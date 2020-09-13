@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="SWEN90007_2020_MagicPigeons:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/SWEN90007_2020_MagicPigeons_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="SWEN90007_2020_MagicPigeons/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="SWEN90007_2020_MagicPigeons" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
