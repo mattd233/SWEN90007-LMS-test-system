@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="Java EE 6-Java EE 6">
+    <archive path="C:/Users/Matt/Documents/github/SWEN90007_2020_MagicPigeons/lib/javax.jms.jar" />
+    <archive path="C:/Users/Matt/Documents/github/SWEN90007_2020_MagicPigeons/lib/javax.annotation.jar" />
+    <archive path="C:/Users/Matt/Documents/github/SWEN90007_2020_MagicPigeons/lib/javax.transaction.jar" />
+    <archive path="C:/Users/Matt/Documents/github/SWEN90007_2020_MagicPigeons/lib/javax.servlet.jsp.jstl.jar" />
+    <archive path="C:/Users/Matt/Documents/github/SWEN90007_2020_MagicPigeons/lib/javax.resource.jar" />
+    <archive path="C:/Users/Matt/Documents/github/SWEN90007_2020_MagicPigeons/lib/javax.ejb.jar" />
+    <archive path="C:/Users/Matt/Documents/github/SWEN90007_2020_MagicPigeons/lib/javax.servlet.jar" />
+    <archive path="C:/Users/Matt/Documents/github/SWEN90007_2020_MagicPigeons/lib/javax.servlet.jsp.jar" />
+    <archive path="C:/Users/Matt/Documents/github/SWEN90007_2020_MagicPigeons/lib/javax.persistence.jar" />
+  </library>
+  <library name="postgresql-42.2.14">
+    <archive path="C:/Users/Matt/Downloads/Software/postgresql-42.2.14.jar" />
+  </library>
+</eclipse-userlibraries>
+

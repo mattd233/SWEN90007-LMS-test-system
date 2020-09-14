@@ -3,12 +3,12 @@
   <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.17">
     <root id="1">
       <ServerVersion>10.14</ServerVersion>
-      <StartupTime>1599867993</StartupTime>
+      <StartupTime>1600042483</StartupTime>
     </root>
     <database id="2" parent="1" name="myDB">
       <ObjectId>16393</ObjectId>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>608</IntrospectionStateNumber>
+      <IntrospectionStateNumber>615</IntrospectionStateNumber>
       <Current>1</Current>
     </database>
     <database id="3" parent="1" name="postgres">
@@ -56,7 +56,7 @@
       <Comment>standard public schema</Comment>
       <StateNumber>352</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>609</IntrospectionStateNumber>
+      <IntrospectionStateNumber>616</IntrospectionStateNumber>
       <Current>1</Current>
     </schema>
     <access-method id="13" parent="2" name="btree">

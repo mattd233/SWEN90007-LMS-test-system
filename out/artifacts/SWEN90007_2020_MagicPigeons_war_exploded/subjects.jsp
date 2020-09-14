@@ -11,26 +11,26 @@
     <title>Subjects</title>
 </head>
 <body>
-<%--<div align="center">--%>
-<%--    <table style="width:70%">--%>
-<%--        <tr>--%>
-<%--            <th>Subject Code</th>--%>
-<%--            <th>Subject Name</th>--%>
-<%--            <th>Coordinator</th>--%>
-<%--        </tr>--%>
-<%--        <tr>--%>
-<%--            <%--%>
-<%--                for (Subject subject : Subject.getAllSubjects()) {--%>
-<%--            %>--%>
-<%--            <td><%= subject.getSubjectCode() %></td>--%>
-<%--            <td><%= subject.getName() %></td>--%>
-<%--            <td><%= subject.getCoordinator() %></td>--%>
-<%--        </tr>--%>
-<%--        <%--%>
-<%--            } // for loop--%>
-<%--        %>--%>
-<%--    </table>--%>
-<%--</div>--%>
+<div align="center">
+    <table style="width:70%">
+        <tr>
+            <th>Subject Code</th>
+            <th>Subject Name</th>
+            <th>Coordinator</th>
+        </tr>
+        <tr>
+            <%
+                for (Subject subject : Subject.getAllSubjects()) {
+            %>
+            <td><%= subject.getSubjectCode() %></td>
+            <td><%= subject.getName() %></td>
+            <td><%= subject.getCoordinator() %></td>
+        </tr>
+        <%
+            } // for loop
+        %>
+    </table>
+</div>
 <div align="center">
     <form name="AddSubjectForm" action="/subjects" method="post">
         Subject Code: <input type = "text" name = "code">
