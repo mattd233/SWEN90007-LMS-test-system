@@ -1,4 +1,5 @@
-<%@ page import="domain.Subject" %><%--
+<%@ page import="domain.Subject" %>
+<%@ page import="db.mapper.SubjectMapper" %><%--
   Created by IntelliJ IDEA.
   User: Matt
   Date: 2020/9/9
@@ -20,11 +21,11 @@
         </tr>
         <tr>
             <%
-                for (Subject subject : Subject.getAllSubjects()) {
+                for (Subject subject : SubjectMapper.getAllSubjects()) {
             %>
             <td><%= subject.getSubjectCode() %></td>
-            <td><%= subject.getName() %></td>
-            <td><%= subject.getCoordinator() %></td>
+            <td><%= subject.getSubjectName() %></td>
+            <td><%= subject.getCoordinatorNamesAsOneString() %></td>
         </tr>
         <%
             } // for loop

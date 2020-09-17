@@ -1,33 +1,24 @@
 package domain;
 
-import db.mapper.CoordinatorMapper;
-
-import java.util.List;
-
-public class Coordinator {
-    private int staffID;
+public class Student {
+    private int studentID;
     private String name;
     private String username;
     private String password;
 
-    public Coordinator(int staffID, String name) {
-        this.staffID = staffID;
-        this.name = name;
-    }
-
-    public Coordinator(int staffID, String name, String username, String password) {
-        this.staffID = staffID;
+    public Student(int studentID, String name, String username, String password) {
+        this.studentID = studentID;
         this.name = name;
         this.username = username;
         this.password = password;
     }
 
-    public int getStaffID() {
-        return staffID;
+    public int getStudentID() {
+        return studentID;
     }
 
-    public void setStaffID(int staffID) {
-        this.staffID = staffID;
+    public void setStudentID(int studentID) {
+        this.studentID = studentID;
     }
 
     public String getName() {
@@ -52,9 +43,5 @@ public class Coordinator {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public List<Subject> getSubjectWithCoordinator(Coordinator coordinator) {
-        return CoordinatorMapper.getSubjectWithCoordinator(this);
     }
 }

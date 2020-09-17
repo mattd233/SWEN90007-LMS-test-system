@@ -1,75 +1,63 @@
 package domain;
 
-import db.DBConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import db.mapper.CoordinatorMapper;
+
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import static java.sql.JDBCType.VARCHAR;
-import static java.text.Collator.PRIMARY;
-
+import java.util.Set;
 
 public class Subject {
     private String subjectCode;
     private String name;
-    private String coordinatorName;
+    // hashmap that uses the staff_ids of coordinators as key and their names as value
+    private HashMap<Integer, String> subjectCoordinators;
 
-    public Subject (String subjectCode, String name, String coordinatorName) {
+    public Subject (String subjectCode, String name) {
         this.subjectCode = subjectCode;
         this.name = name;
-        this.coordinatorName = coordinatorName;
+        subjectCoordinators = new HashMap<>();
     };
+
+    public void addCoordinator(int staffID, String name){
+        subjectCoordinators.put(staffID, name);
+    }
 
     public String getSubjectCode() {
         return subjectCode;
     }
 
-    public String getName() {
+    public String getSubjectName() {
         return name;
     }
 
-    public String getCoordinator() {
-        return coordinatorName;
+    public String getCoordinatorNameByID(int staffID) {
+        return subjectCoordinators.get(staffID);
     }
 
-    private static final String findAllSubjectsStatement =
-            "SELECT s.subject_code, s.name, c.name FROM subjects s\n" +
-            "INNER JOIN coordinators_has_subjects chs on s.subject_code = chs.subject_code\n" +
-            "INNER JOIN coordinators c on chs.staff_id = c.staff_id";
-
-    public static List<Subject> getAllSubjects() {
-        List<Subject> subjects = new ArrayList<>();
-        try {
-            Connection DBConnection = new DBConnection().connect();
-            PreparedStatement stmt = DBConnection.prepareStatement(findAllSubjectsStatement);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                String code = rs.getString(1);
-                String name = rs.getString(2);
-                String coordinator = rs.getString(3);
-                subjects.add(new Subject(code,name,coordinator));
-            }
-        } catch (SQLException e) { }
-        return subjects;
+    public List<Integer> getCoordinatorIDs() {
+        return new ArrayList<Integer>(subjectCoordinators.keySet());
     }
 
-    private String insertSubjectStatement = "INSERT INTO subjects VALUES (?, ?, ?)";
-
-    public String insert() {
-        try {
-            Connection DBConnection = new DBConnection().connect();
-            System.out.println("Hello");
-            PreparedStatement insertStatement = DBConnection.prepareStatement(insertSubjectStatement);
-            insertStatement.setString(1,subjectCode);
-            insertStatement.setString(2, name);
-//            insertStatement.setString(3, coordinator.getName());
-            insertStatement.execute();
-            System.out.println("Insertion successful.");
-        } catch (SQLException e) {}
-        return getSubjectCode();
+    public String getCoordinatorNamesAsOneString() {
+        assert (subjectCoordinators != null);
+        List<Integer> coordinatorIDs = getCoordinatorIDs();
+        String output = subjectCoordinators.get(coordinatorIDs.get(0));
+        for (int i=1; i<subjectCoordinators.size(); i++) {
+            output += ", " + subjectCoordinators.get(coordinatorIDs.get(i));
+        }
+        return output;
     }
+
+    public List<Coordinator> getSubjectCoordinators() {
+        List<Coordinator> coordinators = new ArrayList<>();
+        for (int staffID : subjectCoordinators.keySet()) {
+            Coordinator coordinator = CoordinatorMapper.findCoordinatorWithID(staffID);
+            coordinators.add(coordinator);
+        }
+        return coordinators;
+    }
+
 }
