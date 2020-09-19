@@ -1,6 +1,7 @@
 .idea/*
 out/*
 *.iml
+src/db/DBConnection
 
 # Compiled class file
 *.class
