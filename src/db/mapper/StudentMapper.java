@@ -7,9 +7,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class StudentMapper {
-    public static final String findStudentStmt = "SELECT * FROM students WHERE student_id = ?";
+public class StudentMapper extends Mapper{
+    public static final String findStudentStmt = "SELECT * FROM users WHERE user_id = ?";
 
+    /**
+     *
+     * @param studentID
+     * @return
+     */
     public static Student findStudentWithID(int studentID) {
         try {
             Connection dbConnection = new DBConnection().connect();
@@ -18,9 +23,13 @@ public class StudentMapper {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 int id = rs.getInt(1);
-                String name = rs.getString(2);
-                String userName = rs.getString(3);
-                String passWord = rs.getString(4);
+                String type = rs.getString(2);
+                if (!type.equals("student")) {
+                    throw new Exception("Not a student.");
+                }
+                String name = rs.getString(3);
+                String userName = rs.getString(4);
+                String passWord = rs.getString(5);
                 return new Student(id, name, userName, passWord);
             }
         } catch (Exception e) {

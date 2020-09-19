@@ -25,11 +25,6 @@ public class Login extends HttpServlet {
         ServletContext servletContext = getServletContext();
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
         requestDispatcher.forward(request, response);
-
-//        String view = "/subjects.jsp";
-//        ServletContext servletContext = getServletContext();
-//        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
-//        requestDispatcher.forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

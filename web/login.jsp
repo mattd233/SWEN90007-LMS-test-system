@@ -7,16 +7,16 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <head>
+<head>
     <title>Login Page</title>
-  </head>
-  <body>
-  <form name="LoginForm" action="/login" method="post">
-    username: <input type = "text" name = "userName">
-    <br />
-    password: <input type = "text" name = "passWord">
-    <br />
-    <input type = "submit" value = "Login" />
-  </form>
-  </body>
+</head>
+<body>
+<form name="LoginForm" action="/login" method="post">
+    username: <input type="text" name="userName">
+    <br/>
+    password: <input type="text" name="passWord">
+    <br/>
+    <input type="submit" value="Login"/>
+</form>
+</body>
 </html>

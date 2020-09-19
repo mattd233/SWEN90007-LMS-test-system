@@ -12,14 +12,20 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class SubjectMapper {
+public class SubjectMapper extends Mapper {
 
-    private static final String findAllSubjectsStatement =
-            "SELECT s.subject_code, s.name, c.staff_id, c.name FROM subjects s\n" +
-                    "INNER JOIN coordinators_has_subjects chs on s.subject_code = chs.subject_code\n" +
-                    "INNER JOIN coordinators c on chs.staff_id = c.staff_id";
 
+    /**
+     *
+     * @return
+     */
     public static List<Subject> getAllSubjects() {
+        final String findAllSubjectsStatement =
+                "SELECT s.subject_code, s.name, u.user_id, u.name FROM subjects s\n" +
+                "INNER JOIN users_has_subjects uhs on s.subject_code = uhs.subject_code\n" +
+                "INNER JOIN users u on uhs.user_id = u.user_id\n" +
+                "WHERE u.type = 'instructor'";
+
         // A hashmap that uses subject code as key and the object itself as value
         // It is used to determine whether a subject has already been instantiated
         HashMap<String, Subject> subjects = new HashMap<>();
@@ -42,19 +48,17 @@ public class SubjectMapper {
                     Subject existingSubject = subjects.get(code);
                     existingSubject.addCoordinator(staffID, coordinatorName);
                 }
-
-
             }
         } catch (SQLException e) { }
 
         return new ArrayList<>(subjects.values());
     }
 
-    private static final String insertSubjectStmt = "INSERT INTO subjects VALUES (?, ?)";
-    private static final String insertCHSStmt = "INSERT INTO coordinators_has_subjects VALUES (?, ?)";
-
 
     public static void insert(Subject subject) {
+        final String insertSubjectStmt = "INSERT INTO subjects VALUES (?, ?)";
+        final String insertCHSStmt = "INSERT INTO coordinators_has_subjects VALUES (?, ?)";
+
 //        try {
 //            // first check if we can find the coordinator with given id
 //            for (Integer staffID : subject.getCoordinatorIDs()) {
