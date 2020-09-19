@@ -3,11 +3,9 @@ package domain;
 
 import db.mapper.CoordinatorMapper;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 public class Subject {
     private String subjectCode;

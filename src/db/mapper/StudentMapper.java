@@ -1,12 +1,11 @@
 package db.mapper;
 
-        import db.DBConnection;
-        import domain.Coordinator;
-        import domain.Student;
+import db.DBConnection;
+import domain.Student;
 
-        import java.sql.Connection;
-        import java.sql.PreparedStatement;
-        import java.sql.ResultSet;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class StudentMapper {
     public static final String findStudentStmt = "SELECT * FROM students WHERE student_id = ?";

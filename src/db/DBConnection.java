@@ -3,6 +3,7 @@ package db;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
 public class DBConnection {
     private final String url = "jdbc:postgresql://localhost:5432/myDB";
     private final String user = "postgres";

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Tomcat 9.0.37"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Java EE 6-Java EE 6"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/postgresql-42.2.14"/>
-	<classpathentry kind="output" path="out/production/SWEN90007_2020_MagicPigeons"/>
-</classpath>
