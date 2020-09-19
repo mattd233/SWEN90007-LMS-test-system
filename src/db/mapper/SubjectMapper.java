@@ -42,6 +42,7 @@ public class SubjectMapper {
                     existingSubject.addCoordinator(staffID, coordinatorName);
                 }
 
+
             }
         } catch (SQLException e) { }
 

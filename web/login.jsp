@@ -12,9 +12,9 @@
   </head>
   <body>
   <form name="LoginForm" action="/login" method="post">
-    Subject Code: <input type = "text" name = "userName">
+    username: <input type = "text" name = "userName">
     <br />
-    Subject Name: <input type = "text" name = "passWord">
+    password: <input type = "text" name = "passWord">
     <br />
     <input type = "submit" value = "Login" />
   </form>

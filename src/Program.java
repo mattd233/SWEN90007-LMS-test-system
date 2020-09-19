@@ -21,8 +21,7 @@ public class Program {
 
 
     public static void main(String args[]) throws Exception {
-        StudentMapper.findStudentWithID(904601);
-        System.out.println();
+        Connection conn = new DBConnection().connect();
     }
 
 
