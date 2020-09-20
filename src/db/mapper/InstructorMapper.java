@@ -30,7 +30,7 @@ public class InstructorMapper extends Mapper{
             if (rs.next()) {
                 int id = rs.getInt(1);
                 String type = rs.getString(2);
-                if (!type.equals("instructor")) {
+                if (!type.equals("INSTRUCTOR")) {
                     throw new Exception("Not an instructor.");
                 }
                 String name = rs.getString(3);
@@ -72,4 +72,5 @@ public class InstructorMapper extends Mapper{
         }
         return null;
     }
+
 }
