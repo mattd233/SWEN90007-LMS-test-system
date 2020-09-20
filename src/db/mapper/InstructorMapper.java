@@ -15,17 +15,17 @@ public class InstructorMapper extends Mapper{
 
     /**
      * Find the corresponding row in instructors with the given staff_id.
-     * @param staffID
+     * @param userID
      * @return A new instructor object.
      */
-    public static Instructor findInstructorWithID(int staffID) {
+    public static Instructor findInstructorWithID(int userID) {
 
         final String findInstructorStmt = "SELECT * FROM users WHERE user_id = ?";
 
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(findInstructorStmt);
-            stmt.setInt(1, staffID);
+            stmt.setInt(1, userID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 int id = rs.getInt(1);
@@ -47,10 +47,10 @@ public class InstructorMapper extends Mapper{
 
     /**
      * Get all subjects being taught by a single instructor
-     * @param instructor
+     * @param userID
      * @return
      */
-    public static List<Subject> getAllSubjectsWithInstructor(Instructor instructor) {
+    public static List<Subject> getAllSubjectsWithInstructor(int userID) {
 
         final String findSubjectsStmt= "SELECT s.subject_code, s.name FROM subjects s\n" +
                         "INNER JOIN users_has_subjects uhs on s.subject_code = uhs.subject_code\n" +
@@ -58,7 +58,7 @@ public class InstructorMapper extends Mapper{
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(findSubjectsStmt);
-            stmt.setInt(1, instructor.getStaffID());
+            stmt.setInt(1, userID);
             ResultSet rs = stmt.executeQuery();
             List<Subject> subjects = new ArrayList<>();
             while (rs.next()) {

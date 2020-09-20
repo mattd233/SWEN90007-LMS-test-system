@@ -54,7 +54,7 @@ public class Instructor {
         this.password = password;
     }
 
-    public List<Subject> getSubjectWithCoordinator(Instructor instructor) {
-        return InstructorMapper.getAllSubjectsWithInstructor(this);
+    public List<Subject> getSubjectWithCoordinator(int userID) {
+        return InstructorMapper.getAllSubjectsWithInstructor(userID);
     }
 }
