@@ -1,4 +1,4 @@
-<%@ page import="db.mapper.SubjectMapper" %>
+        <%@ page import="db.mapper.SubjectMapper" %>
 <%@ page import="domain.Subject" %>
 <%@ page import="db.mapper.InstructorMapper" %>
 <%@ page import="domain.Instructor" %>
@@ -27,6 +27,16 @@
     <title>View all subjects</title>
 </head>
 <body>
+<div>
+ <%
+     int userID = 0;
+     if (session.getAttribute("user_id") == null) {
+         response.sendRedirect("login.jsp");
+     } else {
+         userID = (int) session.getAttribute("user_id");
+     }
+ %>
+</div>
 <div align="center">
     <table style="width:70%">
         <tr>
@@ -36,10 +46,10 @@
         </tr>
         <tr>
             <%
-                for (Subject subject : Objects.requireNonNull(InstructorMapper.getAllSubjectsWithInstructor(new Instructor(000001, "Edurado")))) {
+                for (Subject subject : Objects.requireNonNull(InstructorMapper.getAllSubjectsWithInstructor(userID))) {
             %>
-            <td><%= subject.getSubjectCode() %></td>
-            <td><%= subject.getSubjectName() %></td>
+            <td><%=subject.getSubjectCode()%></td>
+            <td><%=subject.getSubjectName()%></td>
             <td><a href="instructorExams.jsp">View exams</a></td>
         </tr>
         <%
