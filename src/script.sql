@@ -1,5 +1,5 @@
 CREATE TABLE subjects(
-    subject_code VARCHAR(20) NOT NULL UNIQUE ,
+    subject_code VARCHAR(20) NOT NULL,
     name VARCHAR(100) NOT NULL,
     PRIMARY KEY (subject_code)
 );
@@ -7,10 +7,10 @@ CREATE TABLE subjects(
 -- CREATE TYPE user_type AS ENUM ('admin', 'student', 'instructor');
 
 CREATE TABLE users(
-    user_id INT NOT NULL UNIQUE,
+    user_id INT NOT NULL,
     type user_type NOT NULL,
     name VARCHAR(50) NOT NULL,
-    username VARCHAR(50) NOT NULL,
+    username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(50) NOT NULL,
     PRIMARY KEY (user_id)
 );

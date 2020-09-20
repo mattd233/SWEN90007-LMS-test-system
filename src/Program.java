@@ -3,9 +3,12 @@ import db.mapper.InstructorMapper;
 import domain.Instructor;
 import domain.Subject;
 
+import javax.servlet.http.HttpSession;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class Program {
@@ -15,22 +18,24 @@ public class Program {
 
 
     public static void main(String args[]) throws Exception {
-        final String findInstructorStmt = "SELECT * FROM users WHERE user_id = ?";
+        final String findInstructorStmt = "SELECT * FROM users WHERE username = ?";
 
-        int staff_id = 1;
-        Connection dbConnection = new DBConnection().connect();
-        PreparedStatement stmt = dbConnection.prepareStatement(findInstructorStmt);
-        stmt.setInt(1, staff_id);
-        ResultSet rs = stmt.executeQuery();
-        if (rs.next()) {
-            int staffID = rs.getInt(1);
-            String type = rs.getString(2);
-            String name = rs.getString(3);
-            String userName = rs.getString(4);
-            String passWord = rs.getString(5);
-            System.out.println(staffID + " " + type + " " + name + " " + userName + " " + passWord);
-        }
-
+        // get username and password from the form
+        String username = "simaid";
+        String password = "000000";
+        try {
+            // get the password for the entered username
+            Connection connection = new db.DBConnection().connect();
+            PreparedStatement stmt = connection.prepareStatement(findInstructorStmt);
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int userID = rs.getInt("user_id");
+                String type = rs.getString("type");
+                String returnedPassword = rs.getString("password");
+                System.out.println(userID + " " + type + " " + returnedPassword);
+            }
+        } catch (SQLException e) {}
     }
 
 
