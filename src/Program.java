@@ -1,5 +1,7 @@
 import db.DBConnection;
 import db.mapper.InstructorMapper;
+import db.mapper.SubjectMapper;
+import domain.Exam;
 import domain.Instructor;
 import domain.Subject;
 
@@ -13,29 +15,12 @@ import java.util.List;
 
 public class Program {
 
-    private static final String findPassWithUsername = "SELECT password FROM students WHERE username = ";
-
-
 
     public static void main(String args[]) throws Exception {
-        final String findInstructorStmt = "SELECT * FROM users WHERE username = ?";
-
-        // get username and password from the form
-        String username = "simaid";
-        String password = "000000";
-        try {
-            // get the password for the entered username
-            Connection connection = new db.DBConnection().connect();
-            PreparedStatement stmt = connection.prepareStatement(findInstructorStmt);
-            stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                int userID = rs.getInt("user_id");
-                String type = rs.getString("type");
-                String returnedPassword = rs.getString("password");
-                System.out.println(userID + " " + type + " " + returnedPassword);
-            }
-        } catch (SQLException e) {}
+        List<Exam> exams = SubjectMapper.getAllExamsWithSubject("SWEN90007");
+        for (Exam exam : exams) {
+            System.out.println(exam.getTitle());
+        }
     }
 
 
