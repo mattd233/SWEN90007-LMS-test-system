@@ -22,6 +22,14 @@ public class Exam {
         this.status = status;
     }
 
+    public Exam(String subjectCode, String title, String description) {
+        examID = -1;
+        this.subjectCode = subjectCode;
+        this.title = title;
+        this.description = description;
+        this.status = ExamStatus.UNPUBLISHED;
+    }
+
     public int getExamID() {
         return examID;
     }

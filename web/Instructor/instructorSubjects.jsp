@@ -38,15 +38,19 @@
                     response.sendRedirect("/login.jsp");
                 } else {
                     userID = (int) session.getAttribute("user_id");
-                    System.out.println(userID);
                 }
-                for (Subject subject : Objects.requireNonNull(InstructorMapper.getAllSubjectsWithInstructor(userID))) {
+                for (Subject subject : Objects.requireNonNull(SubjectMapper.getAllSubjectsWithInstructor(userID))) {
             %>
             <td><%=subject.getSubjectCode()%>
             </td>
             <td><%=subject.getSubjectName()%>
             </td>
-            <td><a href="instructorExams.jsp">View exams</a></td>
+            <td>
+                <form action="instructorExams.jsp">
+                    <input type="submit" value = "View Exams">
+                    <input type = "hidden" name = "subject_code" value="<%=subject.getSubjectCode()%>"/>
+                </form>
+            </td>
         </tr>
         <%
             } // for loop

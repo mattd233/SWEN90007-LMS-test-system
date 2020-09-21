@@ -1,6 +1,6 @@
 package domain;
 
-import db.mapper.InstructorMapper;
+import db.mapper.SubjectMapper;
 
 import java.util.List;
 
@@ -55,6 +55,6 @@ public class Instructor {
     }
 
     public List<Subject> getSubjectWithCoordinator(int userID) {
-        return InstructorMapper.getAllSubjectsWithInstructor(userID);
+        return SubjectMapper.getAllSubjectsWithInstructor(userID);
     }
 }
