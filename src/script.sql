@@ -112,12 +112,13 @@ CREATE TABLE submissions (
   exam_id SERIAL REFERENCES exams(exam_id),
   user_id INT REFERENCES users(user_id),
   submission_time TIMESTAMP NOT NULL,
-  is_marked BIT(1) NOT NULL DEFAULT B'0',
+  is_marked BOOLEAN NOT NULL DEFAULT FALSE,
   marks FLOAT,
   PRIMARY KEY (exam_id, user_id)
 );
 
 INSERT INTO submissions VALUES (1, 904601, '2001-09-28 01:00:00', DEFAULT, null);
+
 --------------------------------------------------------------------------------
 --                            submitted questions                             --
 --------------------------------------------------------------------------------
@@ -129,7 +130,7 @@ CREATE TABLE submitted_questions (
   question_type question_types NOT NULL,
   choice_number SMALLINT DEFAULT null,
   short_answer VARCHAR(500) DEFAULT null,
-  is_marked BIT(1) NOT NULL DEFAULT B'0',
+  is_marked BOOLEAN NOT NULL DEFAULT FALSE,
   marks FLOAT,
   PRIMARY KEY (exam_id, user_id, question_number)
 );
