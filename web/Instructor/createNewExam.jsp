@@ -18,8 +18,9 @@
         Title: <input type="text" name="title">
         <br />
         Description:
-        <br />
-        <textarea name="exam_description " rows="5" cols="30"> </textarea>
+        <input type="text" name="exam_description">
+<%--        <br />--%>
+<%--        <textarea name="exam_description " rows="5" cols="30"> </textarea>--%>
         <br />
         <input type="submit" value="Create exam" />
     </form>

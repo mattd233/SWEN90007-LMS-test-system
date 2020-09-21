@@ -31,6 +31,9 @@ public class AddExamController extends HttpServlet {
         System.out.println(subjectCode);
         String title = request.getParameter("title");
         String description = request.getParameter("exam_description");
+        if (description == null) {
+            description = "";
+        }
         System.out.println(title + " " + description);
         Exam exam = new Exam(subjectCode, title, description);
         ExamMapper.insert(exam);
