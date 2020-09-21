@@ -1,6 +1,7 @@
 package db.mapper;
 
 import db.DBConnection;
+import domain.Exam;
 import domain.Subject;
 
 import java.sql.Connection;
@@ -49,11 +50,12 @@ public class SubjectMapper extends Mapper {
                     existingSubject.addCoordinator(staffID, coordinatorName);
                 }
             }
-        } catch (SQLException e) { }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return new ArrayList<>(subjects.values());
     }
-
 
     public static void insert(Subject subject) {
         final String insertSubjectStmt = "INSERT INTO subjects VALUES (?, ?)";
@@ -91,4 +93,33 @@ public class SubjectMapper extends Mapper {
 //        }
     }
 
+    /**
+     * Get all subjects being taught by a single instructor
+     * @param userID
+     * @return
+     */
+    public static List<Subject> getAllSubjectsWithInstructor(int userID) {
+
+        final String findSubjectsStmt= "SELECT s.subject_code, s.name FROM subjects s\n" +
+                        "INNER JOIN users_has_subjects uhs on s.subject_code = uhs.subject_code\n" +
+                        "WHERE user_id = ?";
+
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(findSubjectsStmt);
+            stmt.setInt(1, userID);
+            ResultSet rs = stmt.executeQuery();
+            List<Subject> subjects = new ArrayList<>();
+            while (rs.next()) {
+                String subject_code = rs.getString(1);
+                String name = rs.getString(2);
+                subjects.add(new Subject(subject_code, name));
+            }
+            return subjects;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

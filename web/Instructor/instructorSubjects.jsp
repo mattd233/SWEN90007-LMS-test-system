@@ -1,4 +1,4 @@
-        <%@ page import="db.mapper.SubjectMapper" %>
+<%@ page import="db.mapper.SubjectMapper" %>
 <%@ page import="domain.Subject" %>
 <%@ page import="db.mapper.InstructorMapper" %>
 <%@ page import="domain.Instructor" %>
@@ -17,9 +17,7 @@
             border: 1px solid black;
             border-collapse: collapse;
         }
-        th, td {
-            padding: 5px;
-        }
+
         th {
             text-align: left;
         }
@@ -27,16 +25,6 @@
     <title>View all subjects</title>
 </head>
 <body>
-<div>
- <%
-     int userID = 0;
-     if (session.getAttribute("user_id") == null) {
-         response.sendRedirect("login.jsp");
-     } else {
-         userID = (int) session.getAttribute("user_id");
-     }
- %>
-</div>
 <div align="center">
     <table style="width:70%">
         <tr>
@@ -45,12 +33,24 @@
             <th></th>
         </tr>
         <tr>
-            <%
-                for (Subject subject : Objects.requireNonNull(InstructorMapper.getAllSubjectsWithInstructor(userID))) {
+            <% int userID = 0;
+                if (session.getAttribute("user_id") == null) {
+                    response.sendRedirect("/login.jsp");
+                } else {
+                    userID = (int) session.getAttribute("user_id");
+                }
+                for (Subject subject : Objects.requireNonNull(SubjectMapper.getAllSubjectsWithInstructor(userID))) {
             %>
-            <td><%=subject.getSubjectCode()%></td>
-            <td><%=subject.getSubjectName()%></td>
-            <td><a href="instructorExams.jsp">View exams</a></td>
+            <td><%=subject.getSubjectCode()%>
+            </td>
+            <td><%=subject.getSubjectName()%>
+            </td>
+            <td>
+                <form action="instructorExams.jsp">
+                    <input type="submit" value = "View Exams">
+                    <input type = "hidden" name = "subject_code" value="<%=subject.getSubjectCode()%>"/>
+                </form>
+            </td>
         </tr>
         <%
             } // for loop
