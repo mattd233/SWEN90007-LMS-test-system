@@ -28,11 +28,11 @@
             text-align: left;
         }
     </style>
-    <title>Submissions Table View</title>
+    <title><%=request.getParameter("subject")%> Submissions in Table View</title>
 </head>
 <body>
 <div align="center">
-    <h1>All Exam Marks of <%=request.getParameter("subject")%></h1>
+    <h1>All Exam Submissions of <%=request.getParameter("subject")%></h1>
     <table style="width:70%">
         <tr>
             <th>Student ID</th>
@@ -48,6 +48,7 @@
             <%
                 } // exam for look ends
             %>
+            <th>Fudge Points</th>
             <th>Total Marks</th>
         </tr>
         <tr>
@@ -77,15 +78,16 @@
                         float marks = submission.getMarks();
                         totalMarks += marks;
             %>
-            <td><%=marks%></td>
+            <td><a href="/submissions?examID=<%=eId%>&userID=<%=uId%>"><%=marks%></a></td>
             <%
                     } else {
             %>
-            <td>Mark this exam</td>
+            <td><a href="/submissions?examID=<%=eId%>&userID=<%=uId%>">Mark this exam</a></td>
             <%
                     }
                 } // submission for loop ends
             %>
+            <td><input name="fudgePoints" size="3"></td>
             <td><%=totalMarks%></td>
         </tr>
             <%

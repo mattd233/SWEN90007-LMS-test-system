@@ -14,7 +14,6 @@ import java.util.List;
 
 public class ExamMapper extends Mapper {
 
-
     /**
      * A function that retrieves all exams related to the subject identified by subject code.
      * @param subjectCode identifies the subject that we are trying to retrieve exams from
@@ -40,8 +39,27 @@ public class ExamMapper extends Mapper {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return exams;
+    }
+
+    public static Exam getExamByID(int examID) {
+        final String findExamStmt = "SELECT * FROM exams WHERE exam_id = ?";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(findExamStmt);
+            stmt.setInt(1, examID);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String subjectCode = rs.getString(2);
+                String title = rs.getString(3);
+                String description = rs.getString(4);
+                Exam.ExamStatus status = Exam.ExamStatus.valueOf(Exam.ExamStatus.class, rs.getString(5));
+                return new Exam(examID, subjectCode, title, description, status);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void insert(Exam exam) {
