@@ -5,8 +5,14 @@
   Time: 1:15 am
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="db.mapper.StudentMapper" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
+<%@ page import="db.mapper.StudentMapper" %>
+<%@ page import="db.mapper.ExamMapper" %>
+<%@ page import="domain.Exam" %>
+<%@ page import="db.mapper.SubmissionMapper" %>
+<%@ page import="domain.Submission" %>
+<%@ page import="domain.Student" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -26,39 +32,64 @@
 </head>
 <body>
 <div align="center">
-    <h1>All Exam Marks of [subject_code]<%%>]</h1>
+    <h1>All Exam Marks of <%=request.getParameter("subject")%></h1>
     <table style="width:70%">
         <tr>
             <th>Student ID</th>
             <th>Student Name</th>
+            <!-- Exam titles -->
             <%
-                // get all exams
+                List<Exam> exams = ExamMapper.getAllExamsWithSubjectCode(request.getParameter("subject"));
+                for (Exam exam : exams) {
+                    String title = exam.getTitle();
                 // exam for loop starts
             %>
-            <th>Placeholder exam title</th>
+            <th><%=title%></th>
             <%
-                // exam for look ends
+                } // exam for look ends
             %>
             <th>Total Marks</th>
         </tr>
         <tr>
             <%
-                ArrayList<Integer> sIds = StudentMapper.findStudentIDs();
-                for (Integer sId : sIds) {
+                // student for loop starts
+                List<Student> students = StudentMapper.getAllStudents();
+                for (Student student : students) {
+                    int uId = student.getStudentID();
+                    String sName = student.getName();
             %>
-            <td><%=sId%></td>
-            <td>Placeholder name</td>
+            <!-- Student ID -->
+            <td><%=uId%></td>
+            <!-- Student Name -->
+            <td><%=sName%></td>
+            <!-- Exam marks -->
             <%
                 // submission for loop starts
+                float totalMarks = 0;
+                for (Exam exam : exams) {
+                    int eId = exam.getExamID();
+                    Submission submission = SubmissionMapper.getSubmissionByIDs(eId, uId);
+                    if (submission == null) {
             %>
-            <td>Placeholder mark of exam</td>
+            <td>No submission</td>
             <%
-                // submission for loop ends
+                    } else if (submission.isMarked()){
+                        float marks = submission.getMarks();
+                        totalMarks += marks;
             %>
-            <td>Placeholder total marks</td>
+            <td><%=marks%></td>
+            <%
+                    } else {
+            %>
+            <td>Mark this exam</td>
+            <%
+                    }
+                } // submission for loop ends
+            %>
+            <td><%=totalMarks%></td>
         </tr>
             <%
-                } // for loop
+                } // student for loop ends
             %>
     </table>
 </div>
