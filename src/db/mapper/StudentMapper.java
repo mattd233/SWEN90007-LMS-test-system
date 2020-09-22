@@ -25,7 +25,7 @@ public class StudentMapper extends Mapper{
             if (rs.next()) {
                 int id = rs.getInt(1);
                 String type = rs.getString(2);
-                if (!type.equals("student")) {
+                if (!type.equals("STUDENT")) {
                     throw new Exception("Not a student.");
                 }
                 String name = rs.getString(3);
