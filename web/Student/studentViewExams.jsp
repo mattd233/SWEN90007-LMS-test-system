@@ -8,11 +8,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+        }
+    </style>
     <title>Title</title>
 </head>
 <body align = "center">
 Detailed view of the exam<br/>
-
+<div align="center">
 <%--    add a link to get back to homepage--%>
 <a href="javascript:history.go(-1);">Go back</a>
 
@@ -48,30 +58,26 @@ Detailed view of the exam<br/>
 <%--    if the exam is published, the student can take the exam--%>
         <tr>
 
-            <td>Exam status (Note that you can only take PUBLISHED exam)</td>
+            <td>Exam status</td>
             <td>
                 <%
-                    if (status.equals("UNPUBLISHED") || status.equals("CLOSED")){
+                    if (status.equals("CLOSED")){
                 %>
                     <%=status%>
-<%--                <a href = "studentTakeExams.jsp?studentID=<%=studentID%>&examID=<%=exam_id%>"><%=status%></a>--%>
+
                 <%
                     } // end if
                 %>
                 <%
                     if (status.equals("PUBLISHED")){
                 %>
-                <a href = "studentTakeExams.jsp?studentID=<%=studentID%>&examID=<%=exam_id%>"><%=status%></a>
+                <a href = "studentTakeExams.jsp?studentID=<%=studentID%>&subject_code=<%=subject_code%>&exam_id=<%=exam_id%>&title=<%=title%>&description=<%=description%>"><%=status%></a>
                 <%
                     } // end if
                 %>
-<%--                <%=status%>--%>
-<%--                <%--%>
-<%--                    } // end else--%>
-<%--                %>--%>
             </td>
         </tr>
     </table>
-
+</div>
 </body>
 </html>

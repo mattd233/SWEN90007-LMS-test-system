@@ -77,7 +77,6 @@ public class ExamMapper extends Mapper {
             e.printStackTrace();
         }
 
-
     }
 
 

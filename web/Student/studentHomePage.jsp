@@ -2,7 +2,8 @@
 <%@ page import="java.util.Objects" %>
 <%@ page import="db.mapper.StudentMapper" %>
 <%@ page import="domain.Exam" %>
-<%@ page import="db.mapper.SubjectMapper" %><%--
+<%@ page import="db.mapper.SubjectMapper" %>
+<%@ page import="db.mapper.ExamMapper" %><%--
   Created by IntelliJ IDEA.
   User: wyr04
   Date: 2020/9/22
@@ -12,10 +13,20 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+        }
+    </style>
     <title>Student home</title>
 </head>
 <body>
-<div align = "center">
+<div align="center">
     <%
         int studentID = 0;
         if (session.getAttribute("user_id") == null){
@@ -26,7 +37,7 @@
         }
     %>
     Welcome back, <%=studentID%>!<br/>
-    <table border="1">
+    <table>
         <tr>
             <th>Subject Code</th>
             <th>Subject Name</th>
@@ -49,16 +60,26 @@
                 <%
                     String subject_code = subject.getSubjectCode();
                     for (Exam exam: Objects
-                            .requireNonNull(SubjectMapper
-                                    .getAllExamsWithSubject(subject_code))){
+                            .requireNonNull(ExamMapper
+                                    .getAllExamsWithSubjectCode(subject_code))){
                         int exam_id = exam.getExamID();
                         String title = exam.getTitle();
                         String description = exam.getDescription();
                         Exam.ExamStatus status = exam.getStatus();
                 %>
-                <ul>
-                    <li><a href="studentViewExams.jsp?studentID=<%=studentID%>&subject_code=<%=subject_code%>&exam_id=<%=exam.getExamID()%>&title=<%=exam.getTitle()%>&description=<%=exam.getDescription()%>&status=<%=exam.getStatus()%>"><%=exam_id%> <%=title%></a></li>
-                </ul>
+                    <%
+                        // select the available exam for student to view
+                        // status = 'PUBLISHED' or 'CLOSED'
+                        if (status == Exam.ExamStatus.PUBLISHED || status == Exam.ExamStatus.CLOSED ) {%>
+                    <ul>
+                        <li>
+                            <a href="studentViewExams.jsp?studentID=<%=studentID%>&subject_code=<%=subject_code%>&exam_id=<%=exam_id%>&title=<%=title%>&description=<%=description%>&status=<%=status%>"><%=exam_id%> <%=title%>
+                            </a></li>
+                    </ul>
+                    <%
+                        } // end if
+                    %>
+
                 <%
                     } // end for exam
                 %>

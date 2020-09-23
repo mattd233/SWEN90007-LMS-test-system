@@ -66,7 +66,8 @@ CREATE TABLE exams (
 
 INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Mid-Sem exam', 'very good exam', DEFAULT);
 INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Final exam', 'very hard exam', DEFAULT);
-INSERT INTO exams VALUES (DEFAULT, 'SWEN90009', 'Final exam', 'the exam want you die', 'PUBLISHED');
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Final exam', 'the exam', 'CLOSED');
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90009', 'Final exam', 'the exam', 'PUBLISHED');
 
 --------------------------------------------------------------------------------
 --                                 questions                                  --
