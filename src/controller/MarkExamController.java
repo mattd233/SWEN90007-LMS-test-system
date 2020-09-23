@@ -24,17 +24,17 @@ public class MarkExamController extends HttpServlet {
         String examID = request.getParameter("examID");
         String userID = request.getParameter("userID");
         if (subjectCode != null) {
-            String view = "/markingTableView.jsp";
+            String view = "/Instructor/MarkingViews/markingTableView.jsp";
             RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
             requestDispatcher.forward(request, response);
             return;
         } else if (examID != null && userID != null) {
-            String view = "/markingDetailedView.jsp";
+            String view = "/Instructor/MarkingViews/markingDetailedView.jsp";
             RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
             requestDispatcher.forward(request, response);
             return;
         } else {
-            String view = "/submissions.jsp";
+            String view = "/errorPage.jsp";
             RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
             requestDispatcher.forward(request, response);
             return;
@@ -43,7 +43,7 @@ public class MarkExamController extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //System.out.println("doPost");
-        String view = "/markingTableView.jsp";
+        String view = "/Instructor/MarkingViews/markingTableView.jsp";
         ServletContext servletContext = getServletContext();
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
         requestDispatcher.forward(request, response);

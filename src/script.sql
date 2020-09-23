@@ -81,14 +81,13 @@ CREATE TABLE questions (
     question_type question_type NOT NULL,
     title VARCHAR(45) NOT NULL,
     description VARCHAR(500) NOT NULL,
-    marks SMALLINT,
+    marks FLOAT NOT NULL,
     PRIMARY KEY (exam_id, question_number)
 );
 
-INSERT INTO questions VALUES (1, 1, 'MULTIPLE_CHOICE', 'Question 1', 'Select the biggest number.', 20);
-INSERT INTO questions VALUES (1, 2, 'SHORT_ANSWER', 'Question 2', 'Are cats cuter than dogs? Discuss.', 78);
-INSERT INTO questions VALUES (1, 3, 'MULTIPLE_CHOICE', 'Question 3', 'What does water turn into when temperature is below 0 degrees celsius?', 2);
-INSERT INTO questions VALUES (2, 1, 'SHORT_ANSWER', 'Question 1', '1+1=?', 100);
+INSERT INTO questions VALUES (1, 1, 'MULTIPLE_CHOICE', 'Maths Question 1', 'Select the biggest number.', 20);
+INSERT INTO questions VALUES (1, 2, 'SHORT_ANSWER', 'Essay Question 2', 'Are cats cuter than dogs? Discuss.', 78);
+INSERT INTO questions VALUES (1, 3, 'MULTIPLE_CHOICE', 'Maths Question 2', 'What does water turn into when temperature is below 0 degrees celsius?', 2);
 
 --------------------------------------------------------------------------------
 --                                  choices                                   --
@@ -117,12 +116,12 @@ CREATE TABLE submissions (
     user_id INT REFERENCES users(user_id),
     submission_time TIMESTAMP NOT NULL,
     is_marked BOOLEAN NOT NULL DEFAULT FALSE,
-    marks FLOAT,
+    marks FLOAT DEFAULT null,
     fudge_points FLOAT DEFAULT 0,
     PRIMARY KEY (exam_id, user_id)
 );
 
-INSERT INTO submissions VALUES (1, 904601, '2001-09-28 01:00:00', DEFAULT, null, DEFAULT);
+INSERT INTO submissions VALUES (1, 904601, '2001-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT);
 INSERT INTO submissions VALUES (2, 904601, '2001-09-28 02:00:00', TRUE, 100, DEFAULT);
 --------------------------------------------------------------------------------
 --                            submitted questions                             --
@@ -136,12 +135,10 @@ CREATE TABLE submitted_questions (
     choice_number SMALLINT DEFAULT null,
     short_answer VARCHAR(500) DEFAULT null,
     is_marked BOOLEAN NOT NULL DEFAULT FALSE,
-    marks FLOAT,
+    marks FLOAT DEFAULT null,
     PRIMARY KEY (exam_id, user_id, question_number)
 );
 
-INSERT INTO submitted_questions VALUES (1, 904601, 1, 'MULTIPLE_CHOICE', 3, DEFAULT, DEFAULT, null);
-INSERT INTO submitted_questions VALUES (1, 904601, 2, 'SHORT_ANSWER', DEFAULT, 'Probably.', DEFAULT, null);
-INSERT INTO submitted_questions VALUES (1, 904601, 3, 'MULTIPLE_CHOICE', 1, DEFAULT, DEFAULT, null);
-INSERT INTO submitted_questions VALUES (2, 904601, 1, 'SHORT_ANSWER', DEFAULT, '3', TRUE, 100);
-
+INSERT INTO submitted_questions VALUES (1, 904601, 1, 'MULTIPLE_CHOICE', 3, DEFAULT, DEFAULT, DEFAULT);
+INSERT INTO submitted_questions VALUES (1, 904601, 2, 'SHORT_ANSWER', DEFAULT, 'Probably.', DEFAULT, DEFAULT);
+INSERT INTO submitted_questions VALUES (1, 904601, 3, 'MULTIPLE_CHOICE', 1, DEFAULT, DEFAULT, DEFAULT);
