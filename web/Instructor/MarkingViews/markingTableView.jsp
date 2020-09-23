@@ -5,7 +5,6 @@
   Time: 1:15 am
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="db.mapper.StudentMapper" %>
 <%@ page import="db.mapper.ExamMapper" %>
@@ -67,6 +66,7 @@
             <%
                 // submission for loop starts
                 float totalMarks = 0;
+                String subjectCode = request.getParameter("subject");
                 for (Exam exam : exams) {
                     int eId = exam.getExamID();
                     Submission submission = SubmissionMapper.getSubmissionByIDs(eId, uId);
@@ -78,11 +78,11 @@
                         float marks = submission.getMarks();
                         totalMarks += marks;
             %>
-            <td><a href="/submissions?examID=<%=eId%>&userID=<%=uId%>"><%=marks%></a></td>
+            <td><a href="/submissions?subject=<%=subjectCode%>&examID=<%=eId%>&userID=<%=uId%>"><%=marks%></a></td>
             <%
                     } else {
             %>
-            <td><a href="/submissions?examID=<%=eId%>&userID=<%=uId%>">Mark this exam</a></td>
+            <td><a href="/submissions?subject=<%=subjectCode%>&examID=<%=eId%>&userID=<%=uId%>">Mark this exam</a></td>
             <%
                     }
                 } // submission for loop ends
