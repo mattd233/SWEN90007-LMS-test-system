@@ -23,7 +23,7 @@
 <body align = "center">
 Detailed view of the exam<br/>
 <div align="center">
-<%--    add a link to get back to homepage--%>
+<%--    add a link to get back to previous page--%>
 <a href="javascript:history.go(-1);">Go back</a>
 
     <table border="1" align = "center">

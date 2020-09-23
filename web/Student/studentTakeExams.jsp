@@ -24,7 +24,7 @@
 <body>
 <div align="center">
 <%--get parameters directly from the url--%>
-<%--    add a link to get back to homepage--%>
+<%--    add a link to get back to previous page--%>
 <a href="javascript:history.go(-1);">Go back</a>
 <%
     String studentID = request.getParameter("studentID");
@@ -46,7 +46,7 @@
 
 <%--give a notive board and add a button to take the exam--%>
 Notice that the exam only allow single attempt!<br/>
-<a href="studentStartExams.jsp?student_id=<%=studentID%>&exam_id=<%=exam_id%>&subject_code=<%=subject_code%>">
+<a href="studentAnswerQuestions.jsp?student_id=<%=studentID%>&exam_id=<%=exam_id%>&subject_code=<%=subject_code%>&title=<%=title%>">
     I understand, start the exam now.</a>
 </div>
 </body>
