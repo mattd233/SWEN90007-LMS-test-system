@@ -71,14 +71,14 @@ INSERT INTO exams VALUES (DEFAULT, 'SWEN90009', 'Final exam', 'the exam want you
 --------------------------------------------------------------------------------
 --                                 questions                                  --
 --------------------------------------------------------------------------------
-DROP TYPE question_types CASCADE;
-CREATE TYPE question_types AS ENUM ('MULTIPLE_CHOICE', 'SHORT_ANSWER');
+DROP TYPE question_type CASCADE;
+CREATE TYPE question_type AS ENUM ('MULTIPLE_CHOICE', 'SHORT_ANSWER');
 
 DROP TABLE questions CASCADE;
 CREATE TABLE questions (
     exam_id SERIAL REFERENCES exams(exam_id),
     question_number SMALLINT NOT NULL,
-    question_type question_types NOT NULL,
+    question_type question_type NOT NULL,
     title VARCHAR(45) NOT NULL,
     description VARCHAR(500) NOT NULL,
     marks SMALLINT,
@@ -132,7 +132,7 @@ CREATE TABLE submitted_questions (
     exam_id SERIAL REFERENCES exams(exam_id),
     user_id INT REFERENCES users(user_id),
     question_number SMALLINT NOT NULL,
-    question_type question_types NOT NULL,
+    question_type question_type NOT NULL,
     choice_number SMALLINT DEFAULT null,
     short_answer VARCHAR(500) DEFAULT null,
     is_marked BOOLEAN NOT NULL DEFAULT FALSE,
