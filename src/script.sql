@@ -33,7 +33,7 @@ INSERT INTO users VALUES (000002, 'INSTRUCTOR', 'Maria', 'maria', '000000');
 INSERT INTO users VALUES (904601, 'STUDENT', 'Simai Deng', 'simaid', '000000');
 
 --------------------------------------------------------------------------------
---                             user_has_subjects                              --
+--                            users_has_subjects                              --
 --------------------------------------------------------------------------------
 DROP TABLE users_has_subjects CASCADE;
 CREATE TABLE users_has_subjects (

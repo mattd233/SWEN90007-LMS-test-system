@@ -12,8 +12,6 @@ import java.util.List;
 public class SubmittedQuestionMapper {
 
     public static List<SubmittedQuestion> getSubmittedQuestions(int examID, int userID) {
-        System.out.println(examID);
-        System.out.println(userID);
         final String findAnswerStmt =
                 "SELECT * FROM submitted_questions WHERE exam_id = ? AND user_id = ?";
         List<SubmittedQuestion> submittedQuestions = new ArrayList<SubmittedQuestion>();

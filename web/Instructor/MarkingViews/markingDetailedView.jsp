@@ -67,7 +67,7 @@
             }
         %>
         <p>Fudge points: <input name="fudgePoints" size="5" value=<%=submission.getFudgePoints()%>></p>
-        <input type="submit" value="Update scores">
+        <input type="submit" value="Update marks">
     </form>
 </body>
 </html>

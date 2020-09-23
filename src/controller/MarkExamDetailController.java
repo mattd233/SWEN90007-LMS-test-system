@@ -15,17 +15,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/submissions")
-public class MarkExamController extends HttpServlet {
+@WebServlet("/submissions_detail")
+public class MarkExamDetailController extends HttpServlet {
 
-    private String subjectCode = "";
-
-    public MarkExamController() {
+    public MarkExamDetailController() {
         super();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        subjectCode = request.getParameter("subject");
+        String subjectCode = request.getParameter("subject");
         String examID = request.getParameter("examID");
         String userID = request.getParameter("userID");
         String view = "/errorPage.jsp";

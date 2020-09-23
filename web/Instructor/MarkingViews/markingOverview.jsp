@@ -50,7 +50,7 @@
     %>
     <h1><%=exam.getSubjectCode()%> <%=exam.getTitle()%></h1>
     <h3 class="successMsg">Your markings are successfully saved to the database.</h3>
-    <table>
+    <table style="width:30%">
         <tr>
             <th>Question Number</th>
             <th>Marks</th>
@@ -77,7 +77,7 @@
         %>
     </table>
     <p>Fudge points: <%=submission.getFudgePoints()%></p>
-    <a href="/submissions?subject=<%=exam.getSubjectCode()%>">Back to table view</a>
+    <a href="/submissions_table?subject=<%=exam.getSubjectCode()%>">Back to table view</a>
 </div>
 </body>
 </html>
