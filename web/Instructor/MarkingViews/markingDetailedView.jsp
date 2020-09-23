@@ -14,7 +14,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Submission</title>
+    <title>Student's Submission</title>
 </head>
 <body>
     <%
@@ -66,7 +66,7 @@
                 }
             }
         %>
-        <p>Fudge points: <input name="fudgePoints" size="2" value=<%=submission.getFudgePoints()%>></p>
+        <p>Fudge points: <input name="fudgePoints" size="5" value=<%=submission.getFudgePoints()%>></p>
         <input type="submit" value="Update scores">
     </form>
 </body>

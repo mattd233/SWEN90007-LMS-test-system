@@ -18,12 +18,14 @@ import java.util.List;
 @WebServlet("/submissions")
 public class MarkExamController extends HttpServlet {
 
+    private String subjectCode = "";
+
     public MarkExamController() {
         super();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String subjectCode = request.getParameter("subject");
+        subjectCode = request.getParameter("subject");
         String examID = request.getParameter("examID");
         String userID = request.getParameter("userID");
         String view = "/errorPage.jsp";
@@ -31,6 +33,8 @@ public class MarkExamController extends HttpServlet {
             view = "/Instructor/MarkingViews/markingTableView.jsp";
         } else if (examID != null && userID != null) {
             view = "/Instructor/MarkingViews/markingDetailedView.jsp";
+        } else {
+            System.out.println("Error in MarkExamController doGet");
         }
         ServletContext servletContext = getServletContext();
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
@@ -49,6 +53,7 @@ public class MarkExamController extends HttpServlet {
                 float numericMarks = Float.valueOf(marks);
                 SubmittedQuestionMapper.updateMarks(examID, userID, questionNumber, numericMarks); // TODO: abort all changes if one update fails?
             } catch (Exception e) {
+                e.printStackTrace();
                 showErrorPage(request, response);
                 return;
             }
@@ -56,11 +61,12 @@ public class MarkExamController extends HttpServlet {
         float fudgePoints = Float.valueOf(request.getParameter("fudgePoints"));
         boolean updateSuccess = SubmissionMapper.updateSubmission(examID, userID, fudgePoints);
         if (updateSuccess) {
-            String view = "/Instructor/MarkingViews/markingTableView.jsp";
+            String view = "/Instructor/MarkingViews/markingOverview.jsp";
             ServletContext servletContext = getServletContext();
             RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
             requestDispatcher.forward(request, response);
         } else {
+            System.out.println("Error in MarkExamController doPost");
             showErrorPage(request, response);
             return;
         }

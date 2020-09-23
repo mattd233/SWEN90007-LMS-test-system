@@ -58,41 +58,41 @@
                     int uId = student.getStudentID();
                     String sName = student.getName();
             %>
-            <!-- Student ID -->
-            <td><%=uId%></td>
-            <!-- Student Name -->
-            <td><%=sName%></td>
-            <!-- Exam marks -->
-            <%
-                // submission for loop starts
-                float totalMarks = 0;
-                String subjectCode = request.getParameter("subject");
-                for (Exam exam : exams) {
-                    int eId = exam.getExamID();
-                    Submission submission = SubmissionMapper.getSubmissionByIDs(eId, uId);
-                    if (submission == null) {
-            %>
-            <td>No submission</td>
-            <%
-                    } else if (submission.isMarked()){
-                        float marks = submission.getMarks();
-                        totalMarks += marks;
-            %>
-            <td><a href="/submissions?subject=<%=subjectCode%>&examID=<%=eId%>&userID=<%=uId%>"><%=marks%></a></td>
-            <%
-                    } else {
-            %>
-            <td><a href="/submissions?subject=<%=subjectCode%>&examID=<%=eId%>&userID=<%=uId%>">Mark this exam</a></td>
-            <%
-                    }
-                } // submission for loop ends
-            %>
-            <td><input name="fudgePoints" size="3"></td>
-            <td><%=totalMarks%></td>
-        </tr>
+                <!-- Student ID -->
+                <td><%=uId%></td>
+                <!-- Student Name -->
+                <td><%=sName%></td>
+                <!-- Exam marks -->
+                <%
+                    // submission for loop starts
+                    float totalMarks = 0;
+                    String subjectCode = request.getParameter("subject");
+                    for (Exam exam : exams) {
+                        int eId = exam.getExamID();
+                        Submission submission = SubmissionMapper.getSubmissionByIDs(eId, uId);
+                        if (submission == null) {
+                %>
+                    <td>No submission</td>
+                <%
+                        } else if (submission.isMarked()){
+                            float marks = submission.getMarks();
+                            totalMarks += marks;
+                %>
+                <td><a href="/submissions?examID=<%=eId%>&userID=<%=uId%>"><%=marks%></a></td>
+                <%
+                        } else {
+                %>
+                <td><a href="/submissions?examID=<%=eId%>&userID=<%=uId%>">Mark this exam</a></td>
+                <%
+                        }
+                    } // submission for loop ends
+                %>
+                <td><input name="fudgePoints" size="5"></td>
+                <td><%=totalMarks%></td>
             <%
                 } // student for loop ends
             %>
+        </tr>
     </table>
 </div>
 </body>

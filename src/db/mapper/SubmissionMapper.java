@@ -50,8 +50,9 @@ public class SubmissionMapper extends Mapper {
             }
             if (!allQuestionsMarked) {
                 totalMarks = 0;
+            } else {
+                totalMarks += fudgePoints;
             }
-            System.out.println(totalMarks);
             final String updateStmt =
                     "UPDATE submissions SET is_marked = ?, marks = ?, fudge_points = ? WHERE exam_id = ? AND user_id = ?";
             Connection dbConnection = new DBConnection().connect();
