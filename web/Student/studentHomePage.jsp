@@ -27,6 +27,7 @@
 </head>
 <body>
 <div align="center">
+
     <%
         int studentID = 0;
         if (session.getAttribute("user_id") == null){
@@ -36,7 +37,10 @@
             studentID = (int) session.getAttribute("user_id");
         }
     %>
-    Welcome back, <%=studentID%>!<br/>
+
+    <%--header--%>
+    <h1>Welcome back, <%=studentID%>!</h1>
+
     <table>
         <tr>
             <th>Subject Code</th>
@@ -73,7 +77,7 @@
                         if (status == Exam.ExamStatus.PUBLISHED || status == Exam.ExamStatus.CLOSED ) {%>
                     <ul>
                         <li>
-                            <a href="studentViewExams.jsp?studentID=<%=studentID%>&subject_code=<%=subject_code%>&exam_id=<%=exam_id%>&title=<%=title%>&description=<%=description%>&status=<%=status%>"><%=exam_id%> <%=title%>
+                            <a href="studentViewExams.jsp?studentID=<%=studentID%>&exam_id=<%=exam_id%>"><%=exam_id%> <%=title%>
                             </a></li>
                     </ul>
                     <%

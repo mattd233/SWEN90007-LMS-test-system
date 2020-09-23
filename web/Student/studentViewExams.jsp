@@ -1,4 +1,5 @@
-<%@ page import="domain.Exam" %><%--
+<%@ page import="domain.Exam" %>
+<%@ page import="db.mapper.ExamMapper" %><%--
   Created by IntelliJ IDEA.
   User: wyr04
   Date: 2020/9/22
@@ -21,24 +22,30 @@
     <title>Title</title>
 </head>
 <body align = "center">
-Detailed view of the exam<br/>
+
+<%--header--%>
+<h1>Detailed view of the exam</h1>
+
 <div align="center">
+
 <%--    add a link to get back to previous page--%>
 <a href="javascript:history.go(-1);">Go back</a>
-
-    <table border="1" align = "center">
 
 <%--get parameters directly from the url--%>
 <%
     String studentID = request.getParameter("studentID");
-    String exam_id = request.getParameter("exam_id");
-    String title = request.getParameter("title");
-    String subject_code = request.getParameter("subject_code");
-    String description = request.getParameter("description");
-    String status = request.getParameter("status");
+    String examID = request.getParameter("exam_id");;
+    int exam_id = Integer.parseInt(examID);
+    Exam exam = ExamMapper.getExamByID(exam_id);
+    assert exam != null;
+    String title = exam.getTitle();
+    String subject_code = exam.getSubjectCode();
+    String description = exam.getDescription();
+    String status = exam.getStatus().name();
 %>
 
-<%--    fill the table--%>
+    <%--    fill the table--%>
+    <table border="1" align = "center">
         <tr>
             <td>Exam id</td>
             <td><%=exam_id%></td>
@@ -71,7 +78,7 @@ Detailed view of the exam<br/>
                 <%
                     if (status.equals("PUBLISHED")){
                 %>
-                <a href = "studentTakeExams.jsp?studentID=<%=studentID%>&subject_code=<%=subject_code%>&exam_id=<%=exam_id%>&title=<%=title%>&description=<%=description%>"><%=status%></a>
+                <a href = "studentTakeExams.jsp?studentID=<%=studentID%>&exam_id=<%=exam_id%>"><%=status%></a>
                 <%
                     } // end if
                 %>

@@ -1,4 +1,5 @@
-<%--
+<%@ page import="domain.Exam" %>
+<%@ page import="db.mapper.ExamMapper" %><%--
   Created by IntelliJ IDEA.
   User: wyr04
   Date: 2020/9/23
@@ -23,17 +24,24 @@
 
 <body>
 <div align="center">
-<%--get parameters directly from the url--%>
 <%--    add a link to get back to previous page--%>
 <a href="javascript:history.go(-1);">Go back</a>
+    <%--get parameters directly from the url--%>
 <%
     String studentID = request.getParameter("studentID");
-    String exam_id = request.getParameter("exam_id");
-    String title = request.getParameter("title");
-    String subject_code = request.getParameter("subject_code");
-    String description = request.getParameter("description");
+    String examID = request.getParameter("exam_id");;
+    int exam_id = Integer.parseInt(examID);
+    Exam exam = ExamMapper.getExamByID(exam_id);
+    assert exam != null;
+    String title = exam.getTitle();
+    String subject_code = exam.getSubjectCode();
+    String description = exam.getDescription();
 %>
     <table>
+        <tr>
+            <td>Subject code</td>
+            <td><%=subject_code%></td>
+        </tr>
         <tr>
             <td>Exam title</td>
             <td><%=title%></td>
@@ -46,7 +54,7 @@
 
 <%--give a notive board and add a button to take the exam--%>
 Notice that the exam only allow single attempt!<br/>
-<a href="studentAnswerQuestions.jsp?student_id=<%=studentID%>&exam_id=<%=exam_id%>&subject_code=<%=subject_code%>&title=<%=title%>">
+<a href="studentAnswerQuestions.jsp?student_id=<%=studentID%>&exam_id=<%=exam_id%>">
     I understand, start the exam now.</a>
 </div>
 </body>
