@@ -49,8 +49,9 @@ public class LoginServlet extends HttpServlet {
                     session.setAttribute("user_id", userID);
                     if (type.equals("INSTRUCTOR")) {
                         response.sendRedirect("Instructor/instructorSubjects.jsp");
+                    }else if (type.equals("STUDENT")){
+                        response.sendRedirect("Student/studentHomePage.jsp");
                     }
-                    // add student and admin here
                     response.sendRedirect("index.jsp");
                 } else {
                     writer.println("Invalid password");

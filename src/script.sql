@@ -46,6 +46,7 @@ INSERT INTO users_has_subjects VALUES(000001, 'SWEN90007', DEFAULT);
 INSERT INTO users_has_subjects VALUES(000001, 'SWEN90009', DEFAULT);
 INSERT INTO users_has_subjects VALUES(000002, 'SWEN90007', DEFAULT);
 INSERT INTO users_has_subjects VALUES(904601, 'SWEN90007', DEFAULT);
+INSERT INTO users_has_subjects VALUES(904601, 'SWEN90009', DEFAULT);
 
 --------------------------------------------------------------------------------
 --                                  exams                                     --
@@ -65,6 +66,7 @@ CREATE TABLE exams (
 
 INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Mid-Sem exam', 'very good exam', DEFAULT);
 INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Final exam', 'very hard exam', DEFAULT);
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90009', 'Final exam', 'the exam want you die', 'PUBLISHED');
 
 --------------------------------------------------------------------------------
 --                                 questions                                  --

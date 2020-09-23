@@ -2,6 +2,7 @@ package db.mapper;
 
 import db.DBConnection;
 import domain.Student;
+import domain.Subject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -64,5 +65,31 @@ public class StudentMapper extends Mapper{
         return null;
     }
 
+    /**
+     * get all the subjects a student enrolled with the input studentID
+     * @param userID
+     * @return subjects
+     */
+    public static List<Subject> getStudentEnrolledSubject(int userID) {
+        final String findSubjectsStmt= "SELECT s.subject_code, s.name FROM subjects s\n" +
+                "INNER JOIN users_has_subjects uhs on s.subject_code = uhs.subject_code\n" +
+                "WHERE user_id = ?";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(findSubjectsStmt);
+            stmt.setInt(1, userID);
+            ResultSet rs = stmt.executeQuery();
+            List<Subject> subjects = new ArrayList<>();
+            while (rs.next()) {
+                String subject_code = rs.getString(1);
+                String name = rs.getString(2);
+                subjects.add(new Subject(subject_code, name));
+            }
+            return subjects;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }

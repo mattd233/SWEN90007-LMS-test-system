@@ -122,4 +122,36 @@ public class SubjectMapper extends Mapper {
 
         return null;
     }
+
+    /**
+     * Get all exams under a given subject
+     * @param subjectCode
+     * @return
+     */
+    public static List<Exam> getAllExamsWithSubject(String subjectCode) {
+
+        final String findExamsStmt=  "SELECT * FROM exams WHERE subject_code = ?";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(findExamsStmt);
+            stmt.setString(1, subjectCode);
+            ResultSet rs = stmt.executeQuery();
+            List<Exam> exams = new ArrayList<>();
+            while (rs.next()) {
+                int examID = rs.getInt(1);
+                String code = rs.getString(2);
+                String title = rs.getString(3);
+                String description = rs.getString(4);
+                String statusString = rs.getString(5);
+                Exam.ExamStatus status =  Exam.ExamStatus.valueOf(Exam.ExamStatus.class, statusString);
+                exams.add(new Exam(examID, code ,title, description, status));
+            }
+            return exams;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }
