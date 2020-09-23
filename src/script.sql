@@ -85,9 +85,10 @@ CREATE TABLE questions (
     PRIMARY KEY (exam_id, question_number)
 );
 
-INSERT INTO questions VALUES (1, 1, 'MULTIPLE_CHOICE', 'Maths Question 1', 'Select the biggest number.', 20);
-INSERT INTO questions VALUES (1, 2, 'SHORT_ANSWER', 'Essay Question 2', 'Are cats cuter than dogs? Discuss.', 78);
-INSERT INTO questions VALUES (1, 3, 'MULTIPLE_CHOICE', 'Maths Question 2', 'What does water turn into when temperature is below 0 degrees celsius?', 2);
+INSERT INTO questions VALUES (1, 1, 'MULTIPLE_CHOICE', 'Question 1', 'Select the biggest number.', 20);
+INSERT INTO questions VALUES (1, 2, 'SHORT_ANSWER', 'Question 2', 'Are cats cuter than dogs? Discuss.', 78);
+INSERT INTO questions VALUES (1, 3, 'MULTIPLE_CHOICE', 'Question 3', 'What does water turn into when temperature is below 0 degrees celsius?', 2);
+INSERT INTO questions VALUES (2, 1, 'SHORT_ANSWER', 'Question 1', '1+1=?', 100);
 
 --------------------------------------------------------------------------------
 --                                  choices                                   --
@@ -142,3 +143,5 @@ CREATE TABLE submitted_questions (
 INSERT INTO submitted_questions VALUES (1, 904601, 1, 'MULTIPLE_CHOICE', 3, DEFAULT, DEFAULT, null);
 INSERT INTO submitted_questions VALUES (1, 904601, 2, 'SHORT_ANSWER', DEFAULT, 'Probably.', DEFAULT, null);
 INSERT INTO submitted_questions VALUES (1, 904601, 3, 'MULTIPLE_CHOICE', 1, DEFAULT, DEFAULT, null);
+INSERT INTO submitted_questions VALUES (2, 904601, 1, 'SHORT_ANSWER', DEFAULT, '3', TRUE, 100);
+
