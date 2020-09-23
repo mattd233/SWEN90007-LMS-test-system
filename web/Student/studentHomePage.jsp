@@ -25,7 +25,7 @@
             studentID = (int) session.getAttribute("user_id");
         }
     %>
-    Welcome back!<br/>
+    Welcome back, <%=studentID%>!<br/>
     <table border="1">
         <tr>
             <th>Subject Code</th>
@@ -57,7 +57,7 @@
                         Exam.ExamStatus status = exam.getStatus();
                 %>
                 <ul>
-                    <li><a href="studentViewExams.jsp?exam_id=<%=exam.getExamID()%>&title=<%=exam.getTitle()%>&description=<%=exam.getDescription()%>&status=<%=exam.getStatus()%>"><%=exam_id%> <%=title%></a></li>
+                    <li><a href="studentViewExams.jsp?studentID=<%=studentID%>&subject_code=<%=subject_code%>&exam_id=<%=exam.getExamID()%>&title=<%=exam.getTitle()%>&description=<%=exam.getDescription()%>&status=<%=exam.getStatus()%>"><%=exam_id%> <%=title%></a></li>
                 </ul>
                 <%
                     } // end for exam
