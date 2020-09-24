@@ -14,7 +14,6 @@
 <div>
     <body>
     <form name="CreateExam" action="/Instructor/createNewExam" method="post">
-        <input type="hidden" name="code" value="<%=request.getParameter("subject_code")%>">
         Title: <input type="text" name="title">
         <br />
         Description:
@@ -22,6 +21,7 @@
 <%--        <br />--%>
 <%--        <textarea name="exam_description " rows="5" cols="30"> </textarea>--%>
         <br />
+        <input type="hidden" name="code" value="<%=request.getParameter("subject_code")%>">
         <input type="submit" value="Create exam" />
     </form>
 </div>

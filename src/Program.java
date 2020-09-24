@@ -1,10 +1,6 @@
 import db.DBConnection;
-import db.mapper.ExamMapper;
-import db.mapper.InstructorMapper;
-import db.mapper.SubjectMapper;
-import domain.Exam;
-import domain.Instructor;
-import domain.Subject;
+import db.mapper.*;
+import domain.*;
 
 import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
@@ -19,8 +15,9 @@ public class Program {
 
 
     public static void main(String args[]) throws Exception {
-        Exam exam = new Exam("SWEN90009", "Final", "");
-        ExamMapper.insert(exam);
+        Exam exam = new Exam("SWEN90009", "Sam's exam", "stupid exam");
+        System.out.println(ExamMapper.insert(exam));
+
     }
 
 

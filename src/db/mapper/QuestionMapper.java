@@ -42,4 +42,27 @@ public class QuestionMapper {
         }
         return questions;
     }
+
+    public static void insert(Question question) {
+        final String insertQuestionStmt = "INSERT INTO questions VALUES (?, ?, ?::question_type, ?, ?, ?)";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(insertQuestionStmt);
+            stmt.setInt(1, question.getExamID());
+            stmt.setInt(2, question.getQuestionNumber());
+            if (question instanceof MultipleChoiceQuestion) {
+                stmt.setString(3, Question.QuestionType.MULTIPLE_CHOICE.toString());
+            } else {
+                stmt.setString(3, Question.QuestionType.SHORT_ANSWER.toString());
+            }
+            stmt.setString(4, question.getTitle());
+            stmt.setString(5, question.getDescription());
+            stmt.setInt(6, question.getMarks());
+            stmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 }

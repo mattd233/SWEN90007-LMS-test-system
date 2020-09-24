@@ -1,4 +1,4 @@
-package servlet;
+package auth;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -15,7 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 @WebServlet("/login")
-public class LoginServlet extends HttpServlet {
+public class Login extends HttpServlet {
 
     private static final String findPassWithUsername = "SELECT * FROM users WHERE username = ?";
 
@@ -51,8 +51,9 @@ public class LoginServlet extends HttpServlet {
                         response.sendRedirect("Instructor/instructorSubjects.jsp");
                     }else if (type.equals("STUDENT")){
                         response.sendRedirect("Student/studentHomePage.jsp");
+                    } else if (type.equals("ADMIN")){
+                        response.sendRedirect("index.jsp");
                     }
-                    response.sendRedirect("index.jsp");
                 } else {
                     writer.println("Invalid password");
                 }
