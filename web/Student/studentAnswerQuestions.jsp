@@ -26,7 +26,7 @@
 <body>
 <%--get parameters directly from the url--%>
 <%
-    String studentID = request.getParameter("studentID");
+    String student_id = request.getParameter("studentID");
     String examID = request.getParameter("exam_id");;
     int exam_id = Integer.parseInt(examID);
     Exam exam = ExamMapper.getExamByID(exam_id);

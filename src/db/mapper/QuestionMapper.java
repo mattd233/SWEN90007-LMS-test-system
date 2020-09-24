@@ -1,10 +1,7 @@
 package db.mapper;
 
 import db.DBConnection;
-import domain.Exam;
-import domain.MultipleChoiceQuestion;
-import domain.Question;
-import domain.ShortAnswerQuestion;
+import domain.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,4 +39,32 @@ public class QuestionMapper {
         }
         return questions;
     }
+
+    /**
+     *
+     * @param exam_id, question_number
+     * @return question
+     */
+    public static Question getQuestionWithQuestionID(int exam_id, int question_number) {
+        final String findQuestionStmt = "SELECT * FROM questions WHERE exam_id = ? AND question_number = ?";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(findQuestionStmt);
+            stmt.setInt(1, exam_id);
+            stmt.setInt(2, question_number);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+//                    exam_id = rs.getInt(1);
+//                    question_number = rs.getInt(2);
+                String title = rs.getString(3);
+                String description = rs.getString(4);
+                int marks = rs.getInt(5);
+                return new Question(exam_id, question_number, title, description, marks);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

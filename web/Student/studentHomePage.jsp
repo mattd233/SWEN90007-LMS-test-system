@@ -1,6 +1,5 @@
 <%@ page import="domain.Subject" %>
 <%@ page import="java.util.Objects" %>
-<%@ page import="db.mapper.StudentMapper" %>
 <%@ page import="domain.Exam" %>
 <%@ page import="db.mapper.SubjectMapper" %>
 <%@ page import="db.mapper.ExamMapper" %><%--
@@ -50,7 +49,7 @@
 
         <%
             for (Subject subject: Objects
-                    .requireNonNull(StudentMapper
+                    .requireNonNull(SubjectMapper
                             .getStudentEnrolledSubject(studentID))){
         %>
         <tr>
@@ -68,7 +67,6 @@
                                     .getAllExamsWithSubjectCode(subject_code))){
                         int exam_id = exam.getExamID();
                         String title = exam.getTitle();
-                        String description = exam.getDescription();
                         Exam.ExamStatus status = exam.getStatus();
                 %>
                     <%

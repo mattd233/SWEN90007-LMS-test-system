@@ -54,7 +54,7 @@
 
 <%--give a notive board and add a button to take the exam--%>
 Notice that the exam only allow single attempt!<br/>
-<a href="studentAnswerQuestions.jsp?student_id=<%=studentID%>&exam_id=<%=exam_id%>">
+<a href="studentAnswerQuestions.jsp?student_id=<%=studentID%>&exam_id=<%=exam_id%>&question_number=1">
     I understand, start the exam now.</a>
 </div>
 </body>
