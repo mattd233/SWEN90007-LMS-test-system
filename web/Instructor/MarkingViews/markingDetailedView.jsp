@@ -14,6 +14,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <link rel="stylesheet" href="/Instructor/MarkingViews/markingStyles.css" type="text/css">
     <title>Student's Submission</title>
 </head>
 <body>
@@ -33,7 +34,9 @@
     <h1><%=exam.getSubjectCode()%> <%=exam.getTitle()%></h1>
     <form method="post">
         <%
+            // Get the submission
             Submission submission = SubmissionMapper.getSubmissionByIDs(examID, userID);
+            // Display questions
             List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
             for (int i=0; i<questions.size(); i++) {
                 Question question = questions.get(i);
@@ -42,11 +45,12 @@
                 if (answer.isMarked()) {
                     displayMarks = Float.valueOf(answer.getMarks()).toString();
                 }
-        %>
-        <h3><%=question.getTitle()%>: <input name="marksQ<%=question.getQuestionNumber()%>" size="5" value="<%=displayMarks%>"> out of <%=question.getMarks()%></h3>
-        <p>Question: <%=question.getDescription()%></p>
-        <p>Student's Answer: </p>
-        <%
+            %>
+            <h3><%=question.getTitle()%>: <input name="marksQ<%=question.getQuestionNumber()%>" size="5" value="<%=displayMarks%>"> out of <%=question.getMarks()%></h3>
+            <p>Question: <%=question.getDescription()%></p>
+            <p>Student's Answer: </p>
+            <%
+                // Display answers
                 if (question instanceof MultipleChoiceQuestion) {
                     List<Choice> choices = ((MultipleChoiceQuestion) question).getChoices();
                     for (Choice choice : choices) {
@@ -54,15 +58,15 @@
                         if (choice.getChoiceNumber() == answer.getChoiceNumber()) {
                             selectionPrepend = "->";
                         }
-        %>
-        <p><%=selectionPrepend%> <%=choice.getChoiceNumber()%>. <%=choice.getChoiceDescription()%></p>
-        <%
+                %>
+                <p><%=selectionPrepend%> <%=choice.getChoiceNumber()%>. <%=choice.getChoiceDescription()%></p>
+                <%
                     }
                 } else if (question instanceof ShortAnswerQuestion) {
                     String shortAnswer = answer.getShortAnswer();
-        %>
-        <p><%=shortAnswer%></p>
-        <%
+            %>
+            <p><%=shortAnswer%></p>
+            <%
                 }
             }
         %>

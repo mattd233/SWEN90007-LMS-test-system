@@ -16,22 +16,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <style>
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 5px;
-        }
-        th {
-            text-align: left;
-        }
-        .successMsg {
-            color: green;
-        }
-    </style>
-    <title>Title</title>
+    <link rel="stylesheet" href="/Instructor/MarkingViews/markingStyles.css" type="text/css">
+    <title>Update success!</title>
 </head>
 <body>
 <div align="center">
@@ -77,7 +63,7 @@
         %>
     </table>
     <p>Fudge points: <%=submission.getFudgePoints()%></p>
-    <a href="/submissions_table?subject=<%=exam.getSubjectCode()%>">Back to table view</a>
+    <a href="/submissions_table?subjectCode=<%=exam.getSubjectCode()%>">Back to table view</a>
 </div>
 </body>
 </html>

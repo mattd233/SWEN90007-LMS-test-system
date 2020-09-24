@@ -23,21 +23,17 @@ public class MarkExamDetailController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String subjectCode = request.getParameter("subject");
         String examID = request.getParameter("examID");
         String userID = request.getParameter("userID");
-        String view = "/errorPage.jsp";
-        if (subjectCode != null) {
-            view = "/Instructor/MarkingViews/markingTableView.jsp";
-        } else if (examID != null && userID != null) {
-            view = "/Instructor/MarkingViews/markingDetailedView.jsp";
+        if (examID != null && userID != null) {
+            String view = "/Instructor/MarkingViews/markingDetailedView.jsp";
+            ServletContext servletContext = getServletContext();
+            RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
+            requestDispatcher.forward(request, response);
         } else {
-            System.out.println("Error in MarkExamController doGet");
+            System.out.println("Error in MarkExamDetailController doGet");
+            showErrorPage(request, response);
         }
-        ServletContext servletContext = getServletContext();
-        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
-        requestDispatcher.forward(request, response);
-        return;
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,22 +44,29 @@ public class MarkExamDetailController extends HttpServlet {
             int questionNumber = question.getQuestionNumber();
             String marks = request.getParameter("marksQ"+questionNumber);
             try {
+                // If there's marks and marks are legal, update the marks in the submitted_questions table
                 float numericMarks = Float.valueOf(marks);
-                SubmittedQuestionMapper.updateMarks(examID, userID, questionNumber, numericMarks); // TODO: abort all changes if one update fails?
+                SubmittedQuestionMapper.updateMarks(examID, userID, questionNumber, numericMarks);
             } catch (Exception e) {
                 e.printStackTrace();
                 showErrorPage(request, response);
                 return;
             }
         }
-        float fudgePoints = Float.valueOf(request.getParameter("fudgePoints"));
-        boolean updateSuccess = SubmissionMapper.updateSubmission(examID, userID, fudgePoints);
-        if (updateSuccess) {
-            String view = "/Instructor/MarkingViews/markingOverview.jsp";
-            ServletContext servletContext = getServletContext();
-            RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
-            requestDispatcher.forward(request, response);
-        } else {
+        try {
+            // update submission
+            float fudgePoints = Float.valueOf(request.getParameter("fudgePoints"));
+            boolean updateSuccess = SubmissionMapper.updateSubmission(examID, userID, fudgePoints);
+            if (updateSuccess) {
+                String view = "/Instructor/MarkingViews/markingOverview.jsp";
+                ServletContext servletContext = getServletContext();
+                RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
+                requestDispatcher.forward(request, response);
+            } else {
+                System.out.println("Error in MarkExamController doPost");
+                showErrorPage(request, response);
+            }
+        } catch (Exception e) {
             System.out.println("Error in MarkExamController doPost");
             showErrorPage(request, response);
             return;
