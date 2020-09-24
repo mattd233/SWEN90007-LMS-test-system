@@ -12,8 +12,15 @@ import java.util.List;
 
 public class SubmissionMapper extends Mapper {
 
+    /**
+     * Get a submission of a student to an exam.
+     * @param examID The exam_id of the exam.
+     * @param userID The user_id of the student.
+     * @return The Submission object.
+     */
     public static Submission getSubmissionByIDs(int examID, int userID) {
-        final String findSubmissionStmt = "SELECT * FROM submissions WHERE exam_id = ? AND user_id = ?";
+        final String findSubmissionStmt =
+                "SELECT * FROM submissions WHERE exam_id = ? AND user_id = ?";
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(findSubmissionStmt);
@@ -35,16 +42,22 @@ public class SubmissionMapper extends Mapper {
         return null;
     }
 
+    /**
+     * Update fields of a submission when fudge points is changed.
+     * @param examID The exam_id of the exam.
+     * @param userID The user_id of the student.
+     * @param fudgePoints The new fudge points.
+     * @return True if update is successful.
+     */
     public static boolean updateSubmission(int examID, int userID, float fudgePoints) {
         try {
-            Submission submission = getSubmissionByIDs(examID, userID);
             List<SubmittedQuestion> answers = SubmittedQuestionMapper.getSubmittedQuestions(examID, userID);
             boolean allQuestionsMarked = true;
             float totalMarks = 0;
             for (SubmittedQuestion answer : answers) {
                 if (answer.isMarked()) {
                     totalMarks += answer.getMarks();
-                } else {
+                } else { // If not all answers are marked
                     allQuestionsMarked = false;
                 }
             }

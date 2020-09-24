@@ -11,6 +11,12 @@ import java.util.List;
 
 public class SubmittedQuestionMapper {
 
+    /**
+     * Get all submitted questions of an exam from a student
+     * @param examID The exam_id of the exam.
+     * @param userID The user_id of the student.
+     * @return A list of SubmittedQuestion objects.
+     */
     public static List<SubmittedQuestion> getSubmittedQuestions(int examID, int userID) {
         final String findAnswerStmt =
                 "SELECT * FROM submitted_questions WHERE exam_id = ? AND user_id = ?";
@@ -36,6 +42,13 @@ public class SubmittedQuestionMapper {
         return submittedQuestions;
     }
 
+    /**
+     * Get a particular submitted question.
+     * @param examID The exam_id of the exam.
+     * @param userID The user_id of the student.
+     * @param questionNumber The question_number of the submitted_question.
+     * @return The SubmittedQuestion object.
+     */
     public static SubmittedQuestion getSubmittedQuestion(int examID, int userID, int questionNumber) {
         final String findAnswerStmt =
                 "SELECT * FROM submitted_questions WHERE exam_id = ? AND user_id = ? AND question_number = ?";
@@ -60,6 +73,14 @@ public class SubmittedQuestionMapper {
         return null;
     }
 
+    /**
+     * Update the marks of a submitted question and set is_marked to true.
+     * @param examID The exam_id of the exam.
+     * @param userID The user_id of the student.
+     * @param questionNumber The question_number of the submitted_question.
+     * @param marks The marks of the submitted_question.
+     * @return True if update is successful.
+     */
     public static boolean updateMarks(int examID, int userID, int questionNumber, float marks) {
         final String updateMarksStmt =
                 "UPDATE submitted_questions SET is_marked = TRUE, marks = ? WHERE exam_id = ? AND user_id = ? AND question_number = ?";

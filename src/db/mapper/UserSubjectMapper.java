@@ -11,6 +11,11 @@ import java.util.List;
 
 public class UserSubjectMapper {
 
+    /**
+     * Get all students who are taking a subject.
+     * @param subjectCode The subject code.
+     * @return A list of Student objects.
+     */
     public static List<Student> getAllStudentsWithSubject(String subjectCode) {
         final String getStudentsStmt =
                 "SELECT * FROM users_has_subjects WHERE subject_code = ?";
@@ -31,6 +36,12 @@ public class UserSubjectMapper {
         return students;
     }
 
+    /**
+     * Get the fudge points of a subject of a student.
+     * @param userID The user_id of the student.
+     * @param subjectCode The subject_code of the subject.
+     * @return A float (the fudge points).
+     */
     public static float getFudgePoints(int userID, String subjectCode) {
         final String getFudgePointsStmt =
                 "SELECT * FROM users_has_subjects WHERE user_id = ? AND subject_code = ?";
@@ -49,6 +60,13 @@ public class UserSubjectMapper {
         return 0;
     }
 
+    /**
+     * Update the fudge points of a subject of a student.
+     * @param userID The user_id of the student.
+     * @param subjectCode The subject_code of the subject.
+     * @param fudgePoints The new fudge points.
+     * @return True if update is successful.
+     */
     public static boolean updateFudgePoints(int userID, String subjectCode, float fudgePoints) {
         final String updateStmt =
                 "UPDATE users_has_subjects SET fudge_points = ? WHERE user_id = ? AND subject_code = ?";
