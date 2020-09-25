@@ -1,7 +1,10 @@
 package db.mapper;
 
 import db.DBConnection;
-import domain.*;
+import domain.Exam;
+import domain.MultipleChoiceQuestion;
+import domain.Question;
+import domain.ShortAnswerQuestion;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,8 +45,9 @@ public class QuestionMapper {
 
     /**
      *
-     * @param exam_id, question_number
-     * @return question
+     * @param exam_id
+     * @param question_number
+     * @return
      */
     public static Question getQuestionWithQuestionID(int exam_id, int question_number) {
         final String findQuestionStmt = "SELECT * FROM questions WHERE exam_id = ? AND question_number = ?";
@@ -54,14 +58,69 @@ public class QuestionMapper {
             stmt.setInt(2, question_number);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-//                    exam_id = rs.getInt(1);
-//                    question_number = rs.getInt(2);
-                String title = rs.getString(3);
-                String description = rs.getString(4);
-                int marks = rs.getInt(5);
-                return new Question(exam_id, question_number, title, description, marks);
+                Question.QuestionType question_type = Question.QuestionType.valueOf(Question.QuestionType.class, rs.getString(3));
+                String title = rs.getString(4);
+                String description = rs.getString(5);
+                int marks = rs.getInt(6);
+                // return a question by telling the question type
+                if (question_type == Question.QuestionType.MULTIPLE_CHOICE){
+                    return new MultipleChoiceQuestion(exam_id, question_number, title, description, marks);
+                }
+                else if (question_type == Question.QuestionType.SHORT_ANSWER){
+                    return new ShortAnswerQuestion(exam_id, question_number, title, description, marks);
+                }
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void insert(Question question) {
+        final String insertQuestionStmt = "INSERT INTO questions VALUES (?, ?, ?::question_type, ?, ?, ?)";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(insertQuestionStmt);
+            stmt.setInt(1, question.getExamID());
+            stmt.setInt(2, question.getQuestionNumber());
+            if (question instanceof MultipleChoiceQuestion) {
+                stmt.setString(3, Question.QuestionType.MULTIPLE_CHOICE.toString());
+            } else {
+                stmt.setString(3, Question.QuestionType.SHORT_ANSWER.toString());
+            }
+            stmt.setString(4, question.getTitle());
+            stmt.setString(5, question.getDescription());
+            stmt.setInt(6, question.getMarks());
+            stmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *
+     * @param exam_id
+     * @param question_number
+     * @return
+     */
+    public static Question getNextQuestion(int exam_id, int question_number){
+        try{
+            List<Question> questionList = getAllQuestionsWithExamID(exam_id);
+            Question thisQuestion = getQuestionWithQuestionID(exam_id, question_number);
+            int index;
+            Question nextQuestion;
+
+            // assert if the question is in the list
+            if (questionList.contains(thisQuestion)){
+                // the question is not the last question in the list
+                index = questionList.indexOf(thisQuestion);
+                nextQuestion = questionList.get(index + 1);
+                return nextQuestion;
+            }
+            else {
+                return null;
+            }
+        }catch (Exception e){
             e.printStackTrace();
         }
         return null;
