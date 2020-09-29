@@ -46,64 +46,59 @@
             <!-- Show all students taking the subject and their marks as rows -->
             <%
                 List<Student> students = UserSubjectMapper.getAllStudentsWithSubject(subjectCode);
-                if (students.size() > 0) {
+                if (students.size() == 0) {
             %>
-            <tr>
-                <%
-                    // student for loop starts
-
-                    for (Student student : students) {
-                        int uId = student.getStudentID();
-                        %>
-                        <!-- Student ID -->
-                        <td><%=uId%></td>
-                        <!-- Student Name -->
-                        <td><%=student.getName()%></td>
-                        <!-- Exam marks -->
-                        <%
-                        // submission for loop starts
-                        float totalMarks = 0;
-                        boolean allSubmissionsMarked = true;
-                        for (Exam exam : exams) {
-                            int eId = exam.getExamID();
-                            Submission submission = SubmissionMapper.getSubmissionByIDs(eId, uId);
-                            if (submission == null) {
-                        %>
-                                <td>No submission</td>
-                        <%
-                            } else if (submission.isMarked()){
-                                float marks = submission.getMarks();
-                                totalMarks += marks;
-                        %>
-                                <td><a href="/submissions_detail?examID=<%=eId%>&userID=<%=uId%>"><%=marks%></a></td>
-                        <%
-                            } else {
-                                allSubmissionsMarked = false;
-                        %>
-                                <td><a href="/submissions_detail?examID=<%=eId%>&userID=<%=uId%>">Mark this exam</a></td>
-                        <%
-                            }
-                        } // submission for loop ends
-                        float fudgePoints = UserSubjectMapper.getFudgePoints(uId, subjectCode);
-                        float finalMarks = totalMarks + fudgePoints;
-                    %>
-                    <td><input name="fp<%=uId%>" size="5" value="<%=fudgePoints%>"></td>
-                    <%
-                        String displayFinalMarks = "N/A";
-                        if (allSubmissionsMarked) {
-                            displayFinalMarks = Float.valueOf(finalMarks).toString();
-                        }
-                    %>
-                        <td><%=displayFinalMarks%></td>
-                    <%
-                    } // student for loop ends
-                %>
-            </tr>
+            <p>No student enrolled in this subject.</p>
             <%
                 } else {
+                    // student for loop starts
+                    for (Student student : students) {
+                        int uId = student.getStudentID();
             %>
-            <p>No student</p>
+            <tr>
+                <!-- Student ID -->
+                <td><%=uId%></td>
+                <!-- Student Name -->
+                <td><%=student.getName()%></td>
+                <!-- Exam marks -->
+                <%
+                    // submission for loop starts
+                    float totalMarks = 0;
+                    boolean allSubmissionsMarked = true;
+                    for (Exam exam : exams) {
+                        int eId = exam.getExamID();
+                        Submission submission = SubmissionMapper.getSubmissionByIDs(eId, uId);
+                        if (submission == null) {
+                %>
+                <td>No submission</td>
+                <%
+                } else if (submission.isMarked()){
+                    float marks = submission.getMarks();
+                    totalMarks += marks;
+                %>
+                <td><a href="/submissions_detail?examID=<%=eId%>&userID=<%=uId%>"><%=marks%></a></td>
+                <%
+                } else {
+                    allSubmissionsMarked = false;
+                %>
+                <td><a href="/submissions_detail?examID=<%=eId%>&userID=<%=uId%>">Mark this exam</a></td>
+                <%
+                        }
+                    } // submission for loop ends
+                    float fudgePoints = UserSubjectMapper.getFudgePoints(uId, subjectCode);
+                    float finalMarks = totalMarks + fudgePoints;
+                %>
+                <td><input name="fp<%=uId%>" size="5" value="<%=fudgePoints%>"></td>
+                <%
+                    String displayFinalMarks = "N/A";
+                    if (allSubmissionsMarked) {
+                        displayFinalMarks = Float.valueOf(finalMarks).toString();
+                    }
+                %>
+                <td><%=displayFinalMarks%></td>
+            </tr>
             <%
+                    } // student for loop ends
                 }
             %>
         </table>

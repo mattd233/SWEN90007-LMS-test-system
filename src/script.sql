@@ -105,10 +105,10 @@ CREATE TABLE choices (
     PRIMARY KEY (exam_id, question_number, choice_number)
 );
 
-INSERT INTO choices VALUES (1, 1, 1, 'Table data gateway');
-INSERT INTO choices VALUES (1, 1, 2, 'Row data gateway');
-INSERT INTO choices VALUES (1, 1, 3, 'Active record');
-INSERT INTO choices VALUES (1, 1, 4, 'Data mapper');
+INSERT INTO choices VALUES (1, 2, 1, 'Table data gateway');
+INSERT INTO choices VALUES (1, 2, 2, 'Row data gateway');
+INSERT INTO choices VALUES (1, 2, 3, 'Active record');
+INSERT INTO choices VALUES (1, 2, 4, 'Data mapper');
 
 --------------------------------------------------------------------------------
 --                                submissions                                 --
@@ -125,11 +125,14 @@ CREATE TABLE submissions (
 );
 
 INSERT INTO submissions VALUES (1, 904601, '2020-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO submissions VALUES (2, 904601, '2020-09-28 02:00:00', TRUE, 100, DEFAULT);
+INSERT INTO submissions VALUES (2, 904601, '2020-09-28 02:00:00', TRUE, 30, DEFAULT);
+INSERT INTO submissions VALUES (3, 904601, '2020-09-28 02:00:00', TRUE, 50, DEFAULT);
 INSERT INTO submissions VALUES (1, 713551, '2020-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO submissions VALUES (2, 713551, '2020-09-28 02:00:00', TRUE, 100, DEFAULT);
+INSERT INTO submissions VALUES (2, 713551, '2020-09-28 02:00:00', TRUE, 30, DEFAULT);
+INSERT INTO submissions VALUES (3, 713551, '2020-09-28 02:00:00', TRUE, 50, DEFAULT);
 INSERT INTO submissions VALUES (1, 1049166, '2020-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO submissions VALUES (2, 1049166, '2020-09-28 02:00:00', TRUE, 100, DEFAULT);
+INSERT INTO submissions VALUES (2, 1049166, '2020-09-28 02:00:00', TRUE, 30, DEFAULT);
+INSERT INTO submissions VALUES (3, 1049166, '2020-09-28 02:00:00', TRUE, 50, DEFAULT);
 --------------------------------------------------------------------------------
 --                            submitted questions                             --
 --------------------------------------------------------------------------------
@@ -149,6 +152,6 @@ CREATE TABLE submitted_questions (
 INSERT INTO submitted_questions VALUES (1, 904601, 1, 'SHORT_ANSWER', DEFAULT, 'Active record', DEFAULT, DEFAULT);
 INSERT INTO submitted_questions VALUES (1, 904601, 2, 'MULTIPLE_CHOICE', 3, DEFAULT, DEFAULT, DEFAULT);
 INSERT INTO submitted_questions VALUES (1, 713551, 1, 'SHORT_ANSWER', DEFAULT, 'Active record', DEFAULT, DEFAULT);
-INSERT INTO submitted_questions VALUES (1, 713551, 2, 'MULTIPLE_CHOICE', 4, DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO submitted_questions VALUES (1, 1049166, 1, 'SHORT_ANSWER', DEFAULT, 'Active record', DEFAULT, DEFAULT);
+INSERT INTO submitted_questions VALUES (1, 713551, 2, 'MULTIPLE_CHOICE', 2, DEFAULT, DEFAULT, DEFAULT);
+INSERT INTO submitted_questions VALUES (1, 1049166, 1, 'SHORT_ANSWER', DEFAULT, 'Data mapper', DEFAULT, DEFAULT);
 INSERT INTO submitted_questions VALUES (1, 1049166, 2, 'MULTIPLE_CHOICE', 4, DEFAULT, DEFAULT, DEFAULT);
