@@ -16,7 +16,10 @@ public class DBConnection {
         Connection conn = null;
         try {
             Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection(url, user, password);
+            DriverManager.registerDriver(new org.postgresql.Driver());
+            String dbUrl = System.getenv("JDBC_DATABASE_URL");
+            conn = DriverManager.getConnection(dbUrl);
+            // conn = DriverManager.getConnection(url, user, password);
             if (conn != null) {
                 System.out.println("Connected to the PostgreSQL server successfully.");
             } else {
