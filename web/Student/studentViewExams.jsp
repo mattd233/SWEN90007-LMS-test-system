@@ -19,7 +19,7 @@
             text-align: left;
         }
     </style>
-    <title>Title</title>
+    <title>Student view exams</title>
 </head>
 <body align = "center">
 

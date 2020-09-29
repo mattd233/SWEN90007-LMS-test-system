@@ -1,7 +1,6 @@
 package db.mapper;
 
 import db.DBConnection;
-import domain.Exam;
 import domain.MultipleChoiceQuestion;
 import domain.Question;
 import domain.ShortAnswerQuestion;
@@ -15,6 +14,11 @@ import java.util.List;
 
 public class QuestionMapper {
 
+    /**
+     * Get all questions of an exam.
+     * @param examID the exam_id of the exam
+     * @return a list of Question objects
+     */
     public static List<Question> getAllQuestionsWithExamID(int examID) {
         final String findAllQuestionsStmt = "SELECT * FROM questions WHERE exam_id = ?";
         List<Question> questions = new ArrayList<>();

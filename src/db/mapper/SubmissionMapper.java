@@ -4,38 +4,20 @@ import db.DBConnection;
 import domain.Submission;
 import domain.SubmittedQuestion;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
-import java.util.ArrayList;
+import java.sql.*;
 import java.util.List;
 
 public class SubmissionMapper extends Mapper {
 
-//    public static List<Submission> getAllSubmissions() {
-//        final String findSubmissionStmt = "SELECT * FROM submissions";
-//        List<Submission> submissions = new ArrayList<Submission>();
-//        try {
-//            Connection dbConnection = new DBConnection().connect();
-//            PreparedStatement stmt = dbConnection.prepareStatement(findSubmissionStmt);
-//            ResultSet rs = stmt.executeQuery();
-//            while (rs.next()) {
-//                int eId = rs.getInt(1);
-//                int uId = rs.getInt(2);
-//                Timestamp submissionTime = rs.getTimestamp(3);
-//                Boolean isMarked = rs.getBoolean(4);
-//                float marks = rs.getFloat(5);
-//                submissions.add(new Submission(eId, uId, submissionTime, isMarked, marks));
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return submissions;
-//    }
-
+    /**
+     * Get a submission of a student to an exam.
+     * @param examID The exam_id of the exam.
+     * @param userID The user_id of the student.
+     * @return The Submission object.
+     */
     public static Submission getSubmissionByIDs(int examID, int userID) {
-        final String findSubmissionStmt = "SELECT * FROM submissions WHERE exam_id = ? AND user_id = ?";
+        final String findSubmissionStmt =
+                "SELECT * FROM submissions WHERE exam_id = ? AND user_id = ?";
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(findSubmissionStmt);
@@ -57,51 +39,75 @@ public class SubmissionMapper extends Mapper {
         return null;
     }
 
-//    public static List<SubmittedQuestion> getAllSubmittedQuestions(int examID, int userID) {
-//        final String findAnswerStmt = "SELECT * FROM submitted_questions WHERE exam_id = ? AND user_id = ?";
-//        List<SubmittedQuestion> answers = new ArrayList<SubmittedQuestion>();
-//        try {
-//            Connection dbConnection = new DBConnection().connect();
-//            PreparedStatement stmt = dbConnection.prepareStatement(findAnswerStmt);
-//            stmt.setInt(1, examID);
-//            stmt.setInt(2, userID);
-//            ResultSet rs = stmt.executeQuery();
-//            while (rs.next()) {
-//                int eId = rs.getInt(1);
-//                int uId = rs.getInt(2);
-//                int qNumber = rs.getInt(3);
-//                String qType = rs.getString(4);
-//                int cNumber = rs.getInt(5);
-//                String shortAnswer = rs.getString(6);
-//                boolean isMarked = rs.getBoolean(7);
-//                float marks = rs.getFloat(8);
-//                answers.add(new SubmittedQuestion(eId, uId, qNumber, qType, cNumber, shortAnswer, isMarked, marks));
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return answers;
-//    }
-    public static SubmittedQuestion getSubmittedQuestion(int examID, int userID, int questionNumber) {
-        final String findAnswerStmt = "SELECT * FROM submitted_questions WHERE exam_id = ? AND user_id = ? AND question_number = ?";
+    /**
+     * Update fields of a submission when fudge points is changed.
+     * @param examID The exam_id of the exam.
+     * @param userID The user_id of the student.
+     * @param fudgePoints The new fudge points.
+     * @return True if update is successful.
+     */
+    public static boolean updateSubmission(int examID, int userID, float fudgePoints) {
         try {
-            Connection dbConnection = new DBConnection().connect();
-            PreparedStatement stmt = dbConnection.prepareStatement(findAnswerStmt);
-            stmt.setInt(1, examID);
-            stmt.setInt(2, userID);
-            stmt.setInt(3, questionNumber);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                String qType = rs.getString(4);
-                int cNumber = rs.getInt(5);
-                String shortAnswer = rs.getString(6);
-                boolean isMarked = rs.getBoolean(7);
-                float marks = rs.getFloat(8);
-                return new SubmittedQuestion(examID, userID, questionNumber, qType, cNumber, shortAnswer, isMarked, marks);
+            List<SubmittedQuestion> answers = SubmittedQuestionMapper.getSubmittedQuestions(examID, userID);
+            boolean allQuestionsMarked = true;
+            float totalMarks = 0;
+            for (SubmittedQuestion answer : answers) {
+                if (answer.isMarked()) {
+                    totalMarks += answer.getMarks();
+                } else { // If not all answers are marked
+                    allQuestionsMarked = false;
+                }
             }
+            if (!allQuestionsMarked) {
+                totalMarks = 0;
+            } else {
+                totalMarks += fudgePoints;
+            }
+            final String updateStmt =
+                    "UPDATE submissions SET is_marked = ?, marks = ?, fudge_points = ? WHERE exam_id = ? AND user_id = ?";
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(updateStmt);
+            stmt.setBoolean(1, allQuestionsMarked);
+            stmt.setFloat(2, totalMarks);
+            stmt.setFloat(3, fudgePoints);
+            stmt.setInt(4, examID);
+            stmt.setInt(5, userID);
+            int result = stmt.executeUpdate();
+            return (result > 0) ? true : false;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-        return null;
     }
+
+    /**
+     * //    exam_id SERIAL REFERENCES exams(exam_id),
+     * //    user_id INT REFERENCES users(user_id),
+     * //    submission_time TIMESTAMP NOT NULL,
+     * //    is_marked BOOLEAN NOT NULL DEFAULT FALSE,
+     * //    marks FLOAT DEFAULT null,
+     * //    fudge_points FLOAT DEFAULT 0,
+     * //    PRIMARY KEY (exam_id, user_id)
+     * @param submission
+     * @return
+     */
+    public static int insertSubmission(Submission submission) {
+
+    final String insertSStmt = "INSERT INTO submissions VALUES (?, ?, ?, DEFAULT, DEFAULT, DEFAULT)";
+
+    try {
+        Connection dbConnection = new DBConnection().connect();
+        PreparedStatement insertStmt = dbConnection.prepareStatement(insertSStmt);
+
+        insertStmt.setInt(1, submission.getExamID());
+        insertStmt.setInt(2, submission.getUserID());
+        insertStmt.setTimestamp(3, submission.getSubmissionTime());
+
+        insertStmt.execute();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return 0;
+}
+
 }
