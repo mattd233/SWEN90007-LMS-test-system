@@ -47,8 +47,8 @@
             </td>
             <td>
                 <form action="instructorExams.jsp">
-                    <input type="submit" value = "View Exams">
-                    <input type = "hidden" name = "subject_code" value="<%=subject.getSubjectCode()%>"/>
+                    <input type="submit" value="View Exams">
+                    <input type="hidden" name="subject_code" value="<%=subject.getSubjectCode()%>"/>
                 </form>
             </td>
         </tr>

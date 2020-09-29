@@ -49,7 +49,7 @@ public class Login extends HttpServlet {
                     session.setAttribute("user_id", userID);
                     if (type.equals("INSTRUCTOR")) {
                         response.sendRedirect("Instructor/instructorSubjects.jsp");
-                    }else if (type.equals("STUDENT")){
+                    } else if (type.equals("STUDENT")){
                         response.sendRedirect("Student/studentHomePage.jsp");
                     } else if (type.equals("ADMIN")){
                         response.sendRedirect("index.jsp");
