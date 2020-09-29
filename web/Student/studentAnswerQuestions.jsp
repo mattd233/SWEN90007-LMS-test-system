@@ -1,11 +1,12 @@
-<%@ page import="java.util.Date" %>
-<%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="db.mapper.ExamMapper" %>
-<%@ page import="java.util.List" %>
 <%@ page import="db.mapper.QuestionMapper" %>
 <%@ page import="domain.*" %>
+<%@ page import="java.security.Timestamp" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %>
 <%@ page import="static db.mapper.ChoiceMapper.getChoices" %>
-<%@ page import="java.util.Objects" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.sql.Time" %>
 
 <%--
   Created by IntelliJ IDEA.
@@ -213,8 +214,17 @@
         <%--    submit quiz button--%>
         <div id="submit" style = "width:80%;float:left">
             <div style="float:right">
-                <a href="studentSubmitExams.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>">
-                    <button>Submit Exam</button>
+                <%
+                    java.sql.Timestamp ts = new java.sql.Timestamp(new Date().getTime());
+                %>
+                <script>
+                    function showTime() {
+                        var date=new Date();
+                        alert("The exam started at: " + date);
+                    }
+                </script>
+                <a href="studentSubmitExams.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&ts=<%=ts%>">
+                    <button onclick="showTime()">Submit Exam</button>
                 </a>
             </div>
         </div>

@@ -1,5 +1,6 @@
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="java.util.Date" %><%--
+<%@ page import="java.util.Date" %>
+<%@ page import="java.sql.Timestamp" %><%--
   Created by IntelliJ IDEA.
   User: wyr04
   Date: 2020/9/24
@@ -13,9 +14,24 @@
 </head>
 <body>
 <%
-    Date date=new Date();
-    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String studentID = request.getParameter("studentID");
+    String examID = request.getParameter("exam_id");
+    String submittedTime = request.getParameter("ts");
+//    Timestamp time = Timestamp.valueOf(submittedTime);
 %>
-The exam submitted successfully at <%=date%>.<br/>
+<div style="margin-top: 100px" align="center">
+    <h3><%=studentID%> submitted exam <%=examID%> successfully at <%=submittedTime%>.<br/></h3>
+
+    <br><br>
+
+    <h3>
+        <a href = studentHomePage.jsp?studentID=<%=studentID%>>
+            Back to home page.
+        </a>
+    </h3>
+</div>
+
+
+
 </body>
 </html>

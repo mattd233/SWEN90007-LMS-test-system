@@ -56,14 +56,8 @@
 
 <%--give a notive board and add a button to take the exam--%>
 Notice that the exam only allow single attempt!<br/>
-    <script>
-        function showStartTime() {
-            var date=new Date();
-            alert("The exam started at: " + date);
-        }
-    </script>
 <%--    once click on the link, record it as the exam start time--%>
-<a onclick = "showStartTime()" href="studentAnswerQuestions.jsp?studentID=<%=studentID%>&exam_id=<%=exam_id%>&question_index=0">
+<a href="studentAnswerQuestions.jsp?studentID=<%=studentID%>&exam_id=<%=exam_id%>&question_index=0">
     I understand, start the exam now.</a>
 </div>
 </body>

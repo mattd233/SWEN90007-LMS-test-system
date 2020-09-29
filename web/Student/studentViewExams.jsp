@@ -1,5 +1,6 @@
 <%@ page import="domain.Exam" %>
-<%@ page import="db.mapper.ExamMapper" %><%--
+<%@ page import="db.mapper.ExamMapper" %>
+<%@ page import="db.mapper.SubmissionMapper" %><%--
   Created by IntelliJ IDEA.
   User: wyr04
   Date: 2020/9/22
@@ -68,23 +69,42 @@
             <td>Exam status</td>
             <td>
                 <%
-                    if (status.equals("CLOSED")){
+                    if (status.equals("CLOSED") || status.equals("PUBLISHED")){
                 %>
                     <%=status%>
+                <%
+                    } // end if
+                %>
 
+            </td>
+        </tr>
+        <tr>
+            <td>Attendance</td>
+            <td>
+                <%
+                    int student_id = Integer.parseInt(studentID);
+                    // check whether it is on the submissions using exam_id combined with student_id
+                    if (SubmissionMapper.checkSubmission(exam_id, student_id)){
+                %>
+                Attended
                 <%
                     } // end if
+                    else {
                 %>
+                Not Attended
                 <%
-                    if (status.equals("PUBLISHED")){
-                %>
-                <a href = "studentTakeExams.jsp?studentID=<%=studentID%>&exam_id=<%=exam_id%>"><%=status%></a>
-                <%
-                    } // end if
+                    }
                 %>
             </td>
         </tr>
     </table>
+    <%
+        if (status.equals("PUBLISHED") && !SubmissionMapper.checkSubmission(exam_id, student_id)){
+    %>
+        <a href = "studentTakeExams.jsp?studentID=<%=studentID%>&exam_id=<%=exam_id%>"> Take the exam now.</a>
+    <%
+        }
+    %>
 </div>
 </body>
 </html>

@@ -88,7 +88,27 @@ public class SubmissionMapper extends Mapper {
      * //    marks FLOAT DEFAULT null,
      * //    fudge_points FLOAT DEFAULT 0,
      * //    PRIMARY KEY (exam_id, user_id)
-     * @param submission
+    **/
+    public static boolean checkSubmission(int exam_id, int student_id){
+        final String findStudentSubmissionsStmt = "SELECT * from submissions WHERE exam_id = ? AND user_id = ? ";
+        boolean flag = false;
+        try{
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(findStudentSubmissionsStmt);
+            stmt.setInt(1, exam_id);
+            stmt.setInt(2, student_id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                flag = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return flag;
+    }
+
+     /**
+      * @param submission
      * @return
      */
     public static int insertSubmission(Submission submission) {
