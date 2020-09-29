@@ -1,4 +1,3 @@
-<%@ page import="db.mapper.InstructorMapper" %>
 <%@ page import="domain.Exam" %>
 <%@ page import="db.mapper.ExamMapper" %>
 <%@ page import="java.util.Objects" %><%--
@@ -44,17 +43,31 @@
             <td><%=exam.getDescription()%></td>
             <td><%=exam.getStatus()%></td>
             <td>
-                <div class=menu>
-                    <ul>
-                        <li><a href="#">Actions</a>
-                            <ul>
-                                <li><a href="#">Publish</a></li>
-                                <li><a href="#">Close</a></li>
-                                <li><a href="#">Delete</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+                <%
+                    if (exam.getStatus() == Exam.ExamStatus.UNPUBLISHED) {
+                %>
+                <a href="/instructor/update_exam_status?action=publish&subject_code=<%=exam.getSubjectCode()%>&exam_id=<%=exam.getExamID()%>">
+                    Publish exam
+                </a><br>
+                <a href="/instructor/update_exam_status?action=delete&subject_code=<%=exam.getSubjectCode()%>&exam_id=<%=exam.getExamID()%>">
+                    Delete exam
+                </a>
+                <%
+                    } else if (exam.getStatus() == Exam.ExamStatus.PUBLISHED) {
+                %>
+                <a href="/instructor/update_exam_status?action=close&subject_code=<%=exam.getSubjectCode()%>&exam_id=<%=exam.getExamID()%>">
+                    Close exam
+                </a><br>
+                <a href="/instructor/update_exam_status?action=delete&subject_code=<%=exam.getSubjectCode()%>&exam_id=<%=exam.getExamID()%>">
+                    Delete exam
+                </a>
+                <%
+                    } else if (exam.getStatus() == Exam.ExamStatus.CLOSED) {
+                %>
+                <a href="/submissions_table?subject_code=<%=exam.getSubjectCode()%>">Mark exam</a>
+                <%
+                    }
+                %>
             </td>
         </tr>
         <%

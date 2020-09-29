@@ -25,7 +25,7 @@ public class MarkExamTableController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String subjectCode = request.getParameter("subjectCode");
+        String subjectCode = request.getParameter("subject_code");
         if (subjectCode != null) {
             String view = "/Instructor/MarkingViews/markingTableView.jsp";
             ServletContext servletContext = getServletContext();
@@ -39,7 +39,7 @@ public class MarkExamTableController extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Update fudge_points in users_has_subjects table
-        String subjectCode = request.getParameter("subjectCode");
+        String subjectCode = request.getParameter("subject_code");
         List<Student> students = UserSubjectMapper.getAllStudentsWithSubject(subjectCode);
         for (Student student : students) {
             int sID = student.getStudentID();

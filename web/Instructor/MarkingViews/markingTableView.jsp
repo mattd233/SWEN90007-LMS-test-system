@@ -16,12 +16,12 @@
 <html>
 <head>
     <link rel="stylesheet" href="/Instructor/MarkingViews/markingStyles.css" type="text/css">
-    <title><%=request.getParameter("subjectCode")%> Submissions Table View</title>
+    <title><%=request.getParameter("subject_code")%> Submissions Table View</title>
 </head>
 <body>
 <div align="center">
     <form method="post">
-        <h1>All Exam Submissions of <%=request.getParameter("subjectCode")%></h1>
+        <h1>All Exam Submissions of <%=request.getParameter("subject_code")%></h1>
         <table style="width:70%">
             <!-- Header row -->
             <tr>
@@ -29,7 +29,7 @@
                 <th>Student Name</th>
                 <!-- Show all exam titles as column headers -->
                 <%
-                    String subjectCode = request.getParameter("subjectCode");
+                    String subjectCode = request.getParameter("subject_code");
                     List<Exam> exams = ExamMapper.getAllExamsWithSubjectCode(subjectCode);
                     for (Exam exam : exams) {
                         String title = exam.getTitle();
@@ -44,10 +44,14 @@
             </tr>
 
             <!-- Show all students taking the subject and their marks as rows -->
+            <%
+                List<Student> students = UserSubjectMapper.getAllStudentsWithSubject(subjectCode);
+                if (students.size() > 0) {
+            %>
             <tr>
                 <%
                     // student for loop starts
-                    List<Student> students = UserSubjectMapper.getAllStudentsWithSubject(subjectCode);
+
                     for (Student student : students) {
                         int uId = student.getStudentID();
                         %>
@@ -95,6 +99,13 @@
                     } // student for loop ends
                 %>
             </tr>
+            <%
+                } else {
+            %>
+            <p>No student</p>
+            <%
+                }
+            %>
         </table>
         <input type="submit" value="Update marks">
     </form>
