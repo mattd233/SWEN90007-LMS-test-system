@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 @WebServlet("/login")
 public class Login extends HttpServlet {
 
+    //TODO
     private static final String findPassWithUsername = "SELECT * FROM users WHERE username = ?";
 
     // Display welcome page if the user enters the correct password and username
