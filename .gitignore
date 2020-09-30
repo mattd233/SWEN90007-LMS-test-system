@@ -16,6 +16,7 @@ src/db/DBConnection
 .mtj.tmp/
 
 # Package Files #
+*.jar
 *.war
 *.nar
 *.ear
