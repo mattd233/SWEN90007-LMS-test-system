@@ -27,7 +27,7 @@ public class UserSubjectMapper {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 int sID = rs.getInt(1);
-                Student student = StudentMapper.findStudentWithID(sID);
+                Student student = UserMapper.findStudentWithID(sID);
                 if (student != null) students.add(student);
             }
         } catch (Exception e) {

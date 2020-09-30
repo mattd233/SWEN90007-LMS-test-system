@@ -1,11 +1,12 @@
-<%@ page import="domain.Subject" %>
-<%@ page import="db.mapper.SubjectMapper" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: Matt
   Date: 2020/9/9
   Time: 14:57
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page import="main.java.db.mapper.SubjectMapper" %>
+<%@ page import="main.java.domain.Subject" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>

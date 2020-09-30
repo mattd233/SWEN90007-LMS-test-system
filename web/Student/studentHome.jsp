@@ -1,14 +1,15 @@
-<%@ page import="domain.Subject" %>
-<%@ page import="java.util.Objects" %>
-<%@ page import="db.mapper.StudentMapper" %>
-<%@ page import="domain.Exam" %>
-<%@ page import="db.mapper.SubjectMapper" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: wyr04
   Date: 2020/9/22
   Time: 19:04
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page import="java.util.Objects" %>
+<%@ page import="main.java.domain.Subject" %>
+<%@ page import="main.java.domain.Exam" %>
+<%@ page import="main.java.db.mapper.UserMapper" %>
+<%@ page import="main.java.db.mapper.SubjectMapper" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -36,7 +37,7 @@
         <tr>
             <%
                 for (Subject subject: Objects
-                        .requireNonNull(StudentMapper
+                        .requireNonNull(UserMapper
                                 .getStudentEnrolledSubject(studentID))){
             %>
                 <td><%=subject.getSubjectCode()%></td>
