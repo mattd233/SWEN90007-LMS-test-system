@@ -1,4 +1,6 @@
-package auth;
+package main.java.auth;
+
+import main.java.db.DBConnection;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -36,7 +38,7 @@ public class Login extends HttpServlet {
         PrintWriter writer = response.getWriter();
         try {
             // get the password for the entered username
-            Connection connection = new db.DBConnection().connect();
+            Connection connection = new DBConnection().connect();
             PreparedStatement stmt = connection.prepareStatement(findPassWithUsername);
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();

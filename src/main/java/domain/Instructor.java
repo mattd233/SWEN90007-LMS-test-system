@@ -1,6 +1,6 @@
-package domain;
+package main.java.domain;
 
-import db.mapper.SubjectMapper;
+import main.java.db.mapper.SubjectMapper;
 
 import java.util.List;
 

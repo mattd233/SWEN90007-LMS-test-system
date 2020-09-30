@@ -1,6 +1,8 @@
-import db.DBConnection;
-import db.mapper.*;
-import domain.*;
+package main.java;
+
+import main.java.db.DBConnection;
+import main.java.db.mapper.*;
+import main.java.domain.*;
 
 import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;

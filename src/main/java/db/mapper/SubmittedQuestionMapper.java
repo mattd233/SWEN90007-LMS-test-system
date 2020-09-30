@@ -1,7 +1,7 @@
-package db.mapper;
+package main.java.db.mapper;
 
-import db.DBConnection;
-import domain.SubmittedQuestion;
+import main.java.db.DBConnection;
+import main.java.domain.SubmittedQuestion;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

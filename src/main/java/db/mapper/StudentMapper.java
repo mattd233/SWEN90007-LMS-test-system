@@ -1,8 +1,8 @@
-package db.mapper;
+package main.java.db.mapper;
 
-import db.DBConnection;
-import domain.Student;
-import domain.Subject;
+import main.java.db.DBConnection;
+import main.java.domain.Student;
+import main.java.domain.Subject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

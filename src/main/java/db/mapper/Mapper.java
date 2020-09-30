@@ -1,4 +1,4 @@
-package db.mapper;//package db.mapper;
+package main.java.db.mapper;//package db.mapper;
 
 abstract class Mapper {
 

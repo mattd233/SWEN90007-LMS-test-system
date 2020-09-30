@@ -1,10 +1,10 @@
-package db.mapper;
+package main.java.db.mapper;
 
-import db.DBConnection;
-import domain.Exam;
-import domain.MultipleChoiceQuestion;
-import domain.Question;
-import domain.ShortAnswerQuestion;
+import main.java.db.DBConnection;
+import main.java.domain.Exam;
+import main.java.domain.MultipleChoiceQuestion;
+import main.java.domain.Question;
+import main.java.domain.ShortAnswerQuestion;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

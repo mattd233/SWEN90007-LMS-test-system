@@ -1,7 +1,6 @@
-package domain;
+package main.java.domain;
 
-
-import db.mapper.InstructorMapper;
+import main.java.db.mapper.InstructorMapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;

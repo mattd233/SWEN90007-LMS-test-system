@@ -1,7 +1,7 @@
-package controller;
+package main.java.controller;
 
-import db.mapper.ExamMapper;
-import domain.Exam;
+import main.java.db.mapper.ExamMapper;
+import main.java.domain.Exam;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;

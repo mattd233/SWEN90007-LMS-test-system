@@ -1,11 +1,9 @@
-package controller;
+package main.java.controller;
 
-import db.mapper.ChoiceMapper;
-import db.mapper.QuestionMapper;
-import domain.Choice;
-import domain.MultipleChoiceQuestion;
-import domain.Question;
-import domain.ShortAnswerQuestion;
+import main.java.db.mapper.ChoiceMapper;
+import main.java.db.mapper.QuestionMapper;
+import main.java.domain.Choice;
+import main.java.domain.MultipleChoiceQuestion;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,9 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet("/Instructor/saveExam")
 public class SaveExamController extends HttpServlet {

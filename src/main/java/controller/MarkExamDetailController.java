@@ -1,9 +1,9 @@
-package controller;
+package main.java.controller;
 
-import db.mapper.QuestionMapper;
-import db.mapper.SubmissionMapper;
-import db.mapper.SubmittedQuestionMapper;
-import domain.Question;
+import main.java.db.mapper.QuestionMapper;
+import main.java.db.mapper.SubmissionMapper;
+import main.java.db.mapper.SubmittedQuestionMapper;
+import main.java.domain.Question;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
