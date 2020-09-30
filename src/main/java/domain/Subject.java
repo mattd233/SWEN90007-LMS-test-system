@@ -1,6 +1,6 @@
 package main.java.domain;
 
-import main.java.db.mapper.InstructorMapper;
+import main.java.db.mapper.UserMapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,7 +51,7 @@ public class Subject {
     public List<Instructor> getSubjectCoordinators() {
         List<Instructor> instructors = new ArrayList<>();
         for (int staffID : subjectCoordinators.keySet()) {
-            Instructor instructor = InstructorMapper.findInstructorWithID(staffID);
+            Instructor instructor = UserMapper.findInstructorWithID(staffID);
             instructors.add(instructor);
         }
         return instructors;

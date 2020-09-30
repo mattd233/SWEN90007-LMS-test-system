@@ -6,12 +6,12 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="java.util.List" %>
-<%@ page import="db.mapper.ExamMapper" %>
-<%@ page import="domain.Exam" %>
-<%@ page import="db.mapper.SubmissionMapper" %>
-<%@ page import="domain.Submission" %>
-<%@ page import="domain.Student" %>
-<%@ page import="db.mapper.UserSubjectMapper" %>
+<%@ page import="main.java.db.mapper.ExamMapper" %>
+<%@ page import="main.java.db.mapper.SubmissionMapper" %>
+<%@ page import="main.java.db.mapper.UserSubjectMapper" %>
+<%@ page import="main.java.domain.Exam" %>
+<%@ page import="main.java.domain.Submission" %>
+<%@ page import="main.java.domain.Student" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>

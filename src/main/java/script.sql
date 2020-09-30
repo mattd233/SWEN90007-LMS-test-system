@@ -133,6 +133,7 @@ INSERT INTO submissions VALUES (3, 713551, '2020-09-28 02:00:00', TRUE, 50, DEFA
 INSERT INTO submissions VALUES (1, 1049166, '2020-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT);
 INSERT INTO submissions VALUES (2, 1049166, '2020-09-28 02:00:00', TRUE, 30, DEFAULT);
 INSERT INTO submissions VALUES (3, 1049166, '2020-09-28 02:00:00', TRUE, 50, DEFAULT);
+
 --------------------------------------------------------------------------------
 --                            submitted questions                             --
 --------------------------------------------------------------------------------
