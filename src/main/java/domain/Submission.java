@@ -20,6 +20,15 @@ public class Submission {
         this.fudgePoints = fudgePoints;
     }
 
+    public Submission(int examID, int studentID, Timestamp time) {
+        this.examID = examID;
+        this.userID = studentID;
+        this.submissionTime = time;
+        isMarked = false;
+        marks = -1;
+        fudgePoints = -1;
+    }
+
     public int getExamID() {
         return examID;
     }

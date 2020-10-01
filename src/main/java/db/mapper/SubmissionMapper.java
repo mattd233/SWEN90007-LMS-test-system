@@ -4,10 +4,7 @@ import main.java.db.DBConnection;
 import main.java.domain.Submission;
 import main.java.domain.SubmittedQuestion;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.List;
 
 public class SubmissionMapper extends Mapper {
@@ -82,4 +79,53 @@ public class SubmissionMapper extends Mapper {
             return false;
         }
     }
+
+    /**
+     * //    exam_id SERIAL REFERENCES exams(exam_id),
+     * //    user_id INT REFERENCES users(user_id),
+     * //    submission_time TIMESTAMP NOT NULL,
+     * //    is_marked BOOLEAN NOT NULL DEFAULT FALSE,
+     * //    marks FLOAT DEFAULT null,
+     * //    fudge_points FLOAT DEFAULT 0,
+     * //    PRIMARY KEY (exam_id, user_id)
+    **/
+    public static boolean checkSubmission(int exam_id, int student_id){
+        final String findStudentSubmissionsStmt = "SELECT * from submissions WHERE exam_id = ? AND user_id = ? ";
+        boolean flag = false;
+        try{
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(findStudentSubmissionsStmt);
+            stmt.setInt(1, exam_id);
+            stmt.setInt(2, student_id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                flag = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return flag;
+    }
+
+     /**
+      * @param submission
+      */
+    public static void insertSubmission(Submission submission) {
+
+    final String insertSStmt = "INSERT INTO submissions VALUES (?, ?, ?, DEFAULT, DEFAULT, DEFAULT)";
+
+    try {
+        Connection dbConnection = new DBConnection().connect();
+        PreparedStatement insertStmt = dbConnection.prepareStatement(insertSStmt);
+
+        insertStmt.setInt(1, submission.getExamID());
+        insertStmt.setInt(2, submission.getUserID());
+        insertStmt.setTimestamp(3, submission.getSubmissionTime());
+        insertStmt.execute();
+        System.out.println("insert submission successfully.");
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    }
+
 }

@@ -60,4 +60,5 @@ public abstract class Question {
     public void setMarks(int marks) {
         this.marks = marks;
     }
+
 }

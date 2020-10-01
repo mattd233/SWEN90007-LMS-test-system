@@ -68,10 +68,15 @@ CREATE TABLE exams (
     PRIMARY KEY (exam_id)
 );
 
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Mid-Sem exam', 'very good exam', DEFAULT);
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Final exam', 'very hard exam', DEFAULT);
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Final exam', 'the exam', 'CLOSED');
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90009', 'Final exam', 'the exam', 'PUBLISHED');
 INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Week 3 Quiz', 'A quiz about data source layer', 'CLOSED');
 INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Week 5 Quiz', 'A quiz about object to relational structural patterns', 'PUBLISHED');
 INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Final exam', 'Final exam of Software Design and Architecture', DEFAULT);
 INSERT INTO exams VALUES (DEFAULT, 'SWEN90009', 'Final exam', 'Final exam of Software Requirement Analysis', DEFAULT);
+
 
 --------------------------------------------------------------------------------
 --                                 questions                                  --
@@ -93,6 +98,10 @@ CREATE TABLE questions (
 INSERT INTO questions VALUES (1, 1, 'SHORT_ANSWER', 'Question 1', 'What is the object that wraps a row in a DB table or view, encapsulates the DB access, and adds domain logic on that data?', 50);
 INSERT INTO questions VALUES (1, 2, 'MULTIPLE_CHOICE', 'Question 2', 'What is the layer of software that separates the in-memory objects from the database?', 50);
 
+INSERT INTO questions VALUES (4, 1, 'SHORT_ANSWER', 'Essay Question 1', 'What is software engineering?', 20);
+INSERT INTO questions VALUES (4, 2, 'SHORT_ANSWER', 'Essay Question 2', 'What is software requirements analysis?', 50);
+INSERT INTO questions VALUES (4, 3, 'MULTIPLE_CHOICE', 'Multiple Choice 1', 'Choose the WRONG statements.', 30);
+
 --------------------------------------------------------------------------------
 --                                  choices                                   --
 --------------------------------------------------------------------------------
@@ -109,6 +118,9 @@ INSERT INTO choices VALUES (1, 2, 1, 'Table data gateway');
 INSERT INTO choices VALUES (1, 2, 2, 'Row data gateway');
 INSERT INTO choices VALUES (1, 2, 3, 'Active record');
 INSERT INTO choices VALUES (1, 2, 4, 'Data mapper');
+
+INSERT INTO choices VALUES (4, 3, 1, 'Software engineering is meaningless.');
+INSERT INTO choices VALUES (4, 3, 2, 'Software engineering is the systematic application of engineering approaches to the development of software.');
 
 --------------------------------------------------------------------------------
 --                                submissions                                 --
