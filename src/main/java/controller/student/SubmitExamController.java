@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -38,6 +37,11 @@ public class SubmitExamController extends HttpServlet {
         HttpSession session = request.getSession();
         String status = ExamMapper.getExamStatus(exam_id);
         assert status != null;
+        int question_index = Integer.parseInt(request.getParameter("index"));
+        String question_answer = request.getParameter("answer");
+        String key = exam_id + "_" + question_index;
+        session.setAttribute(key,question_answer);
+
         if (status.equals("PUBLISHED")) {
             // get all the answers using session
             // int examID, int userID, int questionNumber, String questionType, int choiceNumber, String shortAnswer, boolean isMarked, float marks

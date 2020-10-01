@@ -51,6 +51,8 @@ INSERT INTO users_has_subjects VALUES(904601, 'SWEN90007', DEFAULT);
 INSERT INTO users_has_subjects VALUES(904601, 'SWEN90009', DEFAULT);
 INSERT INTO users_has_subjects VALUES(713551, 'SWEN90007', DEFAULT);
 INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90007', DEFAULT);
+INSERT INTO users_has_subjects VALUES(713551, 'SWEN90009', DEFAULT);
+INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90009', DEFAULT);
 
 --------------------------------------------------------------------------------
 --                                  exams                                     --

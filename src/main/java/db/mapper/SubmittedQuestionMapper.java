@@ -81,7 +81,7 @@ public class SubmittedQuestionMapper {
      **/
     public static void insertSubmittedQuestion(SubmittedQuestion submittedQuestion) {
 
-        final String insertSQStmt = "INSERT INTO submitted_questions VALUES (?, ?, ?, ?::question_type, ?, ?, DEFAULT, DEFAULT)";
+        final String insertSQStmt = "INSERT INTO submitted_questions VALUES (?, ?, ?, ?::question_type, ?::smallint, ?, DEFAULT, DEFAULT)";
 
         try {
             Connection dbConnection = new DBConnection().connect();

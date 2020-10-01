@@ -1,8 +1,11 @@
 package main.java.db.mapper;
 
 
-import main.java.domain.*;
 import main.java.db.DBConnection;
+import main.java.domain.Exam;
+import main.java.domain.Question;
+import main.java.domain.Student;
+import main.java.domain.Submission;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
