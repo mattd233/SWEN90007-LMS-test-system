@@ -1,6 +1,7 @@
 <%@ page import="domain.Exam" %>
 <%@ page import="db.mapper.ExamMapper" %>
-<%@ page import="db.mapper.SubmissionMapper" %><%--
+<%@ page import="db.mapper.SubmissionMapper" %>
+<%@ page import="domain.Submission" %><%--
   Created by IntelliJ IDEA.
   User: wyr04
   Date: 2020/9/22
@@ -30,7 +31,7 @@
 <div align="center">
 
 <%--    add a link to get back to previous page--%>
-<a href="javascript:history.go(-1);">Go back</a>
+<a href="studentHomePage.jsp">Go back to Home Page.</a>
 
 <%--get parameters directly from the url--%>
 <%
@@ -49,15 +50,15 @@
     <table border="1" align = "center">
         <tr>
             <td>Exam id</td>
-            <td><%=exam_id%></td>
+            <td class="exam_id"><%=exam_id%></td>
         </tr>
         <tr>
             <td>Exam title</td>
-            <td><%=title%></td>
+            <td class="exam_title"><%=title%></td>
         </tr>
         <tr>
             <td>Subject code</td>
-            <td><%=subject_code%></td>
+            <td class="subject_code"><%=subject_code%></td>
         </tr>
         <tr>
             <td>Exam description</td>
@@ -79,19 +80,19 @@
             </td>
         </tr>
         <tr>
-            <td>Attendance</td>
+            <td>Submission</td>
             <td>
                 <%
                     int student_id = Integer.parseInt(studentID);
                     // check whether it is on the submissions using exam_id combined with student_id
                     if (SubmissionMapper.checkSubmission(exam_id, student_id)){
                 %>
-                Attended
+                Submitted
                 <%
                     } // end if
                     else {
                 %>
-                Not Attended
+                Not Submitted
                 <%
                     }
                 %>
@@ -101,9 +102,23 @@
     <%
         if (status.equals("PUBLISHED") && !SubmissionMapper.checkSubmission(exam_id, student_id)){
     %>
-        <a href = "studentTakeExams.jsp?studentID=<%=studentID%>&exam_id=<%=exam_id%>"> Take the exam now.</a>
+        <a href = "studentTakeExams.jsp?studentID=<%=studentID%>&exam_id=<%=exam_id%>"><br> Take the exam now.</a>
     <%
-        }
+        } else if (status.equals("PUBLISHED") && SubmissionMapper.checkSubmission(exam_id,student_id)){
+            Submission submission = SubmissionMapper.getSubmissionByIDs(exam_id, student_id);
+            assert submission != null;
+            boolean isMarked = submission.isMarked();
+            if (isMarked){
+    %>
+        <a href = "studentTakeExams.jsp?studentID=<%=studentID%>&exam_id=<%=exam_id%>"><br> View result.</a>
+    <%
+            } // end if
+            else {
+    %>
+            <br>The exam is not graded yet.
+    <%
+            } // end else
+        } // end else if
     %>
 </div>
 </body>

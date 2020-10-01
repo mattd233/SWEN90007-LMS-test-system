@@ -109,9 +109,8 @@ public class SubmissionMapper extends Mapper {
 
      /**
       * @param submission
-     * @return
-     */
-    public static int insertSubmission(Submission submission) {
+      */
+    public static void insertSubmission(Submission submission) {
 
     final String insertSStmt = "INSERT INTO submissions VALUES (?, ?, ?, DEFAULT, DEFAULT, DEFAULT)";
 
@@ -122,12 +121,11 @@ public class SubmissionMapper extends Mapper {
         insertStmt.setInt(1, submission.getExamID());
         insertStmt.setInt(2, submission.getUserID());
         insertStmt.setTimestamp(3, submission.getSubmissionTime());
-
         insertStmt.execute();
+        System.out.println("insert submission successfully.");
     } catch (SQLException e) {
         e.printStackTrace();
     }
-    return 0;
-}
+    }
 
 }

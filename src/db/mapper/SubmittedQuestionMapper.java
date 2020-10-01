@@ -77,23 +77,14 @@ public class SubmittedQuestionMapper {
     /**
      * Insert a submitted question into the database
      * @param submittedQuestion
-     * @return
-     *     exam_id SERIAL REFERENCES exams(exam_id),
-     *     user_id INT REFERENCES users(user_id),
-     *     question_number SMALLINT NOT NULL,
-     *     question_type question_type NOT NULL,
-     *     choice_number SMALLINT DEFAULT null,
-     *     short_answer VARCHAR(500) DEFAULT null,
-     *     is_marked BOOLEAN NOT NULL DEFAULT FALSE,
-     *     marks FLOAT DEFAULT null,
-    **/
-    public static int insertSQ(SubmittedQuestion submittedQuestion) {
+     **/
+    public static void insertSQ(SubmittedQuestion submittedQuestion) {
 
-        final String insertSBStmt = "INSERT INTO submitted_questions VALUES (?, ?, ?, ?, ?, ?, DEFAULT, DEFAULT)";
+        final String insertSQStmt = "INSERT INTO submitted_questions VALUES (?, ?, ?, ?::question_type, ?, ?, DEFAULT, DEFAULT)";
 
         try {
             Connection dbConnection = new DBConnection().connect();
-            PreparedStatement insertStmt = dbConnection.prepareStatement(insertSBStmt);
+            PreparedStatement insertStmt = dbConnection.prepareStatement(insertSQStmt);
 
             insertStmt.setInt(1, submittedQuestion.getExamID());
             insertStmt.setInt(2, submittedQuestion.getUserID());
@@ -108,10 +99,44 @@ public class SubmittedQuestionMapper {
                 insertStmt.setString(6,null);
             }
             insertStmt.execute();
+            System.out.println("insert submitted question successfully");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0;
+    }
+
+    /**
+     *
+     * @param examID
+     * @param studentID
+     * @param questionNumber
+     * @return
+     */
+    public static String getAnswer (int examID, int studentID, int questionNumber){
+        final String findSA =
+                "SELECT * FROM submitted_questions WHERE exam_id = ? AND user_id = ? AND question_number = ?";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(findSA);
+            stmt.setInt(1, examID);
+            stmt.setInt(2, studentID);
+            stmt.setInt(3, questionNumber);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String qType = rs.getString(4);
+                if (qType.equals("SHORT_ANSWER")){
+                    String shortAnswer = rs.getString(6);
+                    return shortAnswer;
+                }
+                else if (qType.equals("MULTIPLE_CHOICE")){
+                    String choiceNumber = rs.getString(5);
+                    return choiceNumber;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

@@ -2,14 +2,12 @@ package db.mapper;
 
 import db.DBConnection;
 import domain.Exam;
-import domain.Subject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ExamMapper extends Mapper {
@@ -40,6 +38,36 @@ public class ExamMapper extends Mapper {
             e.printStackTrace();
         }
         return exams;
+    }
+
+    public static String getExamStatus(int examID){
+        final String findExamStmt = "SELECT * FROM exams WHERE exam_id = ?";
+        try{
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(findExamStmt);
+            stmt.setInt(1, examID);
+            String status = "";
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Exam.ExamStatus examStatus = Exam.ExamStatus.valueOf(Exam.ExamStatus.class, rs.getString(5));
+                if(examStatus.toString().equals("PUBLISHED")){
+                    status = "PUBLISHED";
+                    return status;
+                } else if (examStatus.toString().equals("CLOSED")){
+                    status = "CLOSED";
+                    return status;
+                } else if (examStatus.toString().equals("UNPUBLISHED")){
+                    status = "UNPUBLISHED";
+                    return status;
+                } else {
+                    System.out.println("error when getting the exam status");
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

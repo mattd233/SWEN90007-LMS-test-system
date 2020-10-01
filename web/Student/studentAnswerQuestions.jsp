@@ -1,12 +1,12 @@
 <%@ page import="db.mapper.ExamMapper" %>
 <%@ page import="db.mapper.QuestionMapper" %>
 <%@ page import="domain.*" %>
-<%@ page import="java.security.Timestamp" %>
-<%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="java.util.Date" %>
+<%@ page import="java.sql.Timestamp" %>
 <%@ page import="static db.mapper.ChoiceMapper.getChoices" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.sql.Time" %>
+<%@ page import="java.text.DateFormat" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="db.mapper.SubmittedQuestionMapper" %>
 
 <%--
   Created by IntelliJ IDEA.
@@ -71,6 +71,7 @@
 
     </style>
 </head>
+
 <body>
 <%--get parameters directly from the url--%>
 <%
@@ -88,14 +89,17 @@
     // get the question list
     List<Question> questionList = QuestionMapper.getAllQuestionsWithExamID(exam_id);
     Question question = questionList.get(index);
+    String key = exam_id + "_" + index;
+    String answer = (String) session.getAttribute(key);
+    answer = answer == null ? "" : answer;
     // get this question information
     assert question != null;
     String question_title = question.getTitle();
     String description = question.getDescription();
     int question_marks = question.getMarks();
     int question_number = question.getQuestionNumber();
+//    String answer = SubmittedQuestionMapper.getAnswer(exam_id, Integer.parseInt(student_id), question_number);
 %>
-
 <%--use div to develop block layout--%>
 <%--block 2: question list, time elapsed--%>
 <div class ="menu">
@@ -137,41 +141,42 @@
             <h4>Question Description: <%=description%></h4><br/>
             <br/>
         </div>
+<%--        lazy load pattern is used in this area--%>
+
+        <form method="post" action="studentSubmitExams.jsp" style="width:94%;height:70%;background-color: bisque">
         <div id="answer" style="margin-left: 3%">
             <%
-                if (question.getClass().equals(ShortAnswerQuestion.class)){
+                if (question.getClass()==ShortAnswerQuestion.class){
             %>
-            <%--        // display a input textbox--%>
-            <form method="post" style="width:94%;height:70%;background-color: bisque">
+
                 input your answer in the box below<br/>
-                <div align="center" >
-                    <textarea style="width:80%;height:80%" name="short_answer" ></textarea>
+                <div align = "center" >
+                    <textarea style="width:80%;height:80%" id="short_answer" name="short_answer"><%=answer%></textarea>
                 </div>
-            </form>
+
             <%
             } // end if
-            else if(question.getClass().equals(MultipleChoiceQuestion.class)){
+            else if(question.getClass()== MultipleChoiceQuestion.class){
                 // get the choices
                 List<Choice> choices = getChoices(exam_id, question_number);
                 // display the choices using form
             %>
-            <form action="">
                 <%
                     for (Choice choice : choices) {
                         String choice_description = choice.getChoiceDescription();
                 %>
-                <input type="radio" name="radioChoice" value="<%=choice.getChoiceNumber()%>">
-                <%=choice_description%><br/>
+                    <input type="radio" name="radioChoice" value="<%=choice.getChoiceNumber()%>">
+                    <%=choice_description%><br/>
                 <%
                     } // end for
                 %>
-            </form>
             <%
                 } //end elseif
             %>
         </div>
-
+        </form>
     </div>
+
 
     <div class ="footer" >
         <%--    previous and next question buttons--%>
@@ -180,13 +185,13 @@
                 <%--        get the previous question--%>
                 <%
                     // if it is not the first question
-                    if (index != 0){
-                        int previous = index -1;
+                    if (index > 0){
+//                        int previous = index -1;
+
                 %>
                 <div>
-                    <a href="studentAnswerQuestions.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&question_index=<%=previous%>">
-                        <button>Previous Question</button>
-                    </a>
+                    <button onclick="getPrevious()">Previous Question</button>
+<%--                    <a href="studentAnswerQuestions.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&question_index=<%=previous%>"> </a>--%>
                 </div>
                 <%
                     } // end if
@@ -197,12 +202,11 @@
                 <%
                     // if it is not the last question
                     if (index < questionList.size()-1){
-                        int next = index +1;
+//                        int next = index +1;
                 %>
                 <div>
-                    <a href="studentAnswerQuestions.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&question_index=<%=next%>">
-                        <button>Next Question</button>
-                    </a>
+                    <button onclick="getNext()">Next Question</button>
+<%--                    <a href="studentAnswerQuestions.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&question_index=<%=next%>"></a>--%>
                 </div>
                 <%
                     } // end if
@@ -214,21 +218,93 @@
         <%--    submit quiz button--%>
         <div id="submit" style = "width:80%;float:left">
             <div style="float:right">
-                <%
-                    java.sql.Timestamp ts = new java.sql.Timestamp(new Date().getTime());
-                %>
-                <script>
-                    function showTime() {
-                        var date=new Date();
-                        alert("The exam started at: " + date);
-                    }
-                </script>
-                <a href="studentSubmitExams.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&ts=<%=ts%>">
-                    <button onclick="showTime()">Submit Exam</button>
-                </a>
+<%--                <a href="studentSubmitExams.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&ts=<%=ts%>">--%>
+                    <button onclick="submitExam()">Submit Exam</button>
+<%--                </a>--%>
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+        var isShortAnswer = <%=question.getClass().equals(ShortAnswerQuestion.class)%>;
+        var index = "<%=index%>";
+        var exam_id = "<%=exam_id%>";
+        var student_id = "<%=student_id%>";
+        function getNext() {
+            // get parameters
+            var answer = "";
+            if (isShortAnswer) {
+                // document.getElementById("short_answer").innerHTML = xml.responseText;
+                var shortAnswer = document.getElementById("short_answer").value;
+                answer = shortAnswer;
+            } else {
+                var radio = document.getElementsByTagName("input");
+                for (var i = 0; i < radio.length; i++) {
+                    if (radio[i].checked) {
+                        var choiceIndex = i;
+                        answer = choiceIndex;
+                        // return choiceIndex;
+                    }
+                }
+            }
+            // send ajax request
+            var xml = new XMLHttpRequest();
+            xml.onreadystatechange = function() {
+                if (xml.readyState === 4 && xml.status === 200) {
+                    window.location.href = "studentAnswerQuestions.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&question_index=<%=index+1%>";
+                }
+            };
+            xml.open("POST","/Student/studentAnswerQuestions?index=" + index + "&answer=" + answer + "&exam_id=" + exam_id ,true);
+            xml.send();
+            console.log(index+1);
+            console.log(index);
+            console.log(shortAnswer);
+            console.log(choiceIndex);
+        }
+
+        function getPrevious() {
+            // get parameters
+            var answer = "";
+            if (isShortAnswer) {
+                // document.getElementById("short_answer").innerHTML = xml.responseText;
+                var shortAnswer = document.getElementById("short_answer").value;
+                answer = shortAnswer;
+            } else {
+                var radio = document.getElementsByTagName("input");
+                for (var i = 0; i < radio.length; i++) {
+                    if (radio[i].checked) {
+                        var choiceIndex = i;
+                        answer = choiceIndex;
+                        // return choiceIndex;
+                    }
+                }
+            }
+            // send ajax request
+            var xml = new XMLHttpRequest();
+            xml.onreadystatechange = function() {
+                if (xml.readyState === 4 && xml.status === 200) {
+                    window.location.href = "studentAnswerQuestions.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&question_index=<%=index-1%>";
+                }
+            };
+            xml.open("POST","/Student/studentAnswerQuestions?index=" + index + "&answer=" + answer + "&exam_id=" + exam_id ,true);
+            xml.send();
+            // console.log(index-1);
+            // console.log(index);
+            // console.log(shortAnswer);
+            // console.log(choiceIndex);
+        }
+
+        function submitExam(){
+            var xml = new XMLHttpRequest();
+            xml.onreadystatechange = function() {
+                if (xml.readyState === 4 && xml.status === 200) {
+                    window.location.href = "studentSubmitExams.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>";
+                }
+            };
+            xml.open("POST","/Student/studentSubmitExams?exam_id=" + exam_id +"&student_id=" + student_id,true);
+            xml.send();
+        }
+    </script>
 
 </body>
 </html>

@@ -1,0 +1,109 @@
+package controller;
+
+import db.mapper.QuestionMapper;
+import db.mapper.SubmissionMapper;
+import db.mapper.SubmittedQuestionMapper;
+import domain.*;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.List;
+
+import static db.mapper.ExamMapper.getExamStatus;
+
+/**
+ * @description:
+ */
+@WebServlet("/Student/studentSubmitExams")
+public class SubmitExamController extends HttpServlet {
+    public SubmitExamController(){
+        super();
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String studentID = request.getParameter("student_id");
+        int student_id = Integer.parseInt(studentID);
+        String examID = request.getParameter("exam_id");
+        int exam_id = Integer.parseInt(examID);
+        List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(exam_id);
+        int length = questions.size();
+        String[] keys = new String[length];
+        String[] answers = new String[length];
+        HttpSession session = request.getSession();
+        String status = getExamStatus(exam_id);
+        assert status != null;
+        if (status.equals("PUBLISHED")) {
+            // get all the answers using session
+            // int examID, int userID, int questionNumber, String questionType, int choiceNumber, String shortAnswer, boolean isMarked, float marks
+            SubmittedQuestion sq;
+            //choice_number
+            for (int index = 0; index < length; index++) {
+                keys[index] = exam_id + "_" + index;
+                answers[index] = (String) session.getAttribute(keys[index]);
+                int question_number = questions.get(index).getQuestionNumber();
+                String answer = answers[index];
+                try {
+                    if (questions.get(index).getClass().equals(ShortAnswerQuestion.class)) {
+                        sq = new SubmittedQuestion(exam_id, student_id, question_number, "SHORT_ANSWER", 0, answer, false, -1);
+                        SubmittedQuestionMapper.insertSQ(sq);
+                        System.out.println("insert submitted question " + index + " successfully.");
+                    } else if (questions.get(index).getClass().equals(MultipleChoiceQuestion.class)) {
+                        sq = new SubmittedQuestion(exam_id, student_id, question_number, "MULTIPLE_CHOICE", Integer.parseInt(answer) + 1, null, false, -1);
+                        SubmittedQuestionMapper.insertSQ(sq);
+                        System.out.println("insert submitted question " + index + " successfully.");
+                    } else {
+                        System.out.println("insert submitted question " + index + "  error.");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // submission
+            try{
+            Timestamp ts = new Timestamp(System.currentTimeMillis());
+            Submission submission = new Submission(exam_id, student_id, ts);
+            SubmissionMapper.insertSubmission(submission);
+            System.out.println("insert submission successfully.");
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        } else if (status.equals("CLOSED")){
+            for (int index = 0; index < length; index++) {
+                int question_number = questions.get(index).getQuestionNumber();
+                SubmittedQuestion sq;
+                try {
+                    if (questions.get(index).getClass().equals(ShortAnswerQuestion.class)) {
+                        sq = new SubmittedQuestion(exam_id, student_id, question_number, "SHORT_ANSWER", -1, null, false, -1);
+                        SubmittedQuestionMapper.insertSQ(sq);
+                        System.out.println("insert submitted question " + index + " as unanswered successfully.");
+                    } else if (questions.get(index).getClass().equals(MultipleChoiceQuestion.class)) {
+                        sq = new SubmittedQuestion(exam_id, student_id, question_number, "MULTIPLE_CHOICE", -1, null, false, -1);
+                        SubmittedQuestionMapper.insertSQ(sq);
+                        System.out.println("insert submitted question " + index + " as unanswered successfully.");
+                    } else {
+                        System.out.println("insert submitted question " + index + " as unanswered error.");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            try{
+                Timestamp ts = new Timestamp(System.currentTimeMillis());
+                Submission submission = new Submission(exam_id, student_id, ts);
+                SubmissionMapper.insertSubmission(submission);
+                System.out.println("insert submission as unanswered successfully.");
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            System.out.println("Unsuccessfully. The exam has been closed.");
+        }
+    }
+}

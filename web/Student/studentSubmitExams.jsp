@@ -16,22 +16,18 @@
 <%
     String studentID = request.getParameter("studentID");
     String examID = request.getParameter("exam_id");
-    String submittedTime = request.getParameter("ts");
-//    Timestamp time = Timestamp.valueOf(submittedTime);
 %>
 <div style="margin-top: 100px" align="center">
-    <h3><%=studentID%> submitted exam <%=examID%> successfully at <%=submittedTime%>.<br/></h3>
+    <h3><%=studentID%> submitted exam <%=examID%> successfully.<br/></h3>
 
     <br><br>
 
     <h3>
-        <a href = studentHomePage.jsp?studentID=<%=studentID%>>
-            Back to home page.
+        <a href = studentViewExams.jsp?studentID=<%=studentID%>&exam_id=<%=examID%>>
+            View Submission.
         </a>
     </h3>
 </div>
-
-
 
 </body>
 </html>
