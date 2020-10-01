@@ -1,7 +1,6 @@
 package main.java.controller;
 
 import main.java.db.mapper.ExamMapper;
-import main.java.domain.Exam;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;

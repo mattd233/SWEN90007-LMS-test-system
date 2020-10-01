@@ -256,10 +256,6 @@
             };
             xml.open("POST","/Student/studentAnswerQuestions?index=" + index + "&answer=" + answer + "&exam_id=" + exam_id ,true);
             xml.send();
-            console.log(index+1);
-            console.log(index);
-            console.log(shortAnswer);
-            console.log(choiceIndex);
         }
 
         function getPrevious() {
@@ -288,13 +284,25 @@
             };
             xml.open("POST","/Student/studentAnswerQuestions?index=" + index + "&answer=" + answer + "&exam_id=" + exam_id ,true);
             xml.send();
-            // console.log(index-1);
-            // console.log(index);
-            // console.log(shortAnswer);
-            // console.log(choiceIndex);
         }
 
         function submitExam(){
+            // get parameters
+            var answer = "";
+            if (isShortAnswer) {
+                // document.getElementById("short_answer").innerHTML = xml.responseText;
+                var shortAnswer = document.getElementById("short_answer").value;
+                answer = shortAnswer;
+            } else {
+                var radio = document.getElementsByTagName("input");
+                for (var i = 0; i < radio.length; i++) {
+                    if (radio[i].checked) {
+                        var choiceIndex = i;
+                        answer = choiceIndex;
+                        // return choiceIndex;
+                    }
+                }
+            }
             var xml = new XMLHttpRequest();
             xml.onreadystatechange = function() {
                 if (xml.readyState === 4 && xml.status === 200) {

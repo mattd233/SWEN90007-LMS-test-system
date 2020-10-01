@@ -1,9 +1,10 @@
 package controller;
 
-import db.mapper.QuestionMapper;
-import db.mapper.SubmissionMapper;
-import db.mapper.SubmittedQuestionMapper;
-import domain.*;
+import main.java.db.mapper.ExamMapper;
+import main.java.db.mapper.QuestionMapper;
+import main.java.db.mapper.SubmissionMapper;
+import main.java.db.mapper.SubmittedQuestionMapper;
+import main.java.domain.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,8 +15,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
-
-import static db.mapper.ExamMapper.getExamStatus;
 
 /**
  * @description:
@@ -37,7 +36,7 @@ public class SubmitExamController extends HttpServlet {
         String[] keys = new String[length];
         String[] answers = new String[length];
         HttpSession session = request.getSession();
-        String status = getExamStatus(exam_id);
+        String status = ExamMapper.getExamStatus(exam_id);
         assert status != null;
         if (status.equals("PUBLISHED")) {
             // get all the answers using session
