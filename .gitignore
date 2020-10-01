@@ -1,10 +1,10 @@
 .idea/*
 out/*
 *.iml
-src/db/DBConnection
 
 # Compiled class file
 *.class
+*.kotlin_module
 
 # Log file
 *.log

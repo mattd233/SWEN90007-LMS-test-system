@@ -5,12 +5,12 @@
   Time: 6:45 pm
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="db.mapper.ExamMapper" %>
-<%@ page import="db.mapper.SubmissionMapper" %>
 <%@ page import="java.util.List" %>
-<%@ page import="db.mapper.QuestionMapper" %>
-<%@ page import="domain.*" %>
-<%@ page import="db.mapper.SubmittedQuestionMapper" %>
+<%@ page import="main.java.db.mapper.ExamMapper" %>
+<%@ page import="main.java.db.mapper.SubmissionMapper" %>
+<%@ page import="main.java.db.mapper.QuestionMapper" %>
+<%@ page import="main.java.db.mapper.SubmittedQuestionMapper" %>
+<%@ page import="main.java.domain.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
