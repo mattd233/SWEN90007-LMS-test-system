@@ -1,7 +1,7 @@
 package main.java.db.mapper;
 
 
-import main.java.domain.Exam;
+import main.java.domain.*;
 import main.java.db.DBConnection;
 
 import java.sql.Connection;
@@ -146,7 +146,8 @@ public class ExamMapper extends Mapper {
     }
 
     /**
-     * Close an exam. Exams can only be closed if its current status is PUBLISHED.
+     * Close an exam and create submissions for all students who haven't submitted.
+     * Exams can only be closed if its current status is PUBLISHED.
      * @param examID
      * @return True if exam is closed successfully. Otherwise returns false.
      */
@@ -159,6 +160,20 @@ public class ExamMapper extends Mapper {
             stmt.setString(1, Exam.ExamStatus.CLOSED.toString());
             stmt.setInt(2, examID);
             int result = stmt.executeUpdate();
+            String subjectCode = ExamMapper.getExamByID(examID).getSubjectCode();
+            List<Student> students = UserSubjectMapper.getAllStudentsWithSubject(subjectCode);
+            for (Student student : students) {
+                int userID = student.getUserID();
+                // If there's not submission from this student, create a submission
+                if (SubmissionMapper.getSubmissionByIDs(examID, userID) == null) {
+                    Submission submission = new Submission(examID, userID);
+                    SubmissionMapper.insertSubmission(submission);
+                    List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
+                    for (Question question : questions) {
+                        SubmittedQuestionMapper.insertUnansweredSubmittedQuestion(question, userID);
+                    }
+                }
+            }
             return (result > 0) ? true : false;
         } catch (Exception e) {
             e.printStackTrace();

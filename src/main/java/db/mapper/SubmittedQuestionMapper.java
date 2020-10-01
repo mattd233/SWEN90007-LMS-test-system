@@ -1,6 +1,7 @@
 package main.java.db.mapper;
 
 import main.java.db.DBConnection;
+import main.java.domain.Question;
 import main.java.domain.SubmittedQuestion;
 
 import java.sql.Connection;
@@ -78,7 +79,7 @@ public class SubmittedQuestionMapper {
      * Insert a submitted question into the database
      * @param submittedQuestion
      **/
-    public static void insertSQ(SubmittedQuestion submittedQuestion) {
+    public static void insertSubmittedQuestion(SubmittedQuestion submittedQuestion) {
 
         final String insertSQStmt = "INSERT INTO submitted_questions VALUES (?, ?, ?, ?::question_type, ?, ?, DEFAULT, DEFAULT)";
 
@@ -106,37 +107,28 @@ public class SubmittedQuestionMapper {
     }
 
     /**
-     *
-     * @param examID
-     * @param studentID
-     * @param questionNumber
-     * @return
-     */
-    public static String getAnswer (int examID, int studentID, int questionNumber){
-        final String findSA =
-                "SELECT * FROM submitted_questions WHERE exam_id = ? AND user_id = ? AND question_number = ?";
+     * Insert a submitted question into the database
+     * @param question
+     * @param userID
+     **/
+    public static void insertUnansweredSubmittedQuestion(Question question, int userID) {
+
+        final String insertSQStmt =
+                "INSERT INTO submitted_questions VALUES (?, ?, ?, ?::question_type, DEFAULT, DEFAULT, DEFAULT, DEFAULT)";
+
         try {
             Connection dbConnection = new DBConnection().connect();
-            PreparedStatement stmt = dbConnection.prepareStatement(findSA);
-            stmt.setInt(1, examID);
-            stmt.setInt(2, studentID);
-            stmt.setInt(3, questionNumber);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                String qType = rs.getString(4);
-                if (qType.equals("SHORT_ANSWER")){
-                    String shortAnswer = rs.getString(6);
-                    return shortAnswer;
-                }
-                else if (qType.equals("MULTIPLE_CHOICE")){
-                    String choiceNumber = rs.getString(5);
-                    return choiceNumber;
-                }
-            }
+            PreparedStatement insertStmt = dbConnection.prepareStatement(insertSQStmt);
+
+            insertStmt.setInt(1, question.getExamID());
+            insertStmt.setInt(2, userID);
+            insertStmt.setInt(3, question.getQuestionNumber());
+            insertStmt.setString(4, question.getQuestionType().toString());
+            insertStmt.execute();
+            System.out.println("inserted submitted question as unanswered");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     /**

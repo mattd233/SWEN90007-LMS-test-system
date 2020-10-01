@@ -1,4 +1,4 @@
-package main.java.controller;
+package main.java.controller.admin;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;

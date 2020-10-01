@@ -1,6 +1,5 @@
-package main.java.auth;
+package main.java.controller.auth;
 
-import main.java.db.DBConnection;
 import main.java.db.mapper.UserMapper;
 import main.java.domain.Admin;
 import main.java.domain.Instructor;

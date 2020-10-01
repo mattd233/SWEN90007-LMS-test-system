@@ -8,8 +8,17 @@ public class Submission {
     private int userID;
     private Timestamp submissionTime;
     private boolean isMarked;
-    private float marks;
-    private float fudgePoints;
+    private Float marks;
+    private Float fudgePoints;
+
+    public Submission(int examID, int userID) {
+        this.examID = examID;
+        this.userID = userID;
+        this.submissionTime = new Timestamp(System.currentTimeMillis());
+        this.isMarked = false;
+        this.marks = null;
+        this.fudgePoints = 0.0f;
+    }
 
     public Submission(int examID, int userID, Timestamp submissionTime, boolean isMarked, float marks, float fudgePoints) {
         this.examID = examID;
@@ -18,15 +27,6 @@ public class Submission {
         this.isMarked = isMarked;
         this.marks = marks;
         this.fudgePoints = fudgePoints;
-    }
-
-    public Submission(int examID, int studentID, Timestamp time) {
-        this.examID = examID;
-        this.userID = studentID;
-        this.submissionTime = time;
-        isMarked = false;
-        marks = -1;
-        fudgePoints = -1;
     }
 
     public int getExamID() {

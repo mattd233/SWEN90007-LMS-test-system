@@ -1,4 +1,4 @@
-package main.java.controller;
+package main.java.controller.instructor;
 
 
 import main.java.db.mapper.QuestionMapper;

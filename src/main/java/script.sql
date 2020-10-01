@@ -27,12 +27,12 @@ CREATE TABLE users (
     PRIMARY KEY (user_id)
 );
 
-INSERT INTO users VALUES (000000, 'ADMIN', 'Admin', 'Admin', 'admin');
-INSERT INTO users VALUES (000001, 'INSTRUCTOR', 'Eduardo', 'eduardo', '000000');
-INSERT INTO users VALUES (000002, 'INSTRUCTOR', 'Maria', 'maria', '000000');
+INSERT INTO users VALUES (000000, 'ADMIN', 'Administrator', 'admin', 'admin');
+INSERT INTO users VALUES (000001, 'INSTRUCTOR', 'Eduardo Oliveira', 'eduardo', '000000');
+INSERT INTO users VALUES (000002, 'INSTRUCTOR', 'Maria Rodriguez Read', 'maria', '000000');
 INSERT INTO users VALUES (904601, 'STUDENT', 'Simai Deng', 'simaid', '111111');
-INSERT INTO users VALUES (713551, 'STUDENT', 'Jiayu Li', 'jiayul3', '222222');
-INSERT INTO users VALUES (1049166, 'STUDENT', 'Yiran Wei', 'yirwei', '333333');
+INSERT INTO users VALUES (713551, 'STUDENT', 'Jiayu Li', 'jiayul3', '111111');
+INSERT INTO users VALUES (1049166, 'STUDENT', 'Yiran Wei', 'yirwei', '111111');
 
 --------------------------------------------------------------------------------
 --                            users_has_subjects                              --
@@ -68,15 +68,12 @@ CREATE TABLE exams (
     PRIMARY KEY (exam_id)
 );
 
-INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Mid-Sem exam', 'very good exam', DEFAULT);
-INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Final exam', 'very hard exam', DEFAULT);
-INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Final exam', 'the exam', 'CLOSED');
-INSERT INTO exams VALUES (DEFAULT, 'SWEN90009', 'Final exam', 'the exam', 'PUBLISHED');
 INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Week 3 Quiz', 'A quiz about data source layer', 'CLOSED');
 INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Week 5 Quiz', 'A quiz about object to relational structural patterns', 'PUBLISHED');
-INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Final exam', 'Final exam of Software Design and Architecture', DEFAULT);
-INSERT INTO exams VALUES (DEFAULT, 'SWEN90009', 'Final exam', 'Final exam of Software Requirement Analysis', DEFAULT);
-
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Mid-Sem exam', '2020S2 Mid semester exam (0% of total)', DEFAULT);
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Final exam', '2020S2 Final exam of Software Design and Architecture (60% of total)', DEFAULT);
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90009', 'Mid-Sem exam', '2020S1 Mid semester exam', 'PUBLISHED');
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90009', 'Final exam', '2020S1 Final exam of Software Requirement Analysis', DEFAULT);
 
 --------------------------------------------------------------------------------
 --                                 questions                                  --
@@ -98,9 +95,9 @@ CREATE TABLE questions (
 INSERT INTO questions VALUES (1, 1, 'SHORT_ANSWER', 'Question 1', 'What is the object that wraps a row in a DB table or view, encapsulates the DB access, and adds domain logic on that data?', 50);
 INSERT INTO questions VALUES (1, 2, 'MULTIPLE_CHOICE', 'Question 2', 'What is the layer of software that separates the in-memory objects from the database?', 50);
 
-INSERT INTO questions VALUES (4, 1, 'SHORT_ANSWER', 'Essay Question 1', 'What is software engineering?', 20);
-INSERT INTO questions VALUES (4, 2, 'SHORT_ANSWER', 'Essay Question 2', 'What is software requirements analysis?', 50);
-INSERT INTO questions VALUES (4, 3, 'MULTIPLE_CHOICE', 'Multiple Choice 1', 'Choose the WRONG statements.', 30);
+INSERT INTO questions VALUES (5, 1, 'SHORT_ANSWER', 'Question 1', 'What is software engineering?', 20);
+INSERT INTO questions VALUES (5, 2, 'SHORT_ANSWER', 'Question 2', 'What is software requirements analysis?', 50);
+INSERT INTO questions VALUES (5, 3, 'MULTIPLE_CHOICE', 'Multiple Choice 1', 'Choose the WRONG statement.', 30);
 
 --------------------------------------------------------------------------------
 --                                  choices                                   --
@@ -119,8 +116,8 @@ INSERT INTO choices VALUES (1, 2, 2, 'Row data gateway');
 INSERT INTO choices VALUES (1, 2, 3, 'Active record');
 INSERT INTO choices VALUES (1, 2, 4, 'Data mapper');
 
-INSERT INTO choices VALUES (4, 3, 1, 'Software engineering is meaningless.');
-INSERT INTO choices VALUES (4, 3, 2, 'Software engineering is the systematic application of engineering approaches to the development of software.');
+INSERT INTO choices VALUES (5, 3, 1, 'Software engineering is meaningless.');
+INSERT INTO choices VALUES (5, 3, 2, 'Software engineering is the systematic application of engineering approaches to the development of software.');
 
 --------------------------------------------------------------------------------
 --                                submissions                                 --
@@ -137,13 +134,13 @@ CREATE TABLE submissions (
 );
 
 INSERT INTO submissions VALUES (1, 904601, '2020-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO submissions VALUES (2, 904601, '2020-09-28 02:00:00', TRUE, 30, DEFAULT);
-INSERT INTO submissions VALUES (3, 904601, '2020-09-28 02:00:00', TRUE, 50, DEFAULT);
 INSERT INTO submissions VALUES (1, 713551, '2020-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO submissions VALUES (2, 713551, '2020-09-28 02:00:00', TRUE, 30, DEFAULT);
-INSERT INTO submissions VALUES (3, 713551, '2020-09-28 02:00:00', TRUE, 50, DEFAULT);
 INSERT INTO submissions VALUES (1, 1049166, '2020-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT);
+INSERT INTO submissions VALUES (2, 904601, '2020-09-28 02:00:00', TRUE, 30, DEFAULT);
+INSERT INTO submissions VALUES (2, 713551, '2020-09-28 02:00:00', TRUE, 30, DEFAULT);
 INSERT INTO submissions VALUES (2, 1049166, '2020-09-28 02:00:00', TRUE, 30, DEFAULT);
+INSERT INTO submissions VALUES (3, 904601, '2020-09-28 02:00:00', TRUE, 50, DEFAULT);
+INSERT INTO submissions VALUES (3, 713551, '2020-09-28 02:00:00', TRUE, 50, DEFAULT);
 INSERT INTO submissions VALUES (3, 1049166, '2020-09-28 02:00:00', TRUE, 50, DEFAULT);
 
 --------------------------------------------------------------------------------
@@ -155,7 +152,7 @@ CREATE TABLE submitted_questions (
     user_id INT REFERENCES users(user_id),
     question_number SMALLINT NOT NULL,
     question_type question_type NOT NULL,
-    choice_number SMALLINT DEFAULT null,
+    choice_number SMALLINT DEFAULT 0,
     short_answer VARCHAR(500) DEFAULT null,
     is_marked BOOLEAN NOT NULL DEFAULT FALSE,
     marks FLOAT DEFAULT null,

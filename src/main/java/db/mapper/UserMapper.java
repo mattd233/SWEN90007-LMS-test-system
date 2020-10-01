@@ -54,13 +54,12 @@ public class UserMapper {
             if (rs.next()) {
                 int id = rs.getInt(1);
                 String type = rs.getString(2);
-                if (!type.equals("INSTRUCTOR")) {
-                    throw new Exception("Not an instructor.");
+                if (type.equals(User.UserType.INSTRUCTOR.toString())) {
+                    String name = rs.getString(3);
+                    String userName = rs.getString(4);
+                    String passWord = rs.getString(5);
+                    return new Instructor(id, name, userName, passWord);
                 }
-                String name = rs.getString(3);
-                String userName = rs.getString(4);
-                String passWord = rs.getString(5);
-                return new Instructor(id, name, userName, passWord);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,13 +83,12 @@ public class UserMapper {
             if (rs.next()) {
                 int id = rs.getInt(1);
                 String type = rs.getString(2);
-                if (!type.equals("STUDENT")) {
-                    throw new Exception("Not a student.");
+                if (type.equals(User.UserType.STUDENT.toString())) {
+                    String name = rs.getString(3);
+                    String userName = rs.getString(4);
+                    String passWord = rs.getString(5);
+                    return new Student(id, name, userName, passWord);
                 }
-                String name = rs.getString(3);
-                String userName = rs.getString(4);
-                String passWord = rs.getString(5);
-                return new Student(id, name, userName, passWord);
             }
         } catch (Exception e) {
             e.printStackTrace();

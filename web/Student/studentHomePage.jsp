@@ -1,9 +1,3 @@
-
-<%@ page import="domain.Subject" %>
-<%@ page import="java.util.Objects" %>
-<%@ page import="domain.Exam" %>
-<%@ page import="db.mapper.SubjectMapper" %>
-<%@ page import="db.mapper.ExamMapper" %>
 <%--
   Created by IntelliJ IDEA.
   User: wyr04
@@ -13,7 +7,7 @@
 --%>
 <%@ page import="java.util.Objects" %>
 <%@ page import="main.java.db.mapper.UserMapper" %>
-<%@ page import="main.java.db.mapper.SubjectMapper" %>
+<%@ page import="main.java.db.mapper.ExamMapper" %>
 <%@ page import="main.java.domain.Subject" %>
 <%@ page import="main.java.domain.Exam" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -58,7 +52,6 @@
             for (Subject subject: Objects
 
                     .requireNonNull(UserMapper
- origin/master
                             .getStudentEnrolledSubject(studentID))){
         %>
         <tr>

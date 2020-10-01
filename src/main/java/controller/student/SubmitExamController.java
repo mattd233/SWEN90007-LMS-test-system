@@ -1,4 +1,4 @@
-package controller;
+package main.java.controller.student;
 
 import main.java.db.mapper.ExamMapper;
 import main.java.db.mapper.QuestionMapper;
@@ -51,11 +51,11 @@ public class SubmitExamController extends HttpServlet {
                 try {
                     if (questions.get(index).getClass().equals(ShortAnswerQuestion.class)) {
                         sq = new SubmittedQuestion(exam_id, student_id, question_number, "SHORT_ANSWER", 0, answer, false, -1);
-                        SubmittedQuestionMapper.insertSQ(sq);
+                        SubmittedQuestionMapper.insertSubmittedQuestion(sq);
                         System.out.println("insert submitted question " + index + " successfully.");
                     } else if (questions.get(index).getClass().equals(MultipleChoiceQuestion.class)) {
                         sq = new SubmittedQuestion(exam_id, student_id, question_number, "MULTIPLE_CHOICE", Integer.parseInt(answer) + 1, null, false, -1);
-                        SubmittedQuestionMapper.insertSQ(sq);
+                        SubmittedQuestionMapper.insertSubmittedQuestion(sq);
                         System.out.println("insert submitted question " + index + " successfully.");
                     } else {
                         System.out.println("insert submitted question " + index + "  error.");
@@ -67,36 +67,22 @@ public class SubmitExamController extends HttpServlet {
 
             // submission
             try{
-            Timestamp ts = new Timestamp(System.currentTimeMillis());
-            Submission submission = new Submission(exam_id, student_id, ts);
-            SubmissionMapper.insertSubmission(submission);
-            System.out.println("insert submission successfully.");
+                //Timestamp ts = new Timestamp(System.currentTimeMillis());
+                //Submission submission = new Submission(exam_id, student_id, ts);
+                Submission submission = new Submission(exam_id, student_id);
+                SubmissionMapper.insertSubmission(submission);
+                System.out.println("insert submission successfully.");
             } catch (Exception e){
                 e.printStackTrace();
             }
         } else if (status.equals("CLOSED")){
             for (int index = 0; index < length; index++) {
-                int question_number = questions.get(index).getQuestionNumber();
-                SubmittedQuestion sq;
-                try {
-                    if (questions.get(index).getClass().equals(ShortAnswerQuestion.class)) {
-                        sq = new SubmittedQuestion(exam_id, student_id, question_number, "SHORT_ANSWER", -1, null, false, -1);
-                        SubmittedQuestionMapper.insertSQ(sq);
-                        System.out.println("insert submitted question " + index + " as unanswered successfully.");
-                    } else if (questions.get(index).getClass().equals(MultipleChoiceQuestion.class)) {
-                        sq = new SubmittedQuestion(exam_id, student_id, question_number, "MULTIPLE_CHOICE", -1, null, false, -1);
-                        SubmittedQuestionMapper.insertSQ(sq);
-                        System.out.println("insert submitted question " + index + " as unanswered successfully.");
-                    } else {
-                        System.out.println("insert submitted question " + index + " as unanswered error.");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                SubmittedQuestionMapper.insertUnansweredSubmittedQuestion(questions.get(index), student_id);
             }
             try{
-                Timestamp ts = new Timestamp(System.currentTimeMillis());
-                Submission submission = new Submission(exam_id, student_id, ts);
+                //Timestamp ts = new Timestamp(System.currentTimeMillis());
+                //Submission submission = new Submission(exam_id, student_id, ts);
+                Submission submission = new Submission(exam_id, student_id);
                 SubmissionMapper.insertSubmission(submission);
                 System.out.println("insert submission as unanswered successfully.");
             } catch (Exception e){
