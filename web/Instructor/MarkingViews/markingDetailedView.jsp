@@ -31,34 +31,39 @@
         }
         Exam exam = ExamMapper.getExamByID(examID);
     %>
+    <!-- Show subject code and exam title -->
     <h1><%=exam.getSubjectCode()%> <%=exam.getTitle()%></h1>
-    <form method="post">
-        <%
-            // Get the submission
-            Submission submission = SubmissionMapper.getSubmissionByIDs(examID, userID);
-            if (submission == null) {
-        %>
-        <p>This student has no submission for this exam.</p>
-        <%
+
+    <!-- Show message if there's no submission from this student to this exam -->
+    <%
+        // Get the submission
+        Submission submission = SubmissionMapper.getSubmissionByIDs(examID, userID);
+        if (submission == null) {
+    %>
+    <p>This student has no submission for this exam.</p>
+
+    <!-- Show submission information -->
+    <%
+        } else {
+            String submissionTime = submission.getSubmissionTime().toString();
+    %>
+    <p>Submission time: <%=submissionTime%></p>
+    <%
+        // Display questions and marks
+        List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
+        for (int i=0; i<questions.size(); i++) {
+            Question question = questions.get(i);
+            SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionNumber());
+            String displayMarks = "";
+            if (answer.getChoiceNumber() == 0 && answer.getShortAnswer() == null) {
+                displayMarks = "0";
             } else {
-                String submissionTime = submission.getSubmissionTime().toString();
-        %>
-        <p>Submission time: <%=submissionTime%></p>
-        <%
-                // Display questions and marks
-                List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
-                for (int i=0; i<questions.size(); i++) {
-                    Question question = questions.get(i);
-                    SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionNumber());
-                    String displayMarks = "";
-                    if (answer.getChoiceNumber() == 0 && answer.getShortAnswer() == null) {
-                        displayMarks = "0";
-                    } else {
-                        if (answer.isMarked()) {
-                            displayMarks = Float.valueOf(answer.getMarks()).toString();
-                        }
-                    }
-        %>
+                if (answer.isMarked()) {
+                    displayMarks = Float.valueOf(answer.getMarks()).toString();
+                }
+            }
+    %>
+    <form method="post">
         <h3><%=question.getTitle()%>: <input name="marksQ<%=question.getQuestionNumber()%>" size="5" value="<%=displayMarks%>"> out of <%=question.getMarks()%></h3>
         <p>Question: <%=question.getDescription()%></p>
         <%

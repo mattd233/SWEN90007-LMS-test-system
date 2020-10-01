@@ -1,4 +1,4 @@
-package controller;
+package main.java.controller.student;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;

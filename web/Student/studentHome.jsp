@@ -9,7 +9,7 @@
 <%@ page import="main.java.domain.Subject" %>
 <%@ page import="main.java.domain.Exam" %>
 <%@ page import="main.java.db.mapper.UserMapper" %>
-<%@ page import="main.java.db.mapper.SubjectMapper" %>
+<%@ page import="main.java.db.mapper.ExamMapper" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -49,8 +49,8 @@
                     <%
                     String subject_code = subject.getSubjectCode();
                     for (Exam exam: Objects
-                            .requireNonNull(SubjectMapper
-                                    .getAllExamsWithSubject(subject_code))){
+                            .requireNonNull(ExamMapper
+                                    .getAllExamsWithSubjectCode(subject_code))){
                         int exam_id = exam.getExamID();
                         String title = exam.getTitle();
                         String description = exam.getDescription();
