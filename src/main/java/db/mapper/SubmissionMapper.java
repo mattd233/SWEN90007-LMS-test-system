@@ -112,20 +112,20 @@ public class SubmissionMapper extends Mapper {
       */
     public static void insertSubmission(Submission submission) {
 
-    final String insertSStmt = "INSERT INTO submissions VALUES (?, ?, ?, DEFAULT, DEFAULT, DEFAULT)";
+        final String insertSStmt = "INSERT INTO submissions VALUES (?, ?, ?, DEFAULT, DEFAULT, DEFAULT)";
 
-    try {
-        Connection dbConnection = new DBConnection().connect();
-        PreparedStatement insertStmt = dbConnection.prepareStatement(insertSStmt);
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement insertStmt = dbConnection.prepareStatement(insertSStmt);
 
-        insertStmt.setInt(1, submission.getExamID());
-        insertStmt.setInt(2, submission.getUserID());
-        insertStmt.setTimestamp(3, submission.getSubmissionTime());
-        insertStmt.execute();
-        System.out.println("insert submission successfully.");
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
+            insertStmt.setInt(1, submission.getExamID());
+            insertStmt.setInt(2, submission.getUserID());
+            insertStmt.setTimestamp(3, submission.getSubmissionTime());
+            insertStmt.execute();
+            System.out.println("insert submission successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

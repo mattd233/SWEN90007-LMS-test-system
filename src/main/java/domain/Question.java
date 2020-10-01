@@ -9,13 +9,15 @@ public abstract class Question {
 
     private int examID;
     private int questionNumber;
+    private QuestionType questionType;
     private String title;
     private String description;
     private int marks;
 
-    public Question(int examID, int questionNumber, String title, String description, int marks) {
+    public Question(int examID, int questionNumber, QuestionType questionType, String title, String description, int marks) {
         this.examID = examID;
         this.questionNumber = questionNumber;
+        this.questionType = questionType;
         this.title = title;
         this.description = description;
         this.marks = marks;
@@ -35,6 +37,14 @@ public abstract class Question {
 
     public void setQuestionNumber(int questionNumber) {
         this.questionNumber = questionNumber;
+    }
+
+    public QuestionType getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(QuestionType questionType) {
+        this.questionType = questionType;
     }
 
     public String getTitle() {

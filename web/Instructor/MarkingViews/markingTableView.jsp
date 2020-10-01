@@ -72,14 +72,14 @@
                 %>
                 <td>No submission</td>
                 <%
-                } else if (submission.isMarked()){
-                    float marks = submission.getMarks();
-                    totalMarks += marks;
+                        } else if (submission.isMarked()){
+                            float marks = submission.getMarks();
+                            totalMarks += marks;
                 %>
                 <td><a href="/submissions_detail?examID=<%=eId%>&userID=<%=uId%>"><%=marks%></a></td>
                 <%
-                } else {
-                    allSubmissionsMarked = false;
+                        } else {
+                            allSubmissionsMarked = false;
                 %>
                 <td><a href="/submissions_detail?examID=<%=eId%>&userID=<%=uId%>">Mark this exam</a></td>
                 <%

@@ -20,7 +20,6 @@ public class ExamStatusController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        String subjectCode = request.getParameter("subject_code");
         try {
             int examID = Integer.valueOf(request.getParameter("exam_id"));
             if (action.equals("publish")) {
@@ -36,10 +35,8 @@ public class ExamStatusController extends HttpServlet {
                     showErrorPage(request, response);
                 }
             }
-            String view = "/Instructor/createNewExam.jsp";
-            ServletContext servletContext = getServletContext();
-            RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
-            requestDispatcher.forward(request, response);
+            String subjectCode = request.getParameter("subject_code");
+            response.sendRedirect("/Instructor/instructorExams.jsp?subject_code=" + subjectCode);
         } catch (Exception e) {
             showErrorPage(request, response);
         }

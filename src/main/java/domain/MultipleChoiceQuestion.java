@@ -7,7 +7,7 @@ public class MultipleChoiceQuestion extends Question {
     private List<Choice> choices;
 
     public MultipleChoiceQuestion(int examID, int questionNumber, String title, String description, int marks) {
-        super(examID, questionNumber, title, description, marks);
+        super(examID, questionNumber, QuestionType.MULTIPLE_CHOICE, title, description, marks);
     }
 
     public List<Choice> getChoices() {
