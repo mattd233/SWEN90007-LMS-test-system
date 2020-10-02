@@ -48,10 +48,12 @@
             Submission submission = SubmissionMapper.getSubmissionByIDs(exam_id, student_id);
             boolean isMarked = submission.isMarked();
             float marks = submission.getMarks();
+            //TODO display xx out of xx points
+//            float total =;
         %>
 
         <td>
-            <%=marks%>
+<%--            <%=marks%> out of <%=total%><br>--%>
             <%
                 if (!isMarked){%>
             <br>Some of the questions have not been graded yet.<br>
