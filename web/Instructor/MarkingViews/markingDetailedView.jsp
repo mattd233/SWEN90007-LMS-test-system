@@ -50,7 +50,7 @@
     <p>Submission time: <%=submissionTime%></p>
     <%
         // Display questions and marks
-        List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
+        List<Question> questions = exam.getQuestions();
         for (int i=0; i<questions.size(); i++) {
             Question question = questions.get(i);
             SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionNumber());

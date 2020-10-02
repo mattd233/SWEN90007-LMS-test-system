@@ -1,5 +1,9 @@
 package main.java.domain;
 
+import main.java.db.mapper.QuestionMapper;
+
+import java.util.List;
+
 public class Exam {
 
     public enum ExamStatus {
@@ -13,6 +17,7 @@ public class Exam {
     private String title;
     private String description;
     private ExamStatus status;
+    private List<Question> questions;
 
     public Exam(int examID, String subjectCode, String title, String description, ExamStatus status) {
         this.examID = examID;
@@ -20,6 +25,7 @@ public class Exam {
         this.title = title;
         this.description = description;
         this.status = status;
+        this.questions = null;
     }
 
     public Exam(String subjectCode, String title, String description) {
@@ -68,5 +74,20 @@ public class Exam {
 
     public void setStatus(ExamStatus status) {
         this.status = status;
+    }
+
+    public List<Question> getQuestions() {
+        if (questions == null) {
+            load();
+        }
+        return this.questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
+
+    private void load() {
+        this.questions = QuestionMapper.getAllQuestionsWithExamID(examID);
     }
 }
