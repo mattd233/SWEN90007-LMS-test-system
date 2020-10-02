@@ -2,22 +2,40 @@ package main.java.domain;
 
 public class Choice {
 
-    private int questionID;
-    private int choiceID;
+    private int examID;
+    private int questionNumber;
+    private int choiceNumber;
     private String choiceDescription;
 
-    public Choice(int choiceID, int questionID, String choiceDescription) {
-        this.choiceID = choiceID;
-        this.questionID = questionID;
+    public Choice(int examID, int questionNumber, int choiceNumber, String choiceDescription) {
+        this.examID = examID;
+        this.questionNumber = questionNumber;
+        this.choiceNumber = choiceNumber;
         this.choiceDescription = choiceDescription;
     }
 
-    public int getQuestionID() {
-        return questionID;
+    public int getExamID() {
+        return examID;
     }
 
-    public int getChoiceID() {
-        return choiceID;
+    public void setExamID(int examID) {
+        this.examID = examID;
+    }
+
+    public int getQuestionNumber() {
+        return questionNumber;
+    }
+
+    public void setQuestionNumber(int questionNumber) {
+        this.questionNumber = questionNumber;
+    }
+
+    public int getChoiceNumber() {
+        return choiceNumber;
+    }
+
+    public void setChoiceNumber(int choiceNumber) {
+        this.choiceNumber = choiceNumber;
     }
 
     public String getChoiceDescription() {
@@ -26,6 +44,5 @@ public class Choice {
 
     public void setChoiceDescription(String choiceDescription) {
         this.choiceDescription = choiceDescription;
-        db.ChoiceUOW.getCurrent().registerDirty(this);
     }
 }

@@ -41,7 +41,7 @@ public class MarkExamDetailController extends HttpServlet {
         int userID = Integer.valueOf(request.getParameter("userID"));
         List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
         for (Question question : questions) {
-            int questionNumber = question.getQuestionID();
+            int questionNumber = question.getQuestionNumber();
             String marks = request.getParameter("marksQ"+questionNumber);
             try {
                 // If there's marks and marks are legal, update the marks in the submitted_questions table

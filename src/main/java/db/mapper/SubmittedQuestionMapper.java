@@ -124,7 +124,7 @@ public class SubmittedQuestionMapper {
 
             insertStmt.setInt(1, question.getExamID());
             insertStmt.setInt(2, userID);
-            insertStmt.setInt(3, question.getQuestionID());
+            insertStmt.setInt(3, question.getQuestionNumber());
             if (question instanceof MultipleChoiceQuestion) {
                 insertStmt.setString(4, Question.QuestionType.MULTIPLE_CHOICE.toString());
             } else if (question instanceof ShortAnswerQuestion) {

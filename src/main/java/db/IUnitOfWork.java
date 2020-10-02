@@ -1,4 +1,4 @@
-package db;
+package main.java.db;
 
 import javax.lang.model.util.Types;
 import java.util.ArrayList;

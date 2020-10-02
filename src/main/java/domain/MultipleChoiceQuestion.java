@@ -1,5 +1,7 @@
 package main.java.domain;
 
+import main.java.db.QuestionUOW;
+
 import java.util.List;
 
 public class MultipleChoiceQuestion extends Question {
@@ -16,5 +18,6 @@ public class MultipleChoiceQuestion extends Question {
 
     public void setChoices(List<Choice> choices) {
         this.choices = choices;
+        QuestionUOW.getCurrent().registerDirty(this);
     }
 }

@@ -77,36 +77,37 @@ CREATE TYPE question_type AS ENUM ('MULTIPLE_CHOICE', 'SHORT_ANSWER');
 
 DROP TABLE questions CASCADE;
 CREATE TABLE questions (
-    question_id SERIAL NOT NULL,
     exam_id INT REFERENCES exams(exam_id) ON DELETE CASCADE,
+    question_number INT NOT NULL,
     question_type question_type NOT NULL,
     title VARCHAR(45) NOT NULL,
     description VARCHAR(500) NOT NULL,
     marks FLOAT NOT NULL,
-    PRIMARY KEY (question_id)
+    PRIMARY KEY (exam_id, question_number)
 );
 
-INSERT INTO questions VALUES (DEFAULT, 1, 'MULTIPLE_CHOICE', 'Maths Question 1', 'Select the biggest number.', 20);
-INSERT INTO questions VALUES (DEFAULT, 1, 'SHORT_ANSWER', 'Essay Question 2', 'Are cats cuter than dogs? Discuss.', 78);
-INSERT INTO questions VALUES (DEFAULT, 1, 'MULTIPLE_CHOICE', 'Maths Question 2', 'What does water turn into when temperature is below 0 degrees celsius?', 2);
-INSERT INTO questions VALUES (DEFAULT, 2, 'SHORT_ANSWER', 'Question 1', '1+1=?', 100);
+INSERT INTO questions VALUES (1, 1, 'MULTIPLE_CHOICE', 'Maths Question 1', 'Select the biggest number.', 20);
+INSERT INTO questions VALUES (1, 2, 'SHORT_ANSWER', 'Essay Question 2', 'Are cats cuter than dogs? Discuss.', 78);
+INSERT INTO questions VALUES (1, 3, 'MULTIPLE_CHOICE', 'Maths Question 2', 'What does water turn into when temperature is below 0 degrees celsius?', 2);
+INSERT INTO questions VALUES (2, 1, 'SHORT_ANSWER', 'Question 1', '1+1=?', 100);
 
 --------------------------------------------------------------------------------
 --                                  choices                                   --
 --------------------------------------------------------------------------------
 DROP TABLE choices CASCADE;
 CREATE TABLE choices (
-    choice_id SERIAL NOT NULL,
-    question_id INT REFERENCES questions(question_id) ON DELETE CASCADE,
+    exam_id INT,
+    question_number INT,
+    choice_number INT NOT NULL,
     choice_description VARCHAR(200) NOT NULL,
-    PRIMARY KEY (choice_id)
+    PRIMARY KEY (exam_id, question_number, choice_number)
 );
 
-INSERT INTO choices VALUES (DEFAULT, 1,  '1');
-INSERT INTO choices VALUES (DEFAULT, 1,  '5');
-INSERT INTO choices VALUES (DEFAULT, 1, '20');
-INSERT INTO choices VALUES (DEFAULT, 3, 'Ice');
-INSERT INTO choices VALUES (DEFAULT, 3, 'Cold water');
+INSERT INTO choices VALUES (1, 1, 1,  '1');
+INSERT INTO choices VALUES (1, 1, 2,  '5');
+INSERT INTO choices VALUES (1, 1, 3, '20');
+INSERT INTO choices VALUES (1, 3, 1, 'Ice');
+INSERT INTO choices VALUES (1, 3, 2, 'Cold water');
 
 --------------------------------------------------------------------------------
 --                                submissions                                 --

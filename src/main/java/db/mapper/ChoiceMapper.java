@@ -11,18 +11,19 @@ import java.util.List;
 
 public class ChoiceMapper {
 
-    public static List<Choice> getChoices(int questionID) {
-        final String findChoicesStmt = "SELECT * FROM choices WHERE question_id = ?";
+    public static List<Choice> getChoices(int examID, int questionNumber) {
+        final String findChoicesStmt = "SELECT * FROM choices WHERE exam_id = ? AND question_number = ?";
         List<Choice> choices = new ArrayList<Choice>();
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(findChoicesStmt);
-            stmt.setInt(1, questionID);
+            stmt.setInt(1, examID);
+            stmt.setInt(2, questionNumber);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                int choiceID = rs.getInt(1);
-                String choiceDescription = rs.getString(3);
-                choices.add(new Choice(choiceID, questionID, choiceDescription));
+                int choiceNumber = rs.getInt(3);
+                String choiceDescription = rs.getString(4);
+                choices.add(new Choice(examID, questionNumber, choiceNumber, choiceDescription));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -31,37 +32,14 @@ public class ChoiceMapper {
     }
 
     public static void insert(Choice choice) {
-        final String insertChoiceStmt = "INSERT INTO choices VALUES (DEFAULT, ?, ?)";
+        final String insertChoiceStmt = "INSERT INTO choices VALUES (?, ?, ?, ?)";
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(insertChoiceStmt);
-            stmt.setInt(1, choice.getQuestionID());
-            stmt.setString(2, choice.getChoiceDescription());
-            stmt.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void update(Choice choice) {
-        final String updateChoiceStmt = "UPDATE choices SET choice_description = ? WHERE choice_id = ?";
-        try {
-            Connection dbConnection = new DBConnection().connect();
-            PreparedStatement stmt = dbConnection.prepareStatement(updateChoiceStmt);
-            stmt.setString(1, choice.getChoiceDescription());
-            stmt.setInt(2, choice.getChoiceID());
-            stmt.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void delete(Choice choice) {
-        final String deleteChoiceStmt = "DELETE FROM choices where choice_id = ?";
-        try {
-            Connection dbConnection = new DBConnection().connect();
-            PreparedStatement stmt = dbConnection.prepareStatement(deleteChoiceStmt);
-            stmt.setInt(1, choice.getChoiceID());
+            stmt.setInt(1, choice.getExamID());
+            stmt.setInt(2, choice.getQuestionNumber());
+            stmt.setInt(3, choice.getChoiceNumber());
+            stmt.setString(4, choice.getChoiceDescription());
             stmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
