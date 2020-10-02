@@ -1,5 +1,6 @@
 package main.java.domain;
 
+
 import main.java.db.QuestionUOW;
 
 public abstract class Question {
@@ -9,47 +10,37 @@ public abstract class Question {
         SHORT_ANSWER
     }
 
-    private int questionID;
     private int examID;
-    private QuestionType questionType;
+    private int questionNumber;
     private String title;
     private String description;
     private int marks;
 
-    // get a question object from database, do not register as new
-    public Question(int questionID, int examID, QuestionType questionType, String title, String description, int marks) {
-        this.questionID = questionID;
+    // Pulling a question from database, do not register as New
+    public Question(int examID, int questionNumber, String title, String description, int marks) {
         this.examID = examID;
-        this.questionType = questionType;
+        this.questionNumber = questionNumber;
         this.title = title;
         this.description = description;
         this.marks = marks;
-    }
-
-    // Create a new Question object
-    public Question(int examID, QuestionType questionType, String title, String description, int marks) {
-        this.examID = examID;
-        this.questionType = questionType;
-        this.title = title;
-        this.description = description;
-        this.marks = marks;
-//        QuestionUOW.getCurrent().registerNew(this);
     }
 
     public int getExamID() {
         return examID;
     }
 
-    public int getQuestionID() {
-        return questionID;
+//    public void setExamID(int examID) {
+//        this.examID = examID;
+//        QuestionUOW.getCurrent().registerDirty(this);
+//    }
+
+    public int getQuestionNumber() {
+        return questionNumber;
     }
 
-    public QuestionType getQuestionType() {
-        return questionType;
-    }
-
-    public void setQuestionType(QuestionType questionType) {
-        this.questionType = questionType;
+    public void setQuestionNumber(int questionNumber) {
+        this.questionNumber = questionNumber;
+        QuestionUOW.getCurrent().registerDirty(this);
     }
 
     public String getTitle() {
@@ -58,6 +49,7 @@ public abstract class Question {
 
     public void setTitle(String title) {
         this.title = title;
+        QuestionUOW.getCurrent().registerDirty(this);
     }
 
     public String getDescription() {
@@ -66,6 +58,7 @@ public abstract class Question {
 
     public void setDescription(String description) {
         this.description = description;
+        QuestionUOW.getCurrent().registerDirty(this);
     }
 
     public int getMarks() {
@@ -74,6 +67,8 @@ public abstract class Question {
 
     public void setMarks(int marks) {
         this.marks = marks;
+        QuestionUOW.getCurrent().registerDirty(this);
     }
+
 
 }

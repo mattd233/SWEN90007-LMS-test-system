@@ -7,7 +7,7 @@ import main.java.domain.Choice;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChoiceUOW implements IUnitOfWork {
+public class ChoiceUOW implements IUnitOfWork{
     protected static ThreadLocal current = new ThreadLocal();
     protected List<Choice> newObjects = new ArrayList<>();
     protected List<Choice> dirtyObjects = new ArrayList<>();
@@ -26,7 +26,7 @@ public class ChoiceUOW implements IUnitOfWork {
     }
 
     public void registerNew(Choice choice) {
-        assert (choice.getChoiceID()!=0) : "choice does not exist";
+        assert (choice.getExamID()!=0 && choice.getQuestionNumber()!=0) : "choice does not exist";
         assert !dirtyObjects.contains(choice) : "choice is dirty";
         assert !deletedObjects.contains(choice) : "choice is deleted";
         assert !newObjects.contains(choice) : "choice is new";
@@ -36,7 +36,7 @@ public class ChoiceUOW implements IUnitOfWork {
 
 
     public void registerDirty(Choice choice) {
-        assert (choice.getChoiceID()!=0) : "choice does not exist";
+        assert (choice.getExamID()!=0 && choice.getQuestionNumber()!=0) : "choice does not exist";
         assert !deletedObjects.contains(choice) : "choice is deleted";
         if (!dirtyObjects.contains(choice) && !newObjects.contains(choice)) {
             dirtyObjects.add(choice);
@@ -44,7 +44,7 @@ public class ChoiceUOW implements IUnitOfWork {
     }
 
     public void registerDeleted(Choice choice) {
-        assert (choice.getChoiceID()!=0) : "choice does not exist";
+        assert (choice.getExamID()!=0 && choice.getQuestionNumber()!=0) : "choice does not exist";
         if (newObjects.remove(choice)) return;
         dirtyObjects.remove(choice);
         if (!deletedObjects.contains(choice)) {
@@ -53,7 +53,7 @@ public class ChoiceUOW implements IUnitOfWork {
     }
 
     public void registerClean(Choice choice) {
-        assert (choice.getChoiceID()!=0) : "choice does not exist";
+        assert (choice.getExamID()!=0 && choice.getQuestionNumber()!=0) : "choice does not exist";
     }
 
     @Override
@@ -64,11 +64,11 @@ public class ChoiceUOW implements IUnitOfWork {
         }
         for (Object obj : dirtyObjects) {
             assert obj instanceof Choice;
-            ChoiceMapper.update((Choice) obj);
+//            ChoiceMapper.update((Choice) obj);
         }
         for (Object obj : deletedObjects) {
             assert obj instanceof Choice;
-            ChoiceMapper.delete((Choice) obj);
+//            ChoiceMapper.delete((Choice) obj);
         }
     }
 

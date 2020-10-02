@@ -1,33 +1,41 @@
 package main.java.domain;
 
-import main.java.db.ChoiceUOW;
-
 public class Choice {
 
-    private int questionID;
-    private int choiceID;
+    private int examID;
+    private int questionNumber;
+    private int choiceNumber;
     private String choiceDescription;
 
-    // pulled the item from database
-    public Choice(int choiceID, int questionID, String choiceDescription) {
-        this.choiceID = choiceID;
-        this.questionID = questionID;
+    public Choice(int examID, int questionNumber, int choiceNumber, String choiceDescription) {
+        this.examID = examID;
+        this.questionNumber = questionNumber;
+        this.choiceNumber = choiceNumber;
         this.choiceDescription = choiceDescription;
     }
 
-    // create choice to be added to the database
-    public Choice(int questionID, String choiceDescription) {
-        this.questionID = questionID;
-        this.choiceDescription = choiceDescription;
-        ChoiceUOW.getCurrent().registerNew(this);
+    public int getExamID() {
+        return examID;
     }
 
-    public int getQuestionID() {
-        return questionID;
+    public void setExamID(int examID) {
+        this.examID = examID;
     }
 
-    public int getChoiceID() {
-        return choiceID;
+    public int getQuestionNumber() {
+        return questionNumber;
+    }
+
+    public void setQuestionNumber(int questionNumber) {
+        this.questionNumber = questionNumber;
+    }
+
+    public int getChoiceNumber() {
+        return choiceNumber;
+    }
+
+    public void setChoiceNumber(int choiceNumber) {
+        this.choiceNumber = choiceNumber;
     }
 
     public String getChoiceDescription() {
@@ -36,6 +44,5 @@ public class Choice {
 
     public void setChoiceDescription(String choiceDescription) {
         this.choiceDescription = choiceDescription;
-        ChoiceUOW.getCurrent().registerDirty(this);
     }
 }

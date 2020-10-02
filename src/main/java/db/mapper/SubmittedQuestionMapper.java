@@ -1,6 +1,7 @@
 package main.java.db.mapper;
 
 import main.java.db.DBConnection;
+import main.java.domain.MultipleChoiceQuestion;
 import main.java.domain.Question;
 import main.java.domain.SubmittedQuestion;
 
@@ -122,8 +123,12 @@ public class SubmittedQuestionMapper {
 
             insertStmt.setInt(1, question.getExamID());
             insertStmt.setInt(2, userID);
-            insertStmt.setInt(3, question.getQuestionID());
-            insertStmt.setString(4, question.getQuestionType().toString());
+            insertStmt.setInt(3, question.getQuestionNumber());
+            if (question instanceof MultipleChoiceQuestion) {
+                insertStmt.setString(4, Question.QuestionType.MULTIPLE_CHOICE.toString());
+            } else {
+                insertStmt.setString(4, Question.QuestionType.SHORT_ANSWER.toString());
+            }
             insertStmt.execute();
             System.out.println("inserted submitted question as unanswered");
         } catch (Exception e) {

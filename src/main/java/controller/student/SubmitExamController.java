@@ -51,7 +51,7 @@ public class SubmitExamController extends HttpServlet {
             for (int index = 0; index < length; index++) {
                 keys[index] = exam_id + "_" + index;
                 answers[index] = (String) session.getAttribute(keys[index]);
-                int question_number = questions.get(index).getQuestionID();
+                int question_number = questions.get(index).getQuestionNumber();
                 String answer = answers[index];
                 System.out.println(Arrays.toString(keys) +"_"+ Arrays.toString(answers));
                 try {

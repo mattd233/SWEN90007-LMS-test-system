@@ -5,6 +5,7 @@
 <%@ page import="main.java.domain.MultipleChoiceQuestion" %>
 <%@ page import="main.java.domain.Choice" %>
 <%@ page import="main.java.db.mapper.ChoiceMapper" %>
+<%@ page import="main.java.db.QuestionUOW" %>
 <%--
 Created by IntelliJ IDEA.
   User: Matt
@@ -34,26 +35,26 @@ Created by IntelliJ IDEA.
     Status: <%=exam.getStatus()%>
     <br>
     <%
-        if (db.QuestionUOW.getCurrent() == null) {
-            db.QuestionUOW.newCurrent();
+        if (QuestionUOW.getCurrent() == null) {
+            QuestionUOW.newCurrent();
         }
         for (Question question : QuestionMapper.getAllQuestionsWithExamID(examID)) {
     %>
-    <div id=<%="Q" + question.getQuestionID()%>>
-        <h3>Q<%=question.getQuestionID()%>: <%=question.getTitle()%></h3>
-        <input type="text" placeholder="Change title" name=<%="title" + question.getQuestionID()%>>
+    <div id=<%="Q" + question.getQuestionNumber()%>>
+        <h3>Q<%=question.getQuestionNumber()%>: <%=question.getTitle()%></h3>
+        <input type="text" placeholder="Change title" name=<%="title" + question.getQuestionNumber()%>>
         <p><%=question.getDescription()%></p>
-        <input type="text" placeholder="Change description" name=<%="description" + question.getQuestionID()%>>
-        <input type="hidden" value=<%=question instanceof MultipleChoiceQuestion ? "multiple_choice" : "short-answer"%> name=<%="type" + question.getQuestionID()%>>
+        <input type="text" placeholder="Change description" name=<%="description" + question.getQuestionNumber()%>>
+        <input type="hidden" value=<%=question instanceof MultipleChoiceQuestion ? "multiple_choice" : "short-answer"%> name=<%="type" + question.getQuestionNumber()%>>
         <p>marks: <%=question.getMarks()%></p>
-        <input type="number" placeholder="Change marks" name=<%="marks" + question.getQuestionID()%>>
-        <input type="button" value="remove" onclick=deleteQuestion(<%=question.getQuestionID()%>)>
+        <input type="number" placeholder="Change marks" name=<%="marks" + question.getQuestionNumber()%>>
+        <input type="button" value="remove" onclick=deleteQuestion(<%=question.getQuestionNumber()%>)>
         <br>
             <% if (question instanceof MultipleChoiceQuestion) {
-                for (Choice choice : ChoiceMapper.getChoices( question.getQuestionID())) {
+                for (Choice choice : ChoiceMapper.getChoices(examID, question.getQuestionNumber())) {
             %>
-                    <p class="choice"><%="C" + choice.getChoiceID() + ": " + choice.getChoiceDescription()%></p>
-                    <input class = "choice_input" type="text" placeholder="Change choice" name=<%="Q"+question.getQuestionID()+"choice"+choice.getChoiceID()%>>
+                    <p class="choice"><%="C" + choice.getChoiceNumber() + ": " + choice.getChoiceDescription()%></p>
+                    <input class = "choice_input" type="text" placeholder="Change choice" name=<%="Q"+question.getQuestionNumber()+"choice"+choice.getChoiceNumber()%>>
     <%
                 }
             }

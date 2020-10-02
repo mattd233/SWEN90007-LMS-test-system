@@ -2,11 +2,13 @@ package main.java.controller.instructor;
 
 import main.java.db.ChoiceUOW;
 import main.java.db.QuestionUOW;
+import main.java.db.mapper.ChoiceMapper;
 import main.java.db.mapper.ExamMapper;
 import main.java.db.mapper.QuestionMapper;
 import main.java.domain.Choice;
 import main.java.domain.Exam;
 import main.java.domain.MultipleChoiceQuestion;
+import main.java.domain.ShortAnswerQuestion;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -56,22 +58,18 @@ public class AddExamController extends HttpServlet {
             String description = request.getParameter("description" + questionIdx);
             int marks = Integer.parseInt(request.getParameter("marks" + questionIdx));
             if (type.equals("multiple_choice")) {
-                // get back the question ID
-                int questionID = QuestionMapper.insert(new MultipleChoiceQuestion(examID, title, description, marks));
-                assert questionID != -1;
                 int choiceIdx = 1;
-                while(request.getParameter("Q" + questionIdx + "choice" + choiceIdx)!=null) {
-                    new Choice(questionIdx)
+                while (request.getParameter("Q" + questionIdx + "choice" + choiceIdx) != null) {
+                    ChoiceUOW.getCurrent().registerNew(new Choice(examID, questionIdx, choiceIdx, request.getParameter("Q" + questionIdx + "choice" + choiceIdx)));
                     choiceIdx++;
                 }
-//                questions.add(new MultipleChoiceQuestion(examID, questionIdx, title, description, marks));
-
+                QuestionUOW.getCurrent().registerNew(new MultipleChoiceQuestion(examID, questionIdx, title, description, marks));
             } else {
-                QuestionMapper.insert(new MultipleChoiceQuestion(examID, title, description, marks));
+                QuestionUOW.getCurrent().registerNew(new ShortAnswerQuestion(examID, questionIdx, title, description, marks));
             }
             questionIdx++;
         }
-
+        QuestionUOW.getCurrent().commit();
     }
 
 }
