@@ -27,10 +27,12 @@ CREATE TABLE users (
     PRIMARY KEY (user_id)
 );
 
-INSERT INTO users VALUES (000000, 'ADMIN', 'ADMIN', 'ADMIN', '000000');
-INSERT INTO users VALUES (000001, 'INSTRUCTOR', 'Eduardo', 'eddie', '000000');
-INSERT INTO users VALUES (000002, 'INSTRUCTOR', 'Maria', 'maria', '000000');
-INSERT INTO users VALUES (904601, 'STUDENT', 'Simai Deng', 'simaid', '000000');
+INSERT INTO users VALUES (000000, 'ADMIN', 'Administrator', 'admin', 'admin');
+INSERT INTO users VALUES (000001, 'INSTRUCTOR', 'Eduardo Oliveira', 'eduardo', '000000');
+INSERT INTO users VALUES (000002, 'INSTRUCTOR', 'Maria Rodriguez Read', 'maria', '000000');
+INSERT INTO users VALUES (904601, 'STUDENT', 'Simai Deng', 'simaid', '111111');
+INSERT INTO users VALUES (713551, 'STUDENT', 'Jiayu Li', 'jiayul3', '111111');
+INSERT INTO users VALUES (1049166, 'STUDENT', 'Yiran Wei', 'yirwei', '111111');
 
 --------------------------------------------------------------------------------
 --                            users_has_subjects                              --
@@ -39,14 +41,19 @@ DROP TABLE users_has_subjects CASCADE;
 CREATE TABLE users_has_subjects (
     user_id INT NOT NULL REFERENCES users(user_id),
     subject_code VARCHAR(20) NOT NULL REFERENCES subjects(subject_code),
+    marks INT DEFAULT null,
     fudge_points FLOAT DEFAULT 0
 );
 
-INSERT INTO users_has_subjects VALUES(000001, 'SWEN90007', DEFAULT);
-INSERT INTO users_has_subjects VALUES(000001, 'SWEN90009', DEFAULT);
-INSERT INTO users_has_subjects VALUES(000002, 'SWEN90007', DEFAULT);
-INSERT INTO users_has_subjects VALUES(904601, 'SWEN90007', DEFAULT);
-INSERT INTO users_has_subjects VALUES(904601, 'SWEN90009', DEFAULT);
+INSERT INTO users_has_subjects VALUES(000001, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(000001, 'SWEN90009', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(000002, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(904601, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(904601, 'SWEN90009', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(713551, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(713551, 'SWEN90009', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90009', DEFAULT, DEFAULT);
 
 --------------------------------------------------------------------------------
 --                                  exams                                     --
@@ -64,9 +71,12 @@ CREATE TABLE exams (
     PRIMARY KEY (exam_id)
 );
 
-INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Mid-Sem exam', 'very good exam', DEFAULT);
-INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Final exam', 'very hard exam', DEFAULT);
-INSERT INTO exams VALUES (DEFAULT, 'SWEN90009', 'Final exam', 'the exam want you die', 'PUBLISHED');
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Week 3 Quiz', 'A quiz about data source layer', 'CLOSED');
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Week 5 Quiz', 'A quiz about object to relational structural patterns', 'PUBLISHED');
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Mid-Sem exam', '2020S2 Mid semester exam (0% of total)', DEFAULT);
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Final exam', '2020S2 Final exam of Software Design and Architecture (60% of total)', DEFAULT);
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90009', 'Mid-Sem exam', '2020S1 Mid semester exam', 'PUBLISHED');
+INSERT INTO exams VALUES (DEFAULT, 'SWEN90009', 'Final exam', '2020S1 Final exam of Software Requirement Analysis', DEFAULT);
 
 --------------------------------------------------------------------------------
 --                                 questions                                  --
@@ -85,10 +95,12 @@ CREATE TABLE questions (
     PRIMARY KEY (exam_id, question_number)
 );
 
-INSERT INTO questions VALUES (1, 1, 'MULTIPLE_CHOICE', 'Maths Question 1', 'Select the biggest number.', 20);
-INSERT INTO questions VALUES (1, 2, 'SHORT_ANSWER', 'Essay Question 2', 'Are cats cuter than dogs? Discuss.', 78);
-INSERT INTO questions VALUES (1, 3, 'MULTIPLE_CHOICE', 'Maths Question 2', 'What does water turn into when temperature is below 0 degrees celsius?', 2);
-INSERT INTO questions VALUES (2, 1, 'SHORT_ANSWER', 'Question 1', '1+1=?', 100);
+INSERT INTO questions VALUES (1, 1, 'SHORT_ANSWER', 'Question 1', 'What is the object that wraps a row in a DB table or view, encapsulates the DB access, and adds domain logic on that data?', 50);
+INSERT INTO questions VALUES (1, 2, 'MULTIPLE_CHOICE', 'Question 2', 'What is the layer of software that separates the in-memory objects from the database?', 50);
+
+INSERT INTO questions VALUES (5, 1, 'SHORT_ANSWER', 'Question 1', 'What is software engineering?', 20);
+INSERT INTO questions VALUES (5, 2, 'SHORT_ANSWER', 'Question 2', 'What is software requirements analysis?', 50);
+INSERT INTO questions VALUES (5, 3, 'MULTIPLE_CHOICE', 'Multiple Choice 1', 'Choose the WRONG statement.', 30);
 
 --------------------------------------------------------------------------------
 --                                  choices                                   --
@@ -102,11 +114,13 @@ CREATE TABLE choices (
     PRIMARY KEY (exam_id, question_number, choice_number)
 );
 
-INSERT INTO choices VALUES (1, 1, 1,  '1');
-INSERT INTO choices VALUES (1, 1, 2,  '5');
-INSERT INTO choices VALUES (1, 1, 3, '20');
-INSERT INTO choices VALUES (1, 3, 1, 'Ice');
-INSERT INTO choices VALUES (1, 3, 2, 'Cold water');
+INSERT INTO choices VALUES (1, 2, 1, 'Table data gateway');
+INSERT INTO choices VALUES (1, 2, 2, 'Row data gateway');
+INSERT INTO choices VALUES (1, 2, 3, 'Active record');
+INSERT INTO choices VALUES (1, 2, 4, 'Data mapper');
+
+INSERT INTO choices VALUES (5, 3, 1, 'Software engineering is meaningless.');
+INSERT INTO choices VALUES (5, 3, 2, 'Software engineering is the systematic application of engineering approaches to the development of software.');
 
 --------------------------------------------------------------------------------
 --                                submissions                                 --
@@ -122,8 +136,16 @@ CREATE TABLE submissions (
     PRIMARY KEY (exam_id, user_id)
 );
 
-INSERT INTO submissions VALUES (1, 904601, '2001-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO submissions VALUES (2, 904601, '2001-09-28 02:00:00', TRUE, 100, DEFAULT);
+INSERT INTO submissions VALUES (1, 904601, '2020-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT);
+INSERT INTO submissions VALUES (1, 713551, '2020-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT);
+INSERT INTO submissions VALUES (1, 1049166, '2020-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT);
+INSERT INTO submissions VALUES (2, 904601, '2020-09-28 02:00:00', TRUE, 30, DEFAULT);
+INSERT INTO submissions VALUES (2, 713551, '2020-09-28 02:00:00', TRUE, 30, DEFAULT);
+INSERT INTO submissions VALUES (2, 1049166, '2020-09-28 02:00:00', TRUE, 30, DEFAULT);
+INSERT INTO submissions VALUES (3, 904601, '2020-09-28 02:00:00', TRUE, 50, DEFAULT);
+INSERT INTO submissions VALUES (3, 713551, '2020-09-28 02:00:00', TRUE, 50, DEFAULT);
+INSERT INTO submissions VALUES (3, 1049166, '2020-09-28 02:00:00', TRUE, 50, DEFAULT);
+
 --------------------------------------------------------------------------------
 --                            submitted questions                             --
 --------------------------------------------------------------------------------
@@ -140,7 +162,9 @@ CREATE TABLE submitted_questions (
     PRIMARY KEY (exam_id, user_id, question_number)
 );
 
-INSERT INTO submitted_questions VALUES (1, 904601, 1, 'MULTIPLE_CHOICE', 3, DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO submitted_questions VALUES (1, 904601, 2, 'SHORT_ANSWER', DEFAULT, 'Probably.', DEFAULT, DEFAULT);
-INSERT INTO submitted_questions VALUES (1, 904601, 3, 'MULTIPLE_CHOICE', 1, DEFAULT, DEFAULT, DEFAULT);
-INSERT INTO submitted_questions VALUES (2, 904601, 1, 'SHORT_ANSWER', DEFAULT, '3', TRUE, 100);
+INSERT INTO submitted_questions VALUES (1, 904601, 1, 'SHORT_ANSWER', DEFAULT, 'Active record', DEFAULT, DEFAULT);
+INSERT INTO submitted_questions VALUES (1, 904601, 2, 'MULTIPLE_CHOICE', 3, DEFAULT, DEFAULT, DEFAULT);
+INSERT INTO submitted_questions VALUES (1, 713551, 1, 'SHORT_ANSWER', DEFAULT, 'Active record', DEFAULT, DEFAULT);
+INSERT INTO submitted_questions VALUES (1, 713551, 2, 'MULTIPLE_CHOICE', 2, DEFAULT, DEFAULT, DEFAULT);
+INSERT INTO submitted_questions VALUES (1, 1049166, 1, 'SHORT_ANSWER', DEFAULT, 'Data mapper', DEFAULT, DEFAULT);
+INSERT INTO submitted_questions VALUES (1, 1049166, 2, 'MULTIPLE_CHOICE', 4, DEFAULT, DEFAULT, DEFAULT);

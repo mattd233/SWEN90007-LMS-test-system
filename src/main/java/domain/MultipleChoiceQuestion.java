@@ -19,4 +19,8 @@ public class MultipleChoiceQuestion extends Question {
     public void setChoices(List<Choice> choices) {
         this.choices = choices;
     }
+
+    public void setChoicesWithoutUoW(List<Choice> choices) {
+        this.choices = choices;
+    }
 }

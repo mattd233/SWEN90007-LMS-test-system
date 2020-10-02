@@ -51,10 +51,6 @@
     <%--    fill the table--%>
     <table border="1" align = "center">
         <tr>
-            <td>Exam id</td>
-            <td class="exam_id"><%=exam_id%></td>
-        </tr>
-        <tr>
             <td>Exam title</td>
             <td class="exam_title"><%=title%></td>
         </tr>

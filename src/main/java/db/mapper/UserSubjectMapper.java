@@ -52,11 +52,12 @@ public class UserSubjectMapper {
             stmt.setString(2, subjectCode);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getFloat(3);
+                return rs.getFloat(4);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("UserSubjectMapper: cannot get fudge points");
         return 0;
     }
 

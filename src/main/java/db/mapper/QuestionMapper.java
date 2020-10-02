@@ -36,7 +36,7 @@ public class QuestionMapper {
                 String qType = rs.getString(3);
                 if (qType.equals(Question.QuestionType.MULTIPLE_CHOICE.toString())) {
                     MultipleChoiceQuestion mcq = new MultipleChoiceQuestion(examID, qNumber, title, description, marks);
-                    mcq.setChoices(ChoiceMapper.getChoices(examID, qNumber));
+                    mcq.setChoicesWithoutUoW(ChoiceMapper.getChoices(examID, qNumber));
                     questions.add(mcq);
                 } else if (qType.equals(Question.QuestionType.SHORT_ANSWER.toString())) {
                     questions.add(new ShortAnswerQuestion(examID, qNumber, title, description, marks));
@@ -81,6 +81,7 @@ public class QuestionMapper {
         return null;
     }
 
+
     public static void insert(Question question) {
         final String insertQuestionStmt = "INSERT INTO questions VALUES (?, ?, ?::question_type, ?, ?, ?)";
         try {
@@ -101,6 +102,7 @@ public class QuestionMapper {
             e.printStackTrace();
         }
     }
+
 
     public static void update(Question question) {
         final String updateQuestionStmt = "UPDATE questions SET question_number= ?, question_type = ?::question_type, " +
@@ -204,5 +206,6 @@ public class QuestionMapper {
         }
         return null;
     }
+
 
 }

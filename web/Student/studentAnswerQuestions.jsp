@@ -1,4 +1,3 @@
-
 <%@ page import="main.java.db.mapper.ExamMapper" %>
 <%@ page import="main.java.db.mapper.QuestionMapper" %>
 <%@ page import="main.java.domain.*" %>
@@ -75,7 +74,7 @@
     int index = Integer.parseInt(questionIndex);
 
     // get the question list
-    List<Question> questionList = QuestionMapper.getAllQuestionsWithExamID(exam_id);
+    List<Question> questionList = exam.getQuestions();
     Question question = questionList.get(index);
     String key = exam_id + "_" + index;
     String answer = (String) session.getAttribute(key);

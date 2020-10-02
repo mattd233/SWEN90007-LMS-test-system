@@ -44,10 +44,10 @@
         </tr>
         <%
             Submission submission = SubmissionMapper.getSubmissionByIDs(examID, userID);
-            List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
+            List<Question> questions = exam.getQuestions();
             for (int i=0; i<questions.size(); i++) {
                 Question question = questions.get(i);
-                SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionID());
+                SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionNumber());
                 String displayMarks = "Not marked";
                 if (answer.isMarked()) {
                     displayMarks = Float.valueOf(answer.getMarks()).toString();
@@ -56,7 +56,7 @@
                 }
         %>
             <tr>
-                <td><%=question.getQuestionID()%></td>
+                <td><%=question.getQuestionNumber()%></td>
                 <td><%=displayMarks%></td>
             </tr>
         <%
@@ -64,7 +64,7 @@
         %>
     </table>
     <p>Fudge points: <%=submission.getFudgePoints()%></p>
-    <a href="/submissions_table?subjectCode=<%=exam.getSubjectCode()%>">Back to table view</a>
+    <a href="/submissions_table?subject_code=<%=exam.getSubjectCode()%>">Back to table view</a>
 </div>
 </body>
 </html>

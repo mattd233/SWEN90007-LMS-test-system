@@ -5,11 +5,13 @@
   Time: 19:04
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="java.util.Objects" %>
-<%@ page import="main.java.db.mapper.UserMapper" %>
 <%@ page import="main.java.db.mapper.ExamMapper" %>
-<%@ page import="main.java.domain.Subject" %>
+<%@ page import="main.java.db.mapper.UserMapper" %>
 <%@ page import="main.java.domain.Exam" %>
+<%@ page import="main.java.domain.Student" %>
+<%@ page import="main.java.domain.Subject" %>
+<%@ page import="java.util.Objects" %>
+<%@ page import="main.java.domain.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -36,10 +38,12 @@
         else{
             studentID = (int) session.getAttribute("user_id");
         }
+        Student student = UserMapper.findStudentWithID(studentID);
+        String student_name = student.getName();
     %>
 
     <%--header--%>
-    <h1>Welcome back, <%=studentID%>!</h1>
+    <h1>Welcome back, <%=student_name%>!</h1>
 
     <table>
         <tr>
@@ -50,7 +54,6 @@
 
         <%
             for (Subject subject: Objects
-
                     .requireNonNull(UserMapper
                             .getStudentEnrolledSubject(studentID))){
         %>

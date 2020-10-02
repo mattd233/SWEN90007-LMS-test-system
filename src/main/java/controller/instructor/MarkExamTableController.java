@@ -46,12 +46,15 @@ public class MarkExamTableController extends HttpServlet {
             String fudgePointsStr = request.getParameter("fp"+sID);
             try {
                 float fudgePoints = Float.valueOf(fudgePointsStr);
+                System.out.println(fudgePoints);
                 boolean updateSuccess = UserSubjectMapper.updateFudgePoints(sID, subjectCode, fudgePoints);
                 if (!updateSuccess) {
+                    System.out.println("Error in MarkExamTableController doPost: Update not successful");
                     showErrorPage(request, response);
                     return;
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 showErrorPage(request, response);
                 return;
             }

@@ -40,20 +40,24 @@
         Submission submission = SubmissionMapper.getSubmissionByIDs(examID, userID);
         if (submission == null) {
     %>
+    <!-- Case 1: Student has not submission for this exam -->
     <p>This student has no submission for this exam.</p>
 
-    <!-- Show submission information -->
+    <!-- Case 2: Show submission information -->
     <%
         } else {
             String submissionTime = submission.getSubmissionTime().toString();
     %>
     <p>Submission time: <%=submissionTime%></p>
+    <!-- Display questions and marks -->
     <%
+
         // Display questions and marks
-        List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
+        List<Question> questions = exam.getQuestions();
+
         for (int i=0; i<questions.size(); i++) {
             Question question = questions.get(i);
-            SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionID());
+            SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionNumber());
             String displayMarks = "";
             if (answer.getChoiceNumber() == 0 && answer.getShortAnswer() == null) {
                 displayMarks = "0";
@@ -63,44 +67,91 @@
                 }
             }
     %>
-    <form method="post">
-        <h3><%=question.getTitle()%>: <input name="marksQ<%=question.getQuestionID()%>" size="5" value="<%=displayMarks%>"> out of <%=question.getMarks()%></h3>
+    <form name="markingDetailedForm" method="post">
+        <!-- Question title -->
+        <h3>
+            <%=question.getTitle()%>:
+            <input type="number" name="marksQ<%=question.getQuestionNumber()%>"
+                   value="<%=displayMarks%>" onsubmit="return marksNotNullValidation(<%=question.getQuestionNumber()%>)">
+             out of
+            <%=question.getMarks()%>
+        </h3>
+        <!-- Question content -->
         <p>Question: <%=question.getDescription()%></p>
         <%
                     if (answer.getChoiceNumber() == 0 && answer.getShortAnswer() == null) {
         %>
-        <p>Student did not answer this question.</p>
+        <!-- Case 2.1: Student did not answer the question -->
+        <div class="notification"><p>Student did not answer this question.</p></div>
         <%
                     } else {
         %>
+        <!-- Case 2.2: Show student's answer -->
         <p>Student's Answer: </p>
+        <!-- Case 2.2.1: Multiple choice question -->
         <%
                         // Display student's answer
                         if (question instanceof MultipleChoiceQuestion) {
+        %>
+        <div class="studentAnswer">
+        <%
                             List<Choice> choices = ((MultipleChoiceQuestion) question).getChoices();
                             for (Choice choice : choices) {
-                                String selectionPrepend = "";
-                                if (choice.getChoiceID() == answer.getChoiceNumber()) {
-                                    selectionPrepend = "->";
+                                String addClass = "";
+                                if (choice.getChoiceNumber() == answer.getChoiceNumber()) {
+                                    addClass = " class=\"selectedChoice\"";
                                 }
         %>
-        <p><%=selectionPrepend%> <%=choice.getChoiceID()%>. <%=choice.getChoiceDescription()%></p>
+            <p<%=addClass%>><%=choice.getChoiceNumber()%>. <%=choice.getChoiceDescription()%></p>
         <%
                             }
+        %>
+        </div>
+        <%
                         } else if (question instanceof ShortAnswerQuestion) {
                                 String shortAnswer = answer.getShortAnswer();
         %>
-        <p><%=shortAnswer%></p>
+        <!-- Case 2.2.2: Short answer question -->
+        <div class="studentAnswer">
+            <p><%=shortAnswer%></p>
         <%
                         }
         %>
-        <p>Fudge points: <input name="fudgePoints" size="5" value=<%=submission.getFudgePoints()%>></p>
-        <input type="submit" value="Update marks">
+        </div>
         <%
                     }
                 }
+        %>
+
+        <!-- Fudge points -->
+        <div class="fudgePoints">
+            <p>
+                Fudge points:
+                <input type="number" name="fudgePoints"
+                       value="<%=submission.getFudgePoints()%>" onsubmit="return fpNotNullValidation()">
+            </p>
+        </div>
+        <input type="submit" value="Update marks">
+        <%
             }
         %>
     </form>
+
+    <script>
+        function marksNotNullValidation(qID) {
+            var m = document.forms["markingDetailedForm"]["marksQ" + qID].value();
+            if (m == "") {
+                alert("Fudge points cannot be empty.");
+                return false;
+            }
+        }
+        function fpNotNullValidation() {
+            var fp = document.forms["markingDetailedForm"]["fudgePoints"].value();
+            if (fp == "") {
+                alert("Fudge points cannot be empty.");
+                return false;
+            }
+        }
+    </script>
 </body>
 </html>

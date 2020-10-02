@@ -1,4 +1,6 @@
-<%--
+<%@ page import="main.java.domain.Exam" %>
+<%@ page import="main.java.db.mapper.ExamMapper" %>
+<%@ page import="java.util.Objects" %><%--
   Created by IntelliJ IDEA.
   User: wyr04
   Date: 2020/9/24
@@ -14,9 +16,12 @@
 <%
     String studentID = request.getParameter("studentID");
     String examID = request.getParameter("exam_id");
+    int exam_id = Integer.parseInt(examID);
+    String title = Objects.requireNonNull(ExamMapper.getExamByID(exam_id)).getTitle();
+
 %>
 <div style="margin-top: 100px" align="center">
-    <h3><%=studentID%> submitted exam <%=examID%> successfully.<br/></h3>
+    <h3><%=studentID%> submitted <%=title%> successfully.<br/></h3>
 
     <br><br>
 

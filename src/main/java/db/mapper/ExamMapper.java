@@ -1,6 +1,5 @@
 package main.java.db.mapper;
 
-
 import main.java.db.DBConnection;
 import main.java.domain.Exam;
 import main.java.domain.Question;
@@ -23,7 +22,7 @@ public class ExamMapper extends Mapper {
      */
     public static List<Exam> getAllExamsWithSubjectCode(String subjectCode) {
         final String findAllExamsStmt =
-                "SELECT * FROM exams WHERE subject_code = ?";
+                "SELECT * FROM exams WHERE subject_code = ? ORDER BY exam_id";
 
         List<Exam> exams = new ArrayList<>();
         try {
@@ -171,6 +170,7 @@ public class ExamMapper extends Mapper {
                 if (SubmissionMapper.getSubmissionByIDs(examID, userID) == null) {
                     Submission submission = new Submission(examID, userID);
                     SubmissionMapper.insertSubmission(submission);
+                    // TODO
                     List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
                     for (Question question : questions) {
                         SubmittedQuestionMapper.insertUnansweredSubmittedQuestion(question, userID);
