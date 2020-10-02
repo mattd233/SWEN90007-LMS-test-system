@@ -30,7 +30,6 @@ public class ChoiceUOW implements IUnitOfWork{
         assert !dirtyObjects.contains(choice) : "choice is dirty";
         assert !deletedObjects.contains(choice) : "choice is deleted";
         assert !newObjects.contains(choice) : "choice is new";
-
         newObjects.add(choice);
     }
 
@@ -64,11 +63,11 @@ public class ChoiceUOW implements IUnitOfWork{
         }
         for (Object obj : dirtyObjects) {
             assert obj instanceof Choice;
-//            ChoiceMapper.update((Choice) obj);
+            ChoiceMapper.update((Choice) obj);
         }
         for (Object obj : deletedObjects) {
             assert obj instanceof Choice;
-//            ChoiceMapper.delete((Choice) obj);
+            ChoiceMapper.delete((Choice) obj);
         }
     }
 

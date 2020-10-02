@@ -18,6 +18,5 @@ public class MultipleChoiceQuestion extends Question {
 
     public void setChoices(List<Choice> choices) {
         this.choices = choices;
-        QuestionUOW.getCurrent().registerDirty(this);
     }
 }

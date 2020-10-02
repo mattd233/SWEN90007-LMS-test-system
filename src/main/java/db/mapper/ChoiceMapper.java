@@ -46,4 +46,34 @@ public class ChoiceMapper {
         }
     }
 
+    public static void update(Choice choice) {
+        final String updateChoiceStmt = "UPDATE choices SET choice_description = ? " +
+                "WHERE exam_id = ? AND question_number = ? AND choice_number = ?";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(updateChoiceStmt);
+            stmt.setString(1, choice.getChoiceDescription());
+            stmt.setInt(2, choice.getExamID());
+            stmt.setInt(3, choice.getQuestionNumber());
+            stmt.setInt(4, choice.getChoiceNumber());
+            stmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void delete(Choice choice) {
+        final String deleteChoiceStmt = "DELETE FROM choices " +
+                "WHERE exam_id = ? AND question_number = ? AND choice_number = ?";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(deleteChoiceStmt);
+            stmt.setInt(1, choice.getExamID());
+            stmt.setInt(2, choice.getQuestionNumber());
+            stmt.setInt(3, choice.getChoiceNumber());
+            stmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

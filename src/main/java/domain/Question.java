@@ -1,8 +1,6 @@
 package main.java.domain;
 
 
-import main.java.db.QuestionUOW;
-
 public abstract class Question {
 
     public enum QuestionType {
@@ -29,18 +27,12 @@ public abstract class Question {
         return examID;
     }
 
-//    public void setExamID(int examID) {
-//        this.examID = examID;
-//        QuestionUOW.getCurrent().registerDirty(this);
-//    }
-
     public int getQuestionNumber() {
         return questionNumber;
     }
 
     public void setQuestionNumber(int questionNumber) {
         this.questionNumber = questionNumber;
-        QuestionUOW.getCurrent().registerDirty(this);
     }
 
     public String getTitle() {
@@ -49,7 +41,6 @@ public abstract class Question {
 
     public void setTitle(String title) {
         this.title = title;
-        QuestionUOW.getCurrent().registerDirty(this);
     }
 
     public String getDescription() {
@@ -58,7 +49,6 @@ public abstract class Question {
 
     public void setDescription(String description) {
         this.description = description;
-        QuestionUOW.getCurrent().registerDirty(this);
     }
 
     public int getMarks() {
@@ -67,7 +57,6 @@ public abstract class Question {
 
     public void setMarks(int marks) {
         this.marks = marks;
-        QuestionUOW.getCurrent().registerDirty(this);
     }
 
 

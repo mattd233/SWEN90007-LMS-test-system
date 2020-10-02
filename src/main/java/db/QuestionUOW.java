@@ -31,7 +31,6 @@ public class QuestionUOW implements IUnitOfWork{
         assert !dirtyObjects.contains(question) : "question is dirty";
         assert !deletedObjects.contains(question) : "question is deleted";
         assert !newObjects.contains(question) : "question is new";
-
         newObjects.add(question);
     }
 

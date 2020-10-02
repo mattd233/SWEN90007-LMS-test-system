@@ -20,9 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/Instructor/createNewExam")
-public class AddExamController extends HttpServlet {
+public class CreateExamController extends HttpServlet {
 
-    public AddExamController() {
+    public CreateExamController() {
         super();
     }
 
@@ -70,6 +70,7 @@ public class AddExamController extends HttpServlet {
             questionIdx++;
         }
         QuestionUOW.getCurrent().commit();
+        ChoiceUOW.getCurrent().commit();
     }
 
 }

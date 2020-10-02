@@ -1,5 +1,6 @@
 package main.java.domain;
 
+
 public class Choice {
 
     private int examID;
@@ -18,16 +19,8 @@ public class Choice {
         return examID;
     }
 
-    public void setExamID(int examID) {
-        this.examID = examID;
-    }
-
     public int getQuestionNumber() {
         return questionNumber;
-    }
-
-    public void setQuestionNumber(int questionNumber) {
-        this.questionNumber = questionNumber;
     }
 
     public int getChoiceNumber() {
