@@ -1,6 +1,6 @@
 package main.java.db.mapper;
 
-import main.java.db.DBConnection;
+
 import main.java.domain.MultipleChoiceQuestion;
 import main.java.domain.Question;
 import main.java.domain.ShortAnswerQuestion;
@@ -23,7 +23,7 @@ public class QuestionMapper {
         final String findAllQuestionsStmt = "SELECT * FROM questions WHERE exam_id = ?";
         List<Question> questions = new ArrayList<>();
         try {
-            Connection dbConnection = new DBConnection().connect();
+            Connection dbConnection = new db.DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(findAllQuestionsStmt);
             stmt.setInt(1, examID);
             ResultSet rs = stmt.executeQuery();

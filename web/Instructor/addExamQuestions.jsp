@@ -12,7 +12,7 @@
 </head>
 
 <body>
-<form action="/Instructor/saveExam" method="post">
+<form action="/Instructor/addExamQuestions" method="post">
 <fieldset id="add_exam_questions">
     <legend>Add new questions!</legend>
 </fieldset>
@@ -27,23 +27,23 @@
 <script>
     $(document).ready(function() {
         // add a short-answer question
-        $("#short-answer").click(function() {
-            var lastField = $("#add_exam_questions div:last");
-            var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
-            var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"field" + intId + "\" />");
-            fieldWrapper.data("idx", intId);
-            var fType = $("<input type=\"hidden\" name=\"type" + intId + "\" value=\"short_answer\"/>");
-            var fName = $("<input type=\"text\" placeholder =\"title\" class=\"fieldname\" name=\"title" + intId + "\" />");
-            var fDescription = $("<input type=\"text\" placeholder =\"description\" class=\"fieldname\" name=\"description" + intId + "\" />");
-            var fMarks = $("<input type=\"number\" placeholder =\"marks\" class=\"fieldmarks\" name=\"marks" + intId + "\" />");
-            var removeButton = $("<input type=\"button\" class=\"remove\" value=\"-\" />");
-            removeButton.click(function() {
-                $(this).parent().remove();
-            });
+            $("#short-answer").click(function() {
+                var lastField = $("#add_exam_questions div:last");
+                var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
+                var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"field" + intId + "\" />");
+                fieldWrapper.data("idx", intId);
+                var fType = $("<input type=\"hidden\" name=\"type" + intId + "\" value=\"short_answer\"/>");
+                var fName = $("<input type=\"text\" placeholder =\"title\" class=\"fieldname\" name=\"title" + intId + "\" />");
+                var fDescription = $("<input type=\"text\" placeholder =\"description\" class=\"fieldname\" name=\"description" + intId + "\" />");
+                var fMarks = $("<input type=\"number\" placeholder =\"marks\" class=\"fieldmarks\" name=\"marks" + intId + "\" />");
+                var removeButton = $("<input type=\"button\" class=\"remove\" value=\"-\" />");
+                removeButton.click(function() {
+                    $(this).parent().remove();
+                });
 
-            fieldWrapper.append(intId + ". ");
-            fieldWrapper.append(fType);
-            fieldWrapper.append(fName);
+                fieldWrapper.append(intId + ". ");
+                fieldWrapper.append(fType);
+                fieldWrapper.append(fName);
             fieldWrapper.append(fDescription);
             fieldWrapper.append(fMarks);
             fieldWrapper.append(removeButton);
