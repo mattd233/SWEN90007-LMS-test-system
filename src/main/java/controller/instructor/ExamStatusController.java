@@ -32,6 +32,7 @@ public class ExamStatusController extends HttpServlet {
                 }
             } else if (action.equals("delete")) {
                 if (!ExamMapper.deleteExam(examID)) {
+                    // TODO: error handling
                     showErrorPage(request, response);
                 }
             }

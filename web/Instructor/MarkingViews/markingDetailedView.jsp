@@ -79,21 +79,20 @@
                     if (answer.getChoiceNumber() == 0 && answer.getShortAnswer() == null) {
         %>
         <!-- Case 2.1: Student did not answer the question -->
-        <p>Student did not answer this question.</p>
+        <div class="notification"><p>Student did not answer this question.</p></div>
         <%
                     } else {
         %>
         <!-- Case 2.2: Show student's answer -->
         <p>Student's Answer: </p>
-        <div class="studentAnswer">
         <!-- Case 2.2.1: Multiple choice question -->
         <%
                         // Display student's answer
                         if (question instanceof MultipleChoiceQuestion) {
-                            List<Choice> choices = ((MultipleChoiceQuestion) question).getChoices();
         %>
-
+        <div class="studentAnswer">
         <%
+                            List<Choice> choices = ((MultipleChoiceQuestion) question).getChoices();
                             for (Choice choice : choices) {
                                 String addClass = "";
                                 if (choice.getChoiceNumber() == answer.getChoiceNumber()) {
@@ -103,31 +102,41 @@
             <p<%=addClass%>><%=choice.getChoiceNumber()%>. <%=choice.getChoiceDescription()%></p>
         <%
                             }
+        %>
+        </div>
+        <%
                         } else if (question instanceof ShortAnswerQuestion) {
                                 String shortAnswer = answer.getShortAnswer();
         %>
         <!-- Case 2.2.2: Short answer question -->
+        <div class="studentAnswer">
             <p><%=shortAnswer%></p>
-        </div>
         <%
                         }
+        %>
+        </div>
+        <%
                     }
                 }
         %>
+
         <!-- Fudge points -->
-        <p>
-            Fudge points:
-            <input type="number" name="fudgePoints"
-                   value="<%=submission.getFudgePoints()%>" onsubmit="return fpNotNullValidation()">
-        </p>
+        <div class="fudgePoints">
+            <p>
+                Fudge points:
+                <input type="number" name="fudgePoints"
+                       value="<%=submission.getFudgePoints()%>" onsubmit="return fpNotNullValidation()">
+            </p>
+        </div>
         <input type="submit" value="Update marks">
         <%
             }
         %>
     </form>
+
     <script>
         function marksNotNullValidation(qID) {
-            var m = document.forms["markingDetailedForm"]["marksQ"+qId].value();
+            var m = document.forms["markingDetailedForm"]["marksQ" + qID].value();
             if (m == "") {
                 alert("Fudge points cannot be empty.");
                 return false;

@@ -20,4 +20,8 @@ public class MultipleChoiceQuestion extends Question {
         this.choices = choices;
         QuestionUOW.getCurrent().registerDirty(this);
     }
+
+    public void setChoicesWithoutUoW(List<Choice> choices) {
+        this.choices = choices;
+    }
 }

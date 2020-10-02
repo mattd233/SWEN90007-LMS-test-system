@@ -47,7 +47,7 @@
             List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
             for (int i=0; i<questions.size(); i++) {
                 Question question = questions.get(i);
-                SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionID());
+                SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionNumber());
                 String displayMarks = "Not marked";
                 if (answer.isMarked()) {
                     displayMarks = Float.valueOf(answer.getMarks()).toString();
@@ -56,7 +56,7 @@
                 }
         %>
             <tr>
-                <td><%=question.getQuestionID()%></td>
+                <td><%=question.getQuestionNumber()%></td>
                 <td><%=displayMarks%></td>
             </tr>
         <%

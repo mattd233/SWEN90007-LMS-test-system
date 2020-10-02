@@ -31,7 +31,7 @@ public class MarkExamDetailController extends HttpServlet {
             RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
             requestDispatcher.forward(request, response);
         } else {
-            System.out.println("Error in MarkExamDetailController doGet");
+            System.out.println("Error in MarkExamDetailedController doGet");
             showErrorPage(request, response);
         }
     }
@@ -53,6 +53,7 @@ public class MarkExamDetailController extends HttpServlet {
                 return;
             }
         }
+
         try {
             // update submission
             float fudgePoints = Float.valueOf(request.getParameter("fudgePoints"));
@@ -63,11 +64,11 @@ public class MarkExamDetailController extends HttpServlet {
                 RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
                 requestDispatcher.forward(request, response);
             } else {
-                System.out.println("Error in MarkExamController doPost");
+                System.out.println("Error in MarkExamDetailedController doPost: Update not successful");
                 showErrorPage(request, response);
             }
         } catch (Exception e) {
-            System.out.println("Error in MarkExamController doPost");
+            e.printStackTrace();
             showErrorPage(request, response);
             return;
         }
