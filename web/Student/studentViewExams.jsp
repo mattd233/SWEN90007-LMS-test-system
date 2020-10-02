@@ -32,7 +32,7 @@
 
 <div align="center">
 
-<%--    add a link to get back to previous page--%>
+<%--    add a link to get back to home page--%>
 <a href="studentHomePage.jsp">Go back to Home Page.</a>
 
 <%--get parameters directly from the url--%>
@@ -106,18 +106,19 @@
     %>
         <a href = "studentTakeExams.jsp?studentID=<%=studentID%>&exam_id=<%=exam_id%>"><br> Take the exam now.</a>
     <%
-        } else if (status.equals("PUBLISHED") && SubmissionMapper.checkSubmission(exam_id,student_id)){
+        } else if (SubmissionMapper.checkSubmission(exam_id,student_id)){
             Submission submission = SubmissionMapper.getSubmissionByIDs(exam_id, student_id);
             assert submission != null;
             boolean isMarked = submission.isMarked();
             if (isMarked){
     %>
-        <a href = "studentTakeExams.jsp?studentID=<%=studentID%>&exam_id=<%=exam_id%>"><br> View result.</a>
+        <a href = "studentViewResults.jsp?studentID=<%=studentID%>&exam_id=<%=exam_id%>"><br> View result.</a>
     <%
             } // end if
             else {
     %>
             <br>The exam is not graded yet.
+    <a href = "studentViewResults.jsp?studentID=<%=studentID%>&exam_id=<%=exam_id%>"><br> View result.</a>
     <%
             } // end else
         } // end else if

@@ -55,9 +55,11 @@
 
 <%--give a notive board and add a button to take the exam--%>
 Notice that the exam only allow single attempt!<br/>
-<%--    once click on the link, record it as the exam start time--%>
-<a href="studentAnswerQuestions.jsp?studentID=<%=studentID%>&exam_id=<%=exam_id%>&question_index=0">
-    I understand, start the exam now.</a>
+<form name=start method="post" target="_blank"
+      action="studentAnswerQuestions.jsp?studentID=<%=studentID%>&exam_id=<%=exam_id%>&question_index=0">
+    <input type="button" value="I understand, start the exam now." onclick="javascript:{this.disabled=true;document.start.submit();}">
+</form>
+
 </div>
 </body>
 

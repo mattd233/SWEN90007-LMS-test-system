@@ -1,7 +1,6 @@
 package main.java.db.mapper;
 
 import main.java.db.DBConnection;
-import main.java.domain.Exam;
 import main.java.domain.Subject;
 
 import java.sql.Connection;

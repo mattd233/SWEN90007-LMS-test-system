@@ -1,3 +1,11 @@
+
+<%@ page import="main.java.db.mapper.ExamMapper" %>
+<%@ page import="main.java.db.mapper.QuestionMapper" %>
+<%@ page import="main.java.domain.*" %>
+<%@ page import="java.util.List" %>
+<%@ page import="static main.java.db.mapper.ChoiceMapper.getChoices" %>
+
+
 <%--
   Created by IntelliJ IDEA.
   User: wyr04
@@ -5,10 +13,6 @@
   Time: 19:21
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="main.java.db.mapper.ExamMapper" %>
-<%@ page import="main.java.db.mapper.QuestionMapper" %>
-<%@ page import="main.java.domain.*" %>
-<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -23,19 +27,9 @@
             margin: 0;
             padding: 0;
         }
-        .menu{
-            margin-left: 80%;
-            height: 100%;
-            position:absolute;
-            padding-right: 1px;
-            padding-left: 1px;
-            border-left: 1px solid #E6E6E6;
-            border-top: 1px solid #D9D9D9;
-            overflow: auto;
-        }
 
         .contentContainer{
-            width: 80%;
+            width: 100%;
             height: 100%;
             position: absolute;
             overflow: auto;
@@ -85,7 +79,7 @@
     Question question = questionList.get(index);
     String key = exam_id + "_" + index;
     String answer = (String) session.getAttribute(key);
-    answer = answer == null ? "" : answer;
+
     // get this question information
     assert question != null;
     String question_title = question.getTitle();
@@ -95,28 +89,6 @@
 //    String answer = SubmittedQuestionMapper.getAnswer(exam_id, Integer.parseInt(student_id), question_number);
 %>
 <%--use div to develop block layout--%>
-<%--block 2: question list, time elapsed--%>
-<div class ="menu">
-    <h3>Question list:<br/></h3>
-    <ol>
-        <%
-            for (int i = 0; i<questionList.size(); i++){
-                String menu_title = questionList.get(i).getTitle();
-        %>
-
-        <li>
-            <a href="studentAnswerQuestions.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&question_index=<%=i%>">
-                <%=menu_title%>
-            </a>
-        </li>
-        <%
-            } // end for
-        %>
-    </ol>
-
-</div>
-
-
 <div class="contentContainer">
     <%--block 1: subject_code, start time--%>
     <div class ="header">
@@ -135,39 +107,56 @@
             <h4>Question Description: <%=description%></h4><br/>
             <br/>
         </div>
-<%--        lazy load pattern is used in this area--%>
+        <%--        lazy load pattern is used in this area--%>
 
         <form method="post" action="studentSubmitExams.jsp" style="width:94%;height:70%;background-color: bisque">
-        <div id="answer" style="margin-left: 3%">
-            <%
-                if (question.getClass()==ShortAnswerQuestion.class){
-            %>
+            <div id="answer" style="margin-left: 3%">
+                <%
+                    if (question.getClass()== ShortAnswerQuestion.class){
+                        answer = answer == null ? "" : answer;
+                %>
 
                 input your answer in the box below<br/>
                 <div align = "center" >
                     <textarea style="width:80%;height:80%" id="short_answer" name="short_answer"><%=answer%></textarea>
                 </div>
 
-            <%
-            } // end if
-            else if(question.getClass()== MultipleChoiceQuestion.class){
-                // get the choices
-                List<Choice> choices = getChoices(exam_id, question_number);
-                // display the choices using form
-            %>
                 <%
-                    for (Choice choice : choices) {
-                        String choice_description = choice.getChoiceDescription();
+                } // end if
+                else if(question.getClass()== MultipleChoiceQuestion.class){
+                    // get the choices
+                    List<Choice> choices = getChoices(exam_id, question_number);
                 %>
-                    <input type="radio" name="radioChoice" value="<%=choice.getChoiceNumber()%>">
-                    <%=choice_description%><br/>
+                <%
+                    if (answer == null){
+                        for (Choice choice : choices) {
+                            String choice_description = choice.getChoiceDescription();
+                %>
+                <%--            display all the answers--%>
+                <input type="radio" name="radioChoice" value="<%=choice.getChoiceNumber()%>">
+                <%=choice_description%><br/>
                 <%
                     } // end for
+                } // end if
+                else {
+                    int selected = Integer.parseInt(answer);
+                    for (int i =0; i < choices.size(); i++){
+                        Choice choice = choices.get(i);
+                        String choice_description = choice.getChoiceDescription();
+                        if ( i == selected){
                 %>
-            <%
-                } //end elseif
-            %>
-        </div>
+                <input type="radio" name="radioChoice" value="<%=choice.getChoiceNumber()%>" checked="checked"><%=choice_description%><br/>
+                <%
+                } else{
+                %>
+                <input type="radio" name="radioChoice" value="<%=choice.getChoiceNumber()%>"><%=choice_description%><br/>
+                <%
+                                }// end else
+                            } // end for
+                        } // end else
+                    } //end elseif
+                %>
+            </div>
         </form>
     </div>
 
@@ -185,7 +174,7 @@
                 %>
                 <div>
                     <button onclick="getPrevious()">Previous Question</button>
-<%--                    <a href="studentAnswerQuestions.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&question_index=<%=previous%>"> </a>--%>
+                    <%--                    <a href="studentAnswerQuestions.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&question_index=<%=previous%>"> </a>--%>
                 </div>
                 <%
                     } // end if
@@ -200,7 +189,7 @@
                 %>
                 <div>
                     <button onclick="getNext()">Next Question</button>
-<%--                    <a href="studentAnswerQuestions.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&question_index=<%=next%>"></a>--%>
+                    <%--                    <a href="studentAnswerQuestions.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&question_index=<%=next%>"></a>--%>
                 </div>
                 <%
                     } // end if
@@ -212,9 +201,9 @@
         <%--    submit quiz button--%>
         <div id="submit" style = "width:80%;float:left">
             <div style="float:right">
-<%--                <a href="studentSubmitExams.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&ts=<%=ts%>">--%>
-                    <button onclick="submitExam()">Submit Exam</button>
-<%--                </a>--%>
+                <%--                <a href="studentSubmitExams.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&ts=<%=ts%>">--%>
+                <button onclick="submitExam()">Submit Exam</button>
+                <%--                </a>--%>
             </div>
         </div>
     </div>
@@ -303,7 +292,7 @@
                     window.location.href = "studentSubmitExams.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>";
                 }
             };
-            xml.open("POST","/Student/studentSubmitExams?exam_id=" + exam_id +"&student_id=" + student_id,true);
+            xml.open("POST", "/Student/studentSubmitExams?exam_id=" + exam_id +"&student_id=" + student_id +"&index=" + index + "&answer=" + answer ,true);
             xml.send();
         }
     </script>
