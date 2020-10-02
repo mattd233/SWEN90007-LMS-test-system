@@ -12,8 +12,8 @@
 </head>
 <body>
 <div>
-
-    <form name="CreateExam" action="/Instructor/createNewExam" method="post">
+    <body>
+    <form name="CreateExam" action="/Instructor/createExam" method="post">
         Title: <input type="text" name="title">
         <br />
         Description:
@@ -26,5 +26,4 @@
     </form>
 </div>
 </body>
-
 </html>

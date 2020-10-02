@@ -47,25 +47,38 @@
                 <%
                     if (exam.getStatus() == Exam.ExamStatus.UNPUBLISHED) {
                 %>
-                <a href="/instructor/update_exam_status?action=publish&subject_code=<%=exam.getSubjectCode()%>&exam_id=<%=exam.getExamID()%>">
+                <button onclick="location.href = '/Instructor/editExam?exam_id=<%=exam.getExamID()%>'">
+                    Edit exam
+                </button><br>
+                <button onclick="if (confirm('Are you sure you want to publish the exam?'))
+                    location.href = '/instructor/update_exam_status?action=publish&subject_code=<%=exam.getSubjectCode()%>&exam_id=<%=exam.getExamID()%>' "
+                        type="button">
                     Publish exam
-                </a><br>
-                <a href="/instructor/update_exam_status?action=delete&subject_code=<%=exam.getSubjectCode()%>&exam_id=<%=exam.getExamID()%>">
+                </button><br>
+                <button onclick="if (confirm('Are you sure you want to delete the exam?'))
+                    location.href = '/instructor/update_exam_status?action=delete&subject_code=<%=exam.getSubjectCode()%>&exam_id=<%=exam.getExamID()%>' "
+                        type="button">
                     Delete exam
-                </a>
+                </button>
                 <%
                     } else if (exam.getStatus() == Exam.ExamStatus.PUBLISHED) {
                 %>
-                <a href="/instructor/update_exam_status?action=close&subject_code=<%=exam.getSubjectCode()%>&exam_id=<%=exam.getExamID()%>">
+                <button onclick="if (confirm('Are you sure you want to close the exam?'))
+                    location.href = '/instructor/update_exam_status?action=close&subject_code=<%=exam.getSubjectCode()%>&exam_id=<%=exam.getExamID()%>' "
+                        type="button">
                     Close exam
-                </a><br>
-                <a href="/instructor/update_exam_status?action=delete&subject_code=<%=exam.getSubjectCode()%>&exam_id=<%=exam.getExamID()%>">
+                </button><br>
+                <button onclick="if (confirm('Are you sure you want to delete the exam?'))
+                        location.href = '/instructor/update_exam_status?action=delete&subject_code=<%=exam.getSubjectCode()%>&exam_id=<%=exam.getExamID()%>' "
+                        type="button">
                     Delete exam
-                </a>
+                </button>
                 <%
                     } else if (exam.getStatus() == Exam.ExamStatus.CLOSED) {
                 %>
-                <a href="/submissions_table?subject_code=<%=exam.getSubjectCode()%>">Mark exam</a>
+                <button onclick="location.href='/submissions_table?subject_code=<%=exam.getSubjectCode()%>'">
+                    Mark exam
+                </button>
                 <%
                     }
                 %>

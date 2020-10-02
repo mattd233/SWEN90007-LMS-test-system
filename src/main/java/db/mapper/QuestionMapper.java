@@ -1,5 +1,6 @@
 package main.java.db.mapper;
 
+
 import main.java.db.DBConnection;
 import main.java.domain.MultipleChoiceQuestion;
 import main.java.domain.Question;
@@ -28,17 +29,17 @@ public class QuestionMapper {
             stmt.setInt(1, examID);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                int qNumber = rs.getInt(2);
+                int questionID = rs.getInt(1);
                 String title = rs.getString(4);
                 String description = rs.getString(5);
                 int marks = rs.getInt(6);
                 String qType = rs.getString(3);
                 if (qType.equals(Question.QuestionType.MULTIPLE_CHOICE.toString())) {
-                    MultipleChoiceQuestion mcq = new MultipleChoiceQuestion(examID, qNumber, title, description, marks);
-                    mcq.setChoices(ChoiceMapper.getChoices(examID, qNumber));
+                    MultipleChoiceQuestion mcq = new MultipleChoiceQuestion(questionID, examID, title, description, marks);
+                    mcq.setChoices(ChoiceMapper.getChoices(questionID));
                     questions.add(mcq);
                 } else if (qType.equals(Question.QuestionType.SHORT_ANSWER.toString())) {
-                    questions.add(new ShortAnswerQuestion(examID, qNumber, title, description, marks));
+                    questions.add(new ShortAnswerQuestion(questionID, examID, title, description, marks));
                 }
             }
         } catch (SQLException e) {
@@ -50,16 +51,15 @@ public class QuestionMapper {
     /**
      *
      * @param exam_id
-     * @param question_number
+     * @param questionID
      * @return
      */
-    public static Question getQuestionWithQuestionID(int exam_id, int question_number) {
-        final String findQuestionStmt = "SELECT * FROM questions WHERE exam_id = ? AND question_number = ?";
+    public static Question getQuestionWithQuestionID(int exam_id, int questionID) {
+        final String findQuestionStmt = "SELECT * FROM questions WHERE question_id = ?";
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(findQuestionStmt);
-            stmt.setInt(1, exam_id);
-            stmt.setInt(2, question_number);
+            stmt.setInt(1, questionID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 Question.QuestionType question_type = Question.QuestionType.valueOf(Question.QuestionType.class, rs.getString(3));
@@ -68,10 +68,10 @@ public class QuestionMapper {
                 int marks = rs.getInt(6);
                 // return a question by telling the question type
                 if (question_type == Question.QuestionType.MULTIPLE_CHOICE){
-                    return new MultipleChoiceQuestion(exam_id, question_number, title, description, marks);
+                    return new MultipleChoiceQuestion(exam_id, questionID, title, description, marks);
                 }
                 else if (question_type == Question.QuestionType.SHORT_ANSWER){
-                    return new ShortAnswerQuestion(exam_id, question_number, title, description, marks);
+                    return new ShortAnswerQuestion(exam_id, questionID, title, description, marks);
                 }
             }
         } catch (Exception e) {
@@ -81,21 +81,62 @@ public class QuestionMapper {
     }
 
     public static void insert(Question question) {
-        final String insertQuestionStmt = "INSERT INTO questions VALUES (?, ?, ?::question_type, ?, ?, ?)";
+        final String insertQuestionStmt = "INSERT INTO questions VALUES (DEFAULT, ?, ?::question_type, ?, ?, ?)";
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(insertQuestionStmt);
             stmt.setInt(1, question.getExamID());
-            stmt.setInt(2, question.getQuestionNumber());
             if (question instanceof MultipleChoiceQuestion) {
-                stmt.setString(3, Question.QuestionType.MULTIPLE_CHOICE.toString());
+                stmt.setString(2, Question.QuestionType.MULTIPLE_CHOICE.toString());
             } else {
-                stmt.setString(3, Question.QuestionType.SHORT_ANSWER.toString());
+                stmt.setString(2, Question.QuestionType.SHORT_ANSWER.toString());
             }
-            stmt.setString(4, question.getTitle());
-            stmt.setString(5, question.getDescription());
-            stmt.setInt(6, question.getMarks());
+            stmt.setString(3, question.getTitle());
+            stmt.setString(4, question.getDescription());
+            stmt.setInt(5, question.getMarks());
             stmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void update(Question question) {
+        final String updateQuestionStmt = "UPDATE questions SET question_type = ?::question_type, " +
+                "title = ?, description = ?, marks = ?" +
+                "WHERE question_id = ?";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(updateQuestionStmt);
+            if (question instanceof MultipleChoiceQuestion) {
+                stmt.setString(1, Question.QuestionType.MULTIPLE_CHOICE.toString());
+            } else {
+                stmt.setString(1, Question.QuestionType.SHORT_ANSWER.toString());
+            }
+            stmt.setString(2, question.getTitle());
+            stmt.setString(3, question.getDescription());
+            stmt.setInt(4, question.getMarks());
+            stmt.setInt(5, question.getQuestionID());
+            stmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void delete(Question question) {
+        final String deleteQuestionStmt = "DELETE FROM questions WHERE question_id = ? ";
+//        final String deleteChoicesStmt = "DELETE FROM choices WHERE exam_id = ? AND question_id = ? ";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(deleteQuestionStmt);
+            stmt.setInt(1, question.getQuestionID());
+            stmt.execute();
+//            // take care of choices table if it's a multiple choice question
+//            if (question instanceof MultipleChoiceQuestion) {
+//                stmt = dbConnection.prepareStatement(deleteChoicesStmt);
+//                stmt.setInt(1, question.getExamID());
+//                stmt.setInt(2, question.getQuestionNumber());
+//                stmt.execute();
+//            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
