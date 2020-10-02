@@ -1,7 +1,9 @@
 <%@ page import="main.java.db.mapper.ExamMapper" %>
+<%@ page import="main.java.db.mapper.SubmissionMapper" %>
 <%@ page import="main.java.domain.Exam" %>
+<%@ page import="main.java.domain.Question" %>
 <%@ page import="main.java.domain.Submission" %>
-<%@ page import="main.java.db.mapper.SubmissionMapper" %><%--
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: wyr04
   Date: 2020/10/1
@@ -49,11 +51,18 @@
             boolean isMarked = submission.isMarked();
             float marks = submission.getMarks();
             //TODO display xx out of xx points
-//            float total =;
-        %>
+            List<Question> questionList = exam.getQuestions();
+            // count the total marks of this exam
+            float total = 0;
+            for (Question question : questionList) {
+                System.out.println(question.getDescription());
+                float single_marks = question.getMarks();
+                total += single_marks;
+            }
+            %>
 
         <td>
-<%--            <%=marks%> out of <%=total%><br>--%>
+            <%=marks%> out of <%=total%><br>
             <%
                 if (!isMarked){%>
             <br>Some of the questions have not been graded yet.<br>
