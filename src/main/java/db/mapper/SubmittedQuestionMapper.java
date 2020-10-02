@@ -3,6 +3,7 @@ package main.java.db.mapper;
 import main.java.db.DBConnection;
 import main.java.domain.MultipleChoiceQuestion;
 import main.java.domain.Question;
+import main.java.domain.ShortAnswerQuestion;
 import main.java.domain.SubmittedQuestion;
 
 import java.sql.Connection;
@@ -126,11 +127,13 @@ public class SubmittedQuestionMapper {
             insertStmt.setInt(3, question.getQuestionNumber());
             if (question instanceof MultipleChoiceQuestion) {
                 insertStmt.setString(4, Question.QuestionType.MULTIPLE_CHOICE.toString());
-            } else {
+            } else if (question instanceof ShortAnswerQuestion) {
                 insertStmt.setString(4, Question.QuestionType.SHORT_ANSWER.toString());
+            } else {
+                throw (new Exception("Question type not defined"));
             }
             insertStmt.execute();
-            System.out.println("inserted submitted question as unanswered");
+            // System.out.println("inserted submitted question as unanswered");
         } catch (Exception e) {
             e.printStackTrace();
         }

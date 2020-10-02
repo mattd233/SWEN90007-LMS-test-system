@@ -42,7 +42,7 @@ public abstract class Question {
         this.questionNumber = questionNumber;
         QuestionUOW.getCurrent().registerDirty(this);
     }
-
+  
     public String getTitle() {
         return title;
     }
