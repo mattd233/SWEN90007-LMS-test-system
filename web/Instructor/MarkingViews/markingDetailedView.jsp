@@ -54,7 +54,7 @@
         List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
         for (int i=0; i<questions.size(); i++) {
             Question question = questions.get(i);
-            SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionID());
+            SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionNumber());
             String displayMarks = "";
             if (answer.getChoiceNumber() == 0 && answer.getShortAnswer() == null) {
                 displayMarks = "0";
@@ -68,8 +68,8 @@
         <!-- Question title -->
         <h3>
             <%=question.getTitle()%>:
-            <input type="number" name="marksQ<%=question.getQuestionID()%>"
-                   value="<%=displayMarks%>" onsubmit="return marksNotNullValidation(<%=question.getQuestionID()%>)">
+            <input type="number" name="marksQ<%=question.getQuestionNumber()%>"
+                   value="<%=displayMarks%>" onsubmit="return marksNotNullValidation(<%=question.getQuestionNumber()%>)">
              out of
             <%=question.getMarks()%>
         </h3>
@@ -96,11 +96,11 @@
         <%
                             for (Choice choice : choices) {
                                 String addClass = "";
-                                if (choice.getChoiceID() == answer.getChoiceNumber()) {
+                                if (choice.getChoiceNumber() == answer.getChoiceNumber()) {
                                     addClass = " class=\"selectedChoice\"";
                                 }
         %>
-            <p<%=addClass%>><%=choice.getChoiceID()%>. <%=choice.getChoiceDescription()%></p>
+            <p<%=addClass%>><%=choice.getChoiceNumber()%>. <%=choice.getChoiceDescription()%></p>
         <%
                             }
                         } else if (question instanceof ShortAnswerQuestion) {
