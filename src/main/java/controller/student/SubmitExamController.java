@@ -31,6 +31,7 @@ public class SubmitExamController extends HttpServlet {
         int student_id = Integer.parseInt(studentID);
         String examID = request.getParameter("exam_id");
         int exam_id = Integer.parseInt(examID);
+        // TODO
         List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(exam_id);
         int length = questions.size();
         String[] keys = new String[length];

@@ -44,7 +44,7 @@
         </tr>
         <%
             Submission submission = SubmissionMapper.getSubmissionByIDs(examID, userID);
-            List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
+            List<Question> questions = exam.getQuestions();
             for (int i=0; i<questions.size(); i++) {
                 Question question = questions.get(i);
                 SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionNumber());
