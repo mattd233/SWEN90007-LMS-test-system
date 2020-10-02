@@ -101,6 +101,50 @@ public class QuestionMapper {
         }
     }
 
+    public static void update(Question question) {
+        final String updateQuestionStmt = "UPDATE questions SET question_type = ?::question_type, " +
+                "title = ?, description = ?, marks = ?" +
+                "WHERE exam_id = ? AND question_id = ?";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(updateQuestionStmt);
+            if (question instanceof MultipleChoiceQuestion) {
+                stmt.setString(1, Question.QuestionType.MULTIPLE_CHOICE.toString());
+            } else {
+                stmt.setString(1, Question.QuestionType.SHORT_ANSWER.toString());
+            }
+            stmt.setString(2, question.getTitle());
+            stmt.setString(3, question.getDescription());
+            stmt.setInt(4, question.getMarks());
+            stmt.setInt(5, question.getExamID());
+            stmt.setInt(6, question.getQuestionNumber());
+            stmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void delete(Question question) {
+        final String deleteQuestionStmt = "DELETE FROM questions WHERE exam_id = ? AND question_number = ? ";
+        final String deleteChoicesStmt = "DELETE FROM choices WHERE exam_id = ? AND question_number = ? ";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(deleteQuestionStmt);
+            stmt.setInt(1, question.getExamID());
+            stmt.setInt(2, question.getQuestionNumber());
+            stmt.execute();
+            // take care of choices table if it's a multiple choice question
+            if (question instanceof MultipleChoiceQuestion) {
+                stmt = dbConnection.prepareStatement(deleteChoicesStmt);
+                stmt.setInt(1, question.getExamID());
+                stmt.setInt(2, question.getQuestionNumber());
+                stmt.execute();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      *
      * @param exam_id
