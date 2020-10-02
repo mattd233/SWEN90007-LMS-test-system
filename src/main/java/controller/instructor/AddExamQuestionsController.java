@@ -13,16 +13,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/Instructor/saveExam")
-public class SaveExamController extends HttpServlet {
+public class AddExamQuestionsController extends HttpServlet {
 
-    public SaveExamController(){
+    public AddExamQuestionsController(){
         super();
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String exam_id = request.getParameter("exam_id");
-        System.out.println(exam_id);
         int examID = Integer.parseInt(exam_id);
 //        List<Question> questions = new ArrayList<>();
         int questionIdx = 1;

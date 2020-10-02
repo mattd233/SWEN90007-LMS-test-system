@@ -34,7 +34,7 @@ public class AddExamController extends HttpServlet {
 //        System.out.println(title + " " + description);
         Exam exam = new Exam(subjectCode, title, description);
         int examID = ExamMapper.insert(exam);
-        response.sendRedirect("/Instructor/addExamQuestions.jsp");
+        response.sendRedirect("/Instructor/addExamQuestions.jsp?exam_id="+examID);
     }
 
 }
