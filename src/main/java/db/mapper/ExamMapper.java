@@ -23,7 +23,7 @@ public class ExamMapper extends Mapper {
      */
     public static List<Exam> getAllExamsWithSubjectCode(String subjectCode) {
         final String findAllExamsStmt =
-                "SELECT * FROM exams WHERE subject_code = ?";
+                "SELECT * FROM exams WHERE subject_code = ? ORDER BY exam_id";
 
         List<Exam> exams = new ArrayList<>();
         try {
