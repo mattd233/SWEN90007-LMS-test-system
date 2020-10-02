@@ -20,9 +20,9 @@
 </head>
 <body>
 <div align="center">
-    <form method="post">
-        <h1>All Exam Submissions of <%=request.getParameter("subject_code")%></h1>
-        <table style="width:70%">
+    <h1>All Exam Submissions of <%=request.getParameter("subject_code")%></h1>
+    <form name="markingTableForm" method="post">
+        <table>
             <!-- Header row -->
             <tr>
                 <th>Student ID</th>
@@ -48,6 +48,7 @@
                 List<Student> students = UserSubjectMapper.getAllStudentsWithSubject(subjectCode);
                 if (students.size() == 0) {
             %>
+            <!-- Case 1: Show message if subject has not students -->
             <p>No student enrolled in this subject.</p>
             <%
                 } else {
@@ -55,6 +56,7 @@
                     for (Student student : students) {
                         int uId = student.getStudentID();
             %>
+            <!-- Case 2: Show students and their submission -->
             <tr>
                 <!-- Student ID -->
                 <td><%=uId%></td>
@@ -70,17 +72,20 @@
                         Submission submission = SubmissionMapper.getSubmissionByIDs(eId, uId);
                         if (submission == null) {
                 %>
+                <!-- Case 2.1: Show message if student has no submission -->
                 <td>No submission</td>
                 <%
                         } else if (submission.isMarked()){
                             float marks = submission.getMarks();
                             totalMarks += marks;
                 %>
+                <!-- Case 2.2: Show marks with link to detailed view if there is a submission and it's marked -->
                 <td><a href="/submissions_detail?examID=<%=eId%>&userID=<%=uId%>"><%=marks%></a></td>
                 <%
                         } else {
                             allSubmissionsMarked = false;
                 %>
+                <!-- Case 2.3: Show link to detailed view if there is a submission but not marked -->
                 <td><a href="/submissions_detail?examID=<%=eId%>&userID=<%=uId%>">Mark this exam</a></td>
                 <%
                         }
@@ -88,13 +93,19 @@
                     float fudgePoints = UserSubjectMapper.getFudgePoints(uId, subjectCode);
                     float finalMarks = totalMarks + fudgePoints;
                 %>
-                <td><input name="fp<%=uId%>" size="5" value="<%=fudgePoints%>"></td>
+
+                <!-- Fudge point -->
+                <td>
+                    <input type="number" name="fp<%=uId%>" value="<%=fudgePoints%>" onsubmit="return notNullValidation(<%=uId%>)">
+                </td>
                 <%
                     String displayFinalMarks = "N/A";
                     if (allSubmissionsMarked) {
                         displayFinalMarks = Float.valueOf(finalMarks).toString();
                     }
                 %>
+
+                <!-- Total marks -->
                 <td><%=displayFinalMarks%></td>
             </tr>
             <%
@@ -105,5 +116,14 @@
         <input type="submit" value="Update marks">
     </form>
 </div>
+<script>
+    function notNullValidation(uID) {
+        var s = document.forms["markingTableForm"]["fp"+uID.toString()].value();
+        if (s == "") {
+            alert("Fudge points cannot be empty.");
+            return false;
+        }
+    }
+</script>
 </body>
 </html>

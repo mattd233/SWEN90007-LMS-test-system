@@ -47,7 +47,7 @@
                 <%
                     if (exam.getStatus() == Exam.ExamStatus.UNPUBLISHED) {
                 %>
-                <button href="/Instructor/editExam?exam_id=<%=exam.getExamID()%>">
+                <button onclick="location.href = '/Instructor/editExam?exam_id=<%=exam.getExamID()%>'">
                     Edit exam
                 </button><br>
                 <button onclick="if (confirm('Are you sure you want to publish the exam?'))
@@ -76,7 +76,9 @@
                 <%
                     } else if (exam.getStatus() == Exam.ExamStatus.CLOSED) {
                 %>
-                <button href="/submissions_table?subject_code=<%=exam.getSubjectCode()%>">Mark exam</button>
+                <button onclick="location.href='/submissions_table?subject_code=<%=exam.getSubjectCode()%>'">
+                    Mark exam
+                </button>
                 <%
                     }
                 %>

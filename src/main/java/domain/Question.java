@@ -9,25 +9,22 @@ public abstract class Question {
 
     private int questionID;
     private int examID;
-    private QuestionType questionType;
     private String title;
     private String description;
     private int marks;
 
     // get a question object from database, do not register as new
-    public Question(int questionID, int examID, QuestionType questionType, String title, String description, int marks) {
+    public Question(int questionID, int examID, String title, String description, int marks) {
         this.questionID = questionID;
         this.examID = examID;
-        this.questionType = questionType;
         this.title = title;
         this.description = description;
         this.marks = marks;
     }
 
     // Create a new Question object
-    public Question(int examID, QuestionType questionType, String title, String description, int marks) {
+    public Question(int examID, String title, String description, int marks) {
         this.examID = examID;
-        this.questionType = questionType;
         this.title = title;
         this.description = description;
         this.marks = marks;
@@ -40,14 +37,6 @@ public abstract class Question {
 
     public int getQuestionID() {
         return questionID;
-    }
-
-    public QuestionType getQuestionType() {
-        return questionType;
-    }
-
-    public void setQuestionType(QuestionType questionType) {
-        this.questionType = questionType;
     }
 
     public String getTitle() {

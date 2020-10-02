@@ -39,14 +39,15 @@ DROP TABLE users_has_subjects CASCADE;
 CREATE TABLE users_has_subjects (
     user_id INT NOT NULL REFERENCES users(user_id),
     subject_code VARCHAR(20) NOT NULL REFERENCES subjects(subject_code),
+    marks INT DEFAULT null,
     fudge_points FLOAT DEFAULT 0
 );
 
-INSERT INTO users_has_subjects VALUES(000001, 'SWEN90007', DEFAULT);
-INSERT INTO users_has_subjects VALUES(000001, 'SWEN90009', DEFAULT);
-INSERT INTO users_has_subjects VALUES(000002, 'SWEN90007', DEFAULT);
-INSERT INTO users_has_subjects VALUES(904601, 'SWEN90007', DEFAULT);
-INSERT INTO users_has_subjects VALUES(904601, 'SWEN90009', DEFAULT);
+INSERT INTO users_has_subjects VALUES(000001, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(000001, 'SWEN90009', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(000002, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(904601, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(904601, 'SWEN90009', DEFAULT, DEFAULT);
 
 --------------------------------------------------------------------------------
 --                                  exams                                     --
