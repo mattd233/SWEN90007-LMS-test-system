@@ -81,6 +81,7 @@ public class QuestionMapper {
         return null;
     }
 
+
     public static void insert(Question question) {
         final String insertQuestionStmt = "INSERT INTO questions VALUES (?, ?, ?::question_type, ?, ?, ?)";
         try {
@@ -101,6 +102,7 @@ public class QuestionMapper {
             e.printStackTrace();
         }
     }
+
 
     public static void update(Question question) {
         final String updateQuestionStmt = "UPDATE questions SET question_type = ?::question_type, " +
@@ -175,5 +177,6 @@ public class QuestionMapper {
         }
         return null;
     }
+
 
 }
