@@ -64,7 +64,7 @@
             }
     %>
     <form method="post">
-        <h3><%=question.getTitle()%>: <input name="marksQ<%=question.getQuestionNumber()%>" size="5" value="<%=displayMarks%>"> out of <%=question.getMarks()%></h3>
+        <h3><%=question.getTitle()%>: <input name="marksQ<%=question.getQuestionNumber()%>" type="number" size="5" value="<%=displayMarks%>"> out of <%=question.getMarks()%></h3>
         <p>Question: <%=question.getDescription()%></p>
         <%
                     if (answer.getChoiceNumber() == 0 && answer.getShortAnswer() == null) {
@@ -93,12 +93,12 @@
         <p><%=shortAnswer%></p>
         <%
                         }
-        %>
-        <p>Fudge points: <input name="fudgePoints" size="5" value=<%=submission.getFudgePoints()%>></p>
-        <input type="submit" value="Update marks">
-        <%
                     }
                 }
+        %>
+        <p>Fudge points: <input name="fudgePoints" type="number" size="5" value=<%=submission.getFudgePoints()%>></p>
+        <input type="submit" value="Update marks">
+        <%
             }
         %>
     </form>
