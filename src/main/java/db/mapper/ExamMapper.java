@@ -171,6 +171,7 @@ public class ExamMapper extends Mapper {
                 if (SubmissionMapper.getSubmissionByIDs(examID, userID) == null) {
                     Submission submission = new Submission(examID, userID);
                     SubmissionMapper.insertSubmission(submission);
+                    // TODO
                     List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
                     for (Question question : questions) {
                         SubmittedQuestionMapper.insertUnansweredSubmittedQuestion(question, userID);

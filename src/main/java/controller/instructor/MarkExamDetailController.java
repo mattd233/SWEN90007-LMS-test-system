@@ -1,8 +1,10 @@
 package main.java.controller.instructor;
 
+import main.java.db.mapper.ExamMapper;
 import main.java.db.mapper.QuestionMapper;
 import main.java.db.mapper.SubmissionMapper;
 import main.java.db.mapper.SubmittedQuestionMapper;
+import main.java.domain.Exam;
 import main.java.domain.Question;
 
 import javax.servlet.RequestDispatcher;
@@ -39,7 +41,8 @@ public class MarkExamDetailController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int examID = Integer.valueOf(request.getParameter("examID"));
         int userID = Integer.valueOf(request.getParameter("userID"));
-        List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
+        Exam exam = ExamMapper.getExamByID(examID);
+        List<Question> questions = exam.getQuestions();
         for (Question question : questions) {
             int questionNumber = question.getQuestionNumber();
             String marks = request.getParameter("marksQ"+questionNumber);
