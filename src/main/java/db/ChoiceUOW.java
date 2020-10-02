@@ -2,6 +2,7 @@ package db;
 
 
 
+import main.java.db.mapper.ChoiceMapper;
 import main.java.domain.Choice;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class ChoiceUOW implements db.IUnitOfWork {
     }
 
     public void registerNew(Choice choice) {
-        assert (choice.getExamID()!=0 && choice.getQuestionNumber()!=0) : "choice does not exist";
+        assert (choice.getChoiceID()!=0) : "choice does not exist";
         assert !dirtyObjects.contains(choice) : "choice is dirty";
         assert !deletedObjects.contains(choice) : "choice is deleted";
         assert !newObjects.contains(choice) : "choice is new";
@@ -36,7 +37,7 @@ public class ChoiceUOW implements db.IUnitOfWork {
 
 
     public void registerDirty(Choice choice) {
-        assert (choice.getExamID()!=0 && choice.getQuestionNumber()!=0) : "choice does not exist";
+        assert (choice.getChoiceID()!=0) : "choice does not exist";
         assert !deletedObjects.contains(choice) : "choice is deleted";
         if (!dirtyObjects.contains(choice) && !newObjects.contains(choice)) {
             dirtyObjects.add(choice);
@@ -44,7 +45,7 @@ public class ChoiceUOW implements db.IUnitOfWork {
     }
 
     public void registerDeleted(Choice choice) {
-        assert (choice.getExamID()!=0 && choice.getQuestionNumber()!=0) : "choice does not exist";
+        assert (choice.getChoiceID()!=0) : "choice does not exist";
         if (newObjects.remove(choice)) return;
         dirtyObjects.remove(choice);
         if (!deletedObjects.contains(choice)) {
@@ -53,7 +54,7 @@ public class ChoiceUOW implements db.IUnitOfWork {
     }
 
     public void registerClean(Choice choice) {
-        assert (choice.getExamID()!=0 && choice.getQuestionNumber()!=0) : "choice does not exist";
+        assert (choice.getChoiceID()!=0) : "choice does not exist";
     }
 
     @Override
@@ -64,11 +65,11 @@ public class ChoiceUOW implements db.IUnitOfWork {
         }
         for (Object obj : dirtyObjects) {
             assert obj instanceof Choice;
-//            ChoiceMapper.update((Choice) obj);
+            ChoiceMapper.update((Choice) obj);
         }
         for (Object obj : deletedObjects) {
             assert obj instanceof Choice;
-//            ChoiceMapper.delete((Choice) obj);
+            ChoiceMapper.delete((Choice) obj);
         }
     }
 

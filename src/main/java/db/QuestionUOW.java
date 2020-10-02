@@ -28,7 +28,7 @@ public class QuestionUOW implements db.IUnitOfWork {
             }
 
             public void registerNew(Question question) {
-                assert (question.getExamID()!=0 && question.getQuestionNumber()!=0) : "question does not exist";
+                assert (question.getExamID()!=0 && question.getQuestionID()!=0) : "question does not exist";
                 assert !dirtyObjects.contains(question) : "question is dirty";
                 assert !deletedObjects.contains(question) : "question is deleted";
                 assert !newObjects.contains(question) : "question is new";
@@ -38,7 +38,7 @@ public class QuestionUOW implements db.IUnitOfWork {
 
 
     public void registerDirty(Question question) {
-        assert (question.getExamID()!=0 && question.getQuestionNumber()!=0) : "question does not exist";
+        assert (question.getExamID()!=0 && question.getQuestionID()!=0) : "question does not exist";
         assert !deletedObjects.contains(question) : "question is deleted";
         if (!dirtyObjects.contains(question) && !newObjects.contains(question)) {
             dirtyObjects.add(question);
@@ -46,7 +46,7 @@ public class QuestionUOW implements db.IUnitOfWork {
     }
 
     public void registerDeleted(Question question) {
-        assert (question.getExamID()!=0 && question.getQuestionNumber()!=0) : "question does not exist";
+        assert (question.getExamID()!=0 && question.getQuestionID()!=0) : "question does not exist";
         if (newObjects.remove(question)) return;
         dirtyObjects.remove(question);
         if (!deletedObjects.contains(question)) {
@@ -55,7 +55,7 @@ public class QuestionUOW implements db.IUnitOfWork {
     }
 
     public void registerClean(Question question) {
-        assert (question.getExamID()!=0 && question.getQuestionNumber()!=0) : "question does not exist";
+        assert (question.getExamID()!=0 && question.getQuestionID()!=0) : "question does not exist";
     }
 
     @Override

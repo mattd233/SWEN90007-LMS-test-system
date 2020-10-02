@@ -53,7 +53,7 @@
         List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
         for (int i=0; i<questions.size(); i++) {
             Question question = questions.get(i);
-            SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionNumber());
+            SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionID());
             String displayMarks = "";
             if (answer.getChoiceNumber() == 0 && answer.getShortAnswer() == null) {
                 displayMarks = "0";
@@ -64,7 +64,7 @@
             }
     %>
     <form method="post">
-        <h3><%=question.getTitle()%>: <input name="marksQ<%=question.getQuestionNumber()%>" size="5" value="<%=displayMarks%>"> out of <%=question.getMarks()%></h3>
+        <h3><%=question.getTitle()%>: <input name="marksQ<%=question.getQuestionID()%>" size="5" value="<%=displayMarks%>"> out of <%=question.getMarks()%></h3>
         <p>Question: <%=question.getDescription()%></p>
         <%
                     if (answer.getChoiceNumber() == 0 && answer.getShortAnswer() == null) {
@@ -80,11 +80,11 @@
                             List<Choice> choices = ((MultipleChoiceQuestion) question).getChoices();
                             for (Choice choice : choices) {
                                 String selectionPrepend = "";
-                                if (choice.getChoiceNumber() == answer.getChoiceNumber()) {
+                                if (choice.getChoiceID() == answer.getChoiceNumber()) {
                                     selectionPrepend = "->";
                                 }
         %>
-        <p><%=selectionPrepend%> <%=choice.getChoiceNumber()%>. <%=choice.getChoiceDescription()%></p>
+        <p><%=selectionPrepend%> <%=choice.getChoiceID()%>. <%=choice.getChoiceDescription()%></p>
         <%
                             }
                         } else if (question instanceof ShortAnswerQuestion) {

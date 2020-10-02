@@ -122,7 +122,7 @@ public class SubmittedQuestionMapper {
 
             insertStmt.setInt(1, question.getExamID());
             insertStmt.setInt(2, userID);
-            insertStmt.setInt(3, question.getQuestionNumber());
+            insertStmt.setInt(3, question.getQuestionID());
             insertStmt.setString(4, question.getQuestionType().toString());
             insertStmt.execute();
             System.out.println("inserted submitted question as unanswered");

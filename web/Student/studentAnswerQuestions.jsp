@@ -85,7 +85,7 @@
     String question_title = question.getTitle();
     String description = question.getDescription();
     int question_marks = question.getMarks();
-    int question_number = question.getQuestionNumber();
+    int question_number = question.getQuestionID();
 //    String answer = SubmittedQuestionMapper.getAnswer(exam_id, Integer.parseInt(student_id), question_number);
 %>
 <%--use div to develop block layout--%>
@@ -133,7 +133,7 @@
                             String choice_description = choice.getChoiceDescription();
                 %>
                 <%--            display all the answers--%>
-                <input type="radio" name="radioChoice" value="<%=choice.getChoiceNumber()%>">
+                <input type="radio" name="radioChoice" value="<%=choice.getChoiceID()%>">
                 <%=choice_description%><br/>
                 <%
                     } // end for
@@ -145,11 +145,11 @@
                         String choice_description = choice.getChoiceDescription();
                         if ( i == selected){
                 %>
-                <input type="radio" name="radioChoice" value="<%=choice.getChoiceNumber()%>" checked="checked"><%=choice_description%><br/>
+                <input type="radio" name="radioChoice" value="<%=choice.getChoiceID()%>" checked="checked"><%=choice_description%><br/>
                 <%
                 } else{
                 %>
-                <input type="radio" name="radioChoice" value="<%=choice.getChoiceNumber()%>"><%=choice_description%><br/>
+                <input type="radio" name="radioChoice" value="<%=choice.getChoiceID()%>"><%=choice_description%><br/>
                 <%
                                 }// end else
                             } // end for

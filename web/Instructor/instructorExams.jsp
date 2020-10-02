@@ -44,6 +44,9 @@
             <td><%=exam.getDescription()%></td>
             <td><%=exam.getStatus()%></td>
             <td>
+                <a href="/Instructor/editExam?exam_id=<%=exam.getExamID()%>">
+                    Edit exam
+                </a><br>
                 <%
                     if (exam.getStatus() == Exam.ExamStatus.UNPUBLISHED) {
                 %>
