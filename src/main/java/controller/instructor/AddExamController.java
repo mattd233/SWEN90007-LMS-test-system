@@ -1,7 +1,14 @@
 package main.java.controller.instructor;
 
+import main.java.db.ChoiceUOW;
+import main.java.db.QuestionUOW;
+import main.java.db.mapper.ChoiceMapper;
 import main.java.db.mapper.ExamMapper;
+import main.java.db.mapper.QuestionMapper;
+import main.java.domain.Choice;
 import main.java.domain.Exam;
+import main.java.domain.MultipleChoiceQuestion;
+import main.java.domain.ShortAnswerQuestion;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -27,14 +34,42 @@ public class AddExamController extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        // add the exam
         String subjectCode = request.getParameter("code");
-//        System.out.println(subjectCode);
-        String title = request.getParameter("title");
-        String description = request.getParameter("exam_description");
-//        System.out.println(title + " " + description);
-        Exam exam = new Exam(subjectCode, title, description);
+        String examTitle = request.getParameter("exam_title");
+        String examDescription = request.getParameter("exam_description");
+        Exam exam = new Exam(subjectCode, examTitle, examDescription);
         int examID = ExamMapper.insert(exam);
-        response.sendRedirect("/Instructor/addExamQuestions.jsp");
+        assert examID != -1;
+
+        if (QuestionUOW.getCurrent()==null) {
+            QuestionUOW.newCurrent();
+        }
+        if (ChoiceUOW.getCurrent()==null) {
+            ChoiceUOW.newCurrent();
+        }
+
+        // add the exam questions
+        int questionIdx = 1;
+        while(request.getParameter("title" + questionIdx) != null) {
+            String type = request.getParameter("type" + questionIdx);
+            String title = request.getParameter("title" + questionIdx);
+            String description = request.getParameter("description" + questionIdx);
+            int marks = Integer.parseInt(request.getParameter("marks" + questionIdx));
+            if (type.equals("multiple_choice")) {
+                int choiceIdx = 1;
+                while (request.getParameter("Q" + questionIdx + "choice" + choiceIdx) != null) {
+                    ChoiceUOW.getCurrent().registerNew(new Choice(examID, questionIdx, choiceIdx, request.getParameter("Q" + questionIdx + "choice" + choiceIdx)));
+                    choiceIdx++;
+                }
+                QuestionUOW.getCurrent().registerNew(new MultipleChoiceQuestion(examID, questionIdx, title, description, marks));
+            } else {
+                QuestionUOW.getCurrent().registerNew(new ShortAnswerQuestion(examID, questionIdx, title, description, marks));
+            }
+            questionIdx++;
+        }
+        QuestionUOW.getCurrent().commit();
     }
 
 }

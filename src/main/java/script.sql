@@ -41,18 +41,19 @@ DROP TABLE users_has_subjects CASCADE;
 CREATE TABLE users_has_subjects (
     user_id INT NOT NULL REFERENCES users(user_id),
     subject_code VARCHAR(20) NOT NULL REFERENCES subjects(subject_code),
+    marks INT DEFAULT null,
     fudge_points FLOAT DEFAULT 0
 );
 
-INSERT INTO users_has_subjects VALUES(000001, 'SWEN90007', DEFAULT);
-INSERT INTO users_has_subjects VALUES(000001, 'SWEN90009', DEFAULT);
-INSERT INTO users_has_subjects VALUES(000002, 'SWEN90007', DEFAULT);
-INSERT INTO users_has_subjects VALUES(904601, 'SWEN90007', DEFAULT);
-INSERT INTO users_has_subjects VALUES(904601, 'SWEN90009', DEFAULT);
-INSERT INTO users_has_subjects VALUES(713551, 'SWEN90007', DEFAULT);
-INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90007', DEFAULT);
-INSERT INTO users_has_subjects VALUES(713551, 'SWEN90009', DEFAULT);
-INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90009', DEFAULT);
+INSERT INTO users_has_subjects VALUES(000001, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(000001, 'SWEN90009', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(000002, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(904601, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(904601, 'SWEN90009', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(713551, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(713551, 'SWEN90009', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90009', DEFAULT, DEFAULT);
 
 --------------------------------------------------------------------------------
 --                                  exams                                     --
@@ -85,8 +86,8 @@ CREATE TYPE question_type AS ENUM ('MULTIPLE_CHOICE', 'SHORT_ANSWER');
 
 DROP TABLE questions CASCADE;
 CREATE TABLE questions (
-    exam_id SERIAL REFERENCES exams(exam_id),
-    question_number SMALLINT NOT NULL,
+    exam_id INT REFERENCES exams(exam_id) ON DELETE CASCADE,
+    question_number INT NOT NULL,
     question_type question_type NOT NULL,
     title VARCHAR(45) NOT NULL,
     description VARCHAR(500) NOT NULL,
@@ -106,9 +107,9 @@ INSERT INTO questions VALUES (5, 3, 'MULTIPLE_CHOICE', 'Multiple Choice 1', 'Cho
 --------------------------------------------------------------------------------
 DROP TABLE choices CASCADE;
 CREATE TABLE choices (
-    exam_id SERIAL REFERENCES exams(exam_id),
-    question_number SMALLINT NOT NULL,
-    choice_number SMALLINT NOT NULL,
+    exam_id INT,
+    question_number INT,
+    choice_number INT NOT NULL,
     choice_description VARCHAR(200) NOT NULL,
     PRIMARY KEY (exam_id, question_number, choice_number)
 );
@@ -126,7 +127,7 @@ INSERT INTO choices VALUES (5, 3, 2, 'Software engineering is the systematic app
 --------------------------------------------------------------------------------
 DROP TABLE submissions CASCADE;
 CREATE TABLE submissions (
-    exam_id SERIAL REFERENCES exams(exam_id),
+    exam_id INT REFERENCES exams(exam_id),
     user_id INT REFERENCES users(user_id),
     submission_time TIMESTAMP NOT NULL,
     is_marked BOOLEAN NOT NULL DEFAULT FALSE,
@@ -154,7 +155,7 @@ CREATE TABLE submitted_questions (
     user_id INT REFERENCES users(user_id),
     question_number SMALLINT NOT NULL,
     question_type question_type NOT NULL,
-    choice_number SMALLINT DEFAULT 0,
+    choice_number SMALLINT DEFAULT null,
     short_answer VARCHAR(500) DEFAULT null,
     is_marked BOOLEAN NOT NULL DEFAULT FALSE,
     marks FLOAT DEFAULT null,

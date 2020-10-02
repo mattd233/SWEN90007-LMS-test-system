@@ -1,5 +1,8 @@
 package main.java.domain;
 
+
+import main.java.db.QuestionUOW;
+
 public abstract class Question {
 
     public enum QuestionType {
@@ -9,15 +12,14 @@ public abstract class Question {
 
     private int examID;
     private int questionNumber;
-    private QuestionType questionType;
     private String title;
     private String description;
     private int marks;
 
-    public Question(int examID, int questionNumber, QuestionType questionType, String title, String description, int marks) {
+    // Pulling a question from database, do not register as New
+    public Question(int examID, int questionNumber, String title, String description, int marks) {
         this.examID = examID;
         this.questionNumber = questionNumber;
-        this.questionType = questionType;
         this.title = title;
         this.description = description;
         this.marks = marks;
@@ -27,9 +29,10 @@ public abstract class Question {
         return examID;
     }
 
-    public void setExamID(int examID) {
-        this.examID = examID;
-    }
+//    public void setExamID(int examID) {
+//        this.examID = examID;
+//        QuestionUOW.getCurrent().registerDirty(this);
+//    }
 
     public int getQuestionNumber() {
         return questionNumber;
@@ -37,22 +40,16 @@ public abstract class Question {
 
     public void setQuestionNumber(int questionNumber) {
         this.questionNumber = questionNumber;
+        QuestionUOW.getCurrent().registerDirty(this);
     }
-
-    public QuestionType getQuestionType() {
-        return questionType;
-    }
-
-    public void setQuestionType(QuestionType questionType) {
-        this.questionType = questionType;
-    }
-
+  
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
+        QuestionUOW.getCurrent().registerDirty(this);
     }
 
     public String getDescription() {
@@ -61,6 +58,7 @@ public abstract class Question {
 
     public void setDescription(String description) {
         this.description = description;
+        QuestionUOW.getCurrent().registerDirty(this);
     }
 
     public int getMarks() {
@@ -69,6 +67,8 @@ public abstract class Question {
 
     public void setMarks(int marks) {
         this.marks = marks;
+        QuestionUOW.getCurrent().registerDirty(this);
     }
+
 
 }

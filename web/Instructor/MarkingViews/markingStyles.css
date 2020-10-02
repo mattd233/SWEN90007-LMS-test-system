@@ -2,6 +2,9 @@ table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
 }
+table {
+    width: 70%
+}
 th, td {
     padding: 7px;
 }
@@ -10,4 +13,13 @@ th {
 }
 .successMsg {
     color: green;
+}
+.studentAnswer {
+    width: 500px;
+    border: 2px solid black;
+    padding: 50px;
+    margin: 10px;
+}
+.selectedChoice {
+    font-weight: bold;
 }

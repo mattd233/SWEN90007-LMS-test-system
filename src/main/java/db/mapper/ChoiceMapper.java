@@ -2,7 +2,6 @@ package main.java.db.mapper;
 
 import main.java.db.DBConnection;
 import main.java.domain.Choice;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
