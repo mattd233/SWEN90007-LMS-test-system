@@ -1,5 +1,7 @@
 package main.java.domain;
 
+import main.java.db.QuestionUOW;
+
 public abstract class Question {
 
     public enum QuestionType {
@@ -31,7 +33,7 @@ public abstract class Question {
         this.title = title;
         this.description = description;
         this.marks = marks;
-        db.QuestionUOW.getCurrent().registerNew(this);
+//        QuestionUOW.getCurrent().registerNew(this);
     }
 
     public int getExamID() {

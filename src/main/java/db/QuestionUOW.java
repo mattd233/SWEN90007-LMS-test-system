@@ -1,5 +1,4 @@
-package db;
-
+package main.java.db;
 
 
 import main.java.db.mapper.QuestionMapper;
@@ -9,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class QuestionUOW implements db.IUnitOfWork {
+public class QuestionUOW implements IUnitOfWork {
     protected static ThreadLocal current = new ThreadLocal();
     protected List<Question> newObjects = new ArrayList<>();
     protected List<Question> dirtyObjects = new ArrayList<>();

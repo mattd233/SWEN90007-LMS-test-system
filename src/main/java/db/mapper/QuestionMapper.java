@@ -80,11 +80,17 @@ public class QuestionMapper {
         return null;
     }
 
-    public static void insert(Question question) {
-        final String insertQuestionStmt = "INSERT INTO questions VALUES (DEFAULT, ?, ?::question_type, ?, ?, ?)";
+    /**
+     * Insert a question and returns the question_id assigned by the database
+     * @param question object to be inserted
+     * @return database id of the object inserted
+     */
+    public static int insert(Question question) {
+        final String insertQuestionStmt = "INSERT INTO questions VALUES (?, ?, ?::question_type, ?, ?, ?)";
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(insertQuestionStmt);
+            PreparedStatement getIDStatement = dbConnection.prepareStatement(getIDStmt);
             stmt.setInt(1, question.getExamID());
             if (question instanceof MultipleChoiceQuestion) {
                 stmt.setString(2, Question.QuestionType.MULTIPLE_CHOICE.toString());
@@ -95,9 +101,14 @@ public class QuestionMapper {
             stmt.setString(4, question.getDescription());
             stmt.setInt(5, question.getMarks());
             stmt.execute();
+            ResultSet rs = getIDStatement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
     public static void update(Question question) {

@@ -28,11 +28,11 @@ Created by IntelliJ IDEA.
 <form action="/Instructor/editExam" method="post">
     <input type="hidden" value=<%=examID%> name="exam_id">
     Exam Title: <input type="text" placeholder=<%=exam.getTitle()%>>
-    </br>
+    <br>
     Exam Description: <input type="text" placeholder=<%=exam.getDescription()%>>
-    </br>
+    <br>
     Status: <%=exam.getStatus()%>
-    </br>
+    <br>
     <%
         if (db.QuestionUOW.getCurrent() == null) {
             db.QuestionUOW.newCurrent();
@@ -48,7 +48,7 @@ Created by IntelliJ IDEA.
         <p>marks: <%=question.getMarks()%></p>
         <input type="number" placeholder="Change marks" name=<%="marks" + question.getQuestionID()%>>
         <input type="button" value="remove" onclick=deleteQuestion(<%=question.getQuestionID()%>)>
-        </br>
+        <br>
             <% if (question instanceof MultipleChoiceQuestion) {
                 for (Choice choice : ChoiceMapper.getChoices( question.getQuestionID())) {
             %>
@@ -62,7 +62,7 @@ Created by IntelliJ IDEA.
     <%
         }
     %>
-    </br>
+    <br>
     <input type="submit" value="Save Exam">
 </form>
 </body>

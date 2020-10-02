@@ -1,5 +1,4 @@
-package db;
-
+package main.java.db;
 
 
 import main.java.db.mapper.ChoiceMapper;
@@ -8,7 +7,7 @@ import main.java.domain.Choice;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChoiceUOW implements db.IUnitOfWork {
+public class ChoiceUOW implements IUnitOfWork {
     protected static ThreadLocal current = new ThreadLocal();
     protected List<Choice> newObjects = new ArrayList<>();
     protected List<Choice> dirtyObjects = new ArrayList<>();
