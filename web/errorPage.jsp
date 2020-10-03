@@ -11,6 +11,6 @@
     <title>Error</title>
 </head>
 <body>
-    <p>Error: Something wrong has happened</p>
+    <p>Error: <%=request.getAttribute("errMsg")%></p>
 </body>
 </html>

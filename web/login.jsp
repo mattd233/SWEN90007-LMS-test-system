@@ -8,15 +8,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <link rel="stylesheet" href="/styles/login.css" type="text/css">
     <title>Login Page</title>
 </head>
 <body>
-<form name="LoginForm" action="/login" method="post">
-    username: <input type="text" name="userName">
-    <br/>
-    password: <input type="text" name="passWord">
-    <br/>
-    <input type="submit" value="Login"/>
-</form>
+    <div class="center">
+        <form name="LoginForm" action="/login" method="post">
+            <div class="inputLine">username: <input type="text" name="userName"></div><br>
+            <div class="inputLine">password: <input type="text" name="passWord"></div><br>
+            <input class="submitButton" type="submit" value="Login"/>
+        </form>
+    </div>
 </body>
 </html>
