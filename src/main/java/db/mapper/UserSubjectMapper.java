@@ -48,7 +48,7 @@ public class UserSubjectMapper {
             stmt.setString(2, subjectCode);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                throw new Exception("Instructor already exists in the subject.");
+                throw new Exception("Entry with user id and subject code already exists in table.");
             }
             stmt = dbConnection.prepareStatement(insertStmt);
             stmt.setInt(1, userID);

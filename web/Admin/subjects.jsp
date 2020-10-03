@@ -40,11 +40,11 @@
 
 <div align="center">
     <h2>Add New Subject</h2>
-    <form name="AddSubjectForm" action="/subjects" method="post">
-        <div class="inputLine">Subject Code: <input type = "text" name = "code"></div>
-        <div class="inputLine">Subject Name: <input type = "text" name = "name"></div>
-        <div class="inputLine">Instructor ID: <input type = "text" name = "instructor_id" /></div>
-        <input class="submitButton" type = "submit" value = "Add Subject" />
+    <form name="AddSubjectForm" action="/subjects" method="post" id="AddSubjectForm">
+        <div class="inputLine">Subject Code: <input type = "text" name = "code" id="code"></div>
+        <div class="inputLine">Subject Name: <input type = "text" name = "name" id="name"></div>
+        <div class="inputLine">Instructor ID: <input type = "text" name = "instructor_id" id="instructor_id"/></div>
+        <input class="submitButton" type = "button" value = "Add Subject" onclick="addSubject()"/>
     </form>
 </div>
 </body>
@@ -54,6 +54,19 @@
         if (instructorID != null && instructorID !== "") {
             var target = "/subjects?instructor_id=".concat(instructorID, "&subject_code=", subjectCode);
             window.location.replace(target);
+        }
+    }
+    function addSubject() {
+        if (document.getElementById("code").value === "") {
+            window.alert("Please enter a subject code");
+        }
+        else if (document.getElementById("name").value === "") {
+            window.alert("Please enter a subject name");
+        }
+        else if (document.getElementById("instructor_id").value === "") {
+            window.alert("Please enter an instructor id");
+        } else {
+            document.getElementById("AddSubjectForm").submit();
         }
     }
 </script>

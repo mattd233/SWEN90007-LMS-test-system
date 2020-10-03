@@ -48,7 +48,9 @@ public class AddSubjectController extends HttpServlet {
         String instructorID = request.getParameter("instructor_id");
         Subject subject = new Subject(subjectCode, name);
         Instructor instructor = UserMapper.findInstructorWithID(Integer.parseInt(instructorID));
-        assert instructor != null;
+        if (instructor==null) {
+            response.getWriter().println("Invalid instructor ID");
+        }
         subject.addInstructor(instructor.getStaffID(), instructor.getName());
         SubjectMapper.insert(subject);
         String view = "/Admin/subjects.jsp";
