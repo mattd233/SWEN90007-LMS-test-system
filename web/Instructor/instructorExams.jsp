@@ -91,6 +91,7 @@
     <form name="add_new_exam" action="createNewExam.jsp?subject_code=<%=request.getParameter("subject_code")%>" method="post">
         <input type="submit" value="Add new exam"/>
     </form>
+    <a href="/Instructor/instructorSubjects.jsp">back to subject page</a>
 </div>
 
 </body>

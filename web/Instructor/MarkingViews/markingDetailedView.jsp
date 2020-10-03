@@ -8,7 +8,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="main.java.db.mapper.ExamMapper" %>
 <%@ page import="main.java.db.mapper.SubmissionMapper" %>
-<%@ page import="main.java.db.mapper.QuestionMapper" %>
 <%@ page import="main.java.db.mapper.SubmittedQuestionMapper" %>
 <%@ page import="main.java.domain.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -34,6 +33,9 @@
     <!-- Show subject code and exam title -->
     <h1><%=exam.getSubjectCode()%> <%=exam.getTitle()%></h1>
 
+    <a href="/submissions_table?subject_code=<%=exam.getSubjectCode()%>">
+        back to table view
+    </a>
     <!-- Get the submission -->
     <%
         Submission submission = SubmissionMapper.getSubmissionByIDs(examID, userID);
@@ -47,6 +49,7 @@
         } else {
             String submissionTime = submission.getSubmissionTime().toString();
     %>
+    <p>Submitted by student: <%=userID%></p>
     <p>Submission time: <%=submissionTime%></p>
     <!-- Display questions and marks -->
     <%
@@ -80,7 +83,7 @@
             <%=question.getMarks()%>
         </h3>
         <!-- Question content -->
-        <p>Question: <%=question.getDescription()%></p>
+        <p style="font-weight: bold">Question: </p><p><%=question.getDescription()%></p>
         <%
                     if (answer.getChoiceNumber() == 0 && answer.getShortAnswer() == null) {
         %>
@@ -90,7 +93,7 @@
                     } else {
         %>
         <!-- Case 2.2: Show student's answer -->
-        <p>Student's Answer: </p>
+        <p style="font-weight: bold">Student's Answer: </p>
         <!-- Case 2.2.1: Multiple choice question -->
         <%
                         // Display student's answer

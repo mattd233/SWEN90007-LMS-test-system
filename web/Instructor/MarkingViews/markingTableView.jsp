@@ -96,7 +96,7 @@
 
                 <!-- Fudge point -->
                 <td>
-                    <input type="number" name="fp<%=uId%>" value="<%=fudgePoints%>" onsubmit="return notNullValidation(<%=uId%>)">
+                    <input type="number" name="fp<%=uId%>" value="<%=fudgePoints%>">
                 </td>
                 <%
                     String displayFinalMarks = "N/A";
@@ -115,14 +115,21 @@
         </table>
         <input type="submit" value="Update marks">
     </form>
+    <a href="/Instructor/instructorSubjects.jsp">
+        back to subject page
+    </a><br>
+    <a href="/Instructor/instructorExams.jsp?subject_code=<%=subjectCode%>">
+        back to the exam page of subject <%=subjectCode%>
+    </a>
 </div>
 <script>
-    function notNullValidation(uID) {
-        var s = document.forms["markingTableForm"]["fp"+uID.toString()].value();
-        if (s == "") {
+    function notNullValidation(uId) {
+        var s = document.forms["markingTableForm"]["fp"+uId.toString()].value;
+        if (s == "" || s == null) {
             alert("Fudge points cannot be empty.");
             return false;
         }
+        return true;
     }
 </script>
 </body>
