@@ -1,6 +1,9 @@
 package main.java.controller.instructor;
 
+import main.java.db.mapper.ExamMapper;
+import main.java.db.mapper.SubmissionMapper;
 import main.java.db.mapper.UserSubjectMapper;
+import main.java.domain.Exam;
 import main.java.domain.Student;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -33,11 +36,24 @@ public class MarkExamTableController extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Update fudge_points in users_has_subjects table
         String subjectCode = request.getParameter("subject_code");
         List<Student> students = UserSubjectMapper.getAllStudentsWithSubject(subjectCode);
+        List<Exam> exams = ExamMapper.getAllExamsWithSubjectCode(subjectCode);
         for (Student student : students) {
             int sID = student.getStudentID();
+            // Update marks
+            for (Exam exam : exams) {
+                String marksStr = request.getParameter("m_"+exam.getExamID()+"_"+sID);
+                System.out.println(marksStr);
+                try {
+                    float marks = Float.valueOf(marksStr);
+                    SubmissionMapper.updateSubmissionMarks(exam.getExamID(), sID, marks);
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+
+            // Update fudge_points in users_has_subjects table
             String fudgePointsStr = request.getParameter("fp"+sID);
             try {
                 float fudgePoints = Float.valueOf(fudgePointsStr);
@@ -45,13 +61,13 @@ public class MarkExamTableController extends HttpServlet {
                 if (!updateSuccess) {
                     System.err.println("Error in MarkExamTableController doPost: Update not successful");
                     showErrorPage(request, response, "Update not successful. Please try again.");
-                    return;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 showErrorPage(request, response, e.getMessage());
-                return;
             }
+
+
         }
         String view = "/Instructor/MarkingViews/markingTableView.jsp";
         ServletContext servletContext = getServletContext();

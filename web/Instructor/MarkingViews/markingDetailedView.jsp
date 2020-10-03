@@ -66,7 +66,7 @@
             SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionNumber());
             String displayMarks = "";
             if (answer.getChoiceNumber() == 0 && answer.getShortAnswer() == null) {
-                displayMarks = "0";
+                displayMarks = "0.0";
             } else {
                 if (answer.isMarked()) {
                     displayMarks = Float.valueOf(answer.getMarks()).toString();
@@ -77,8 +77,8 @@
         <!-- Question title -->
         <h3>
             <%=question.getTitle()%>:
-            <input type="number" name="marksQ<%=question.getQuestionNumber()%>"
-                   value="<%=displayMarks%>" onsubmit="return marksNotNullValidation(<%=question.getQuestionNumber()%>)">
+            <input type="number" name="marksQ<%=question.getQuestionNumber()%>" value="<%=displayMarks%>"
+                   onsubmit="return marksNotNullValidation(<%=question.getQuestionNumber()%>)">
              out of
             <%=question.getMarks()%>
         </h3>

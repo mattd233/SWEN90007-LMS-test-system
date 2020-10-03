@@ -1,7 +1,9 @@
 package main.java.db.mapper;
 
 import main.java.db.DBConnection;
+import main.java.domain.Exam;
 import main.java.domain.Student;
+import main.java.domain.Submission;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +20,7 @@ public class UserSubjectMapper {
      */
     public static List<Student> getAllStudentsWithSubject(String subjectCode) {
         final String getStudentsStmt =
-                "SELECT * FROM users_has_subjects WHERE subject_code = ?";
+                "SELECT * FROM users_has_subjects WHERE subject_code = ? ORDER BY user_id";
         List<Student> students = new ArrayList<Student>();
         try {
             Connection dbConnection = new DBConnection().connect();
@@ -75,6 +77,25 @@ public class UserSubjectMapper {
             stmt.setString(2, subjectCode);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
+                return rs.getFloat(4);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("UserSubjectMapper: cannot get fudge points");
+        return 0;
+    }
+
+    public static float getMarks(int userID, String subjectCode) {
+        final String getFudgePointsStmt =
+                "SELECT * FROM users_has_subjects WHERE user_id = ? AND subject_code = ?";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(getFudgePointsStmt);
+            stmt.setInt(1, userID);
+            stmt.setString(2, subjectCode);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
                 return rs.getFloat(3);
             }
         } catch (Exception e) {
@@ -98,6 +119,34 @@ public class UserSubjectMapper {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(updateStmt);
             stmt.setFloat(1, fudgePoints);
+            stmt.setInt(2, userID);
+            stmt.setString(3, subjectCode);
+            int result = stmt.executeUpdate();
+            return (result > 0) ? true : false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean updateMarks(int userID, String subjectCode) {
+        List<Exam> exams = ExamMapper.getAllExamsWithSubjectCode(subjectCode);
+        float totalMarks = 0f;
+        for (Exam exam : exams) {
+            Submission submission = SubmissionMapper.getSubmissionByIDs(exam.getExamID(), userID);
+            if (submission.getMarks() == -1) {
+                return false;
+            }
+            totalMarks += submission.getMarks();
+        }
+        float fudgePoints = getFudgePoints(userID, subjectCode);
+        totalMarks += fudgePoints;
+        final String updateStmt =
+                "UPDATE users_has_subjects SET marks = ? WHERE user_id = ? AND subject_code = ?";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(updateStmt);
+            stmt.setFloat(1, totalMarks);
             stmt.setInt(2, userID);
             stmt.setString(3, subjectCode);
             int result = stmt.executeUpdate();
