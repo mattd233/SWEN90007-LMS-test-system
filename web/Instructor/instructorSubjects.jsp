@@ -45,10 +45,16 @@
             <td><%=subject.getSubjectName()%>
             </td>
             <td>
-                <form action="instructorExams.jsp">
-                    <input type="submit" value="View Exams">
-                    <input type="hidden" name="subject_code" value="<%=subject.getSubjectCode()%>"/>
-                </form>
+<%--                <form action="instructorExams.jsp">--%>
+<%--                    <input type="submit" value="View Exams">--%>
+<%--                    <input type="hidden" name="subject_code" value="<%=subject.getSubjectCode()%>"/>--%>
+<%--                </form>--%>
+                <button onclick="location.href='/Instructor/instructorExams.jsp?subject_code=<%=subject.getSubjectCode()%>'">
+                    View exams
+                </button><br>
+                <button onclick="location.href='/submissions_table?subject_code=<%=subject.getSubjectCode()%>'">
+                    Mark exam submissions in table view
+                </button>
             </td>
         </tr>
         <%
