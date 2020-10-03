@@ -71,9 +71,10 @@
     int index = Integer.parseInt(questionIndex);
 
     // get the question list
+    // lazy load
     List<Question> questionList = exam.getQuestions();
     Question question = questionList.get(index);
-    String key = exam_id + "_" + index;
+    String key = student_id + "_" + exam_id + "_" + index;
     String answer = (String) session.getAttribute(key);
 
     // get this question information
@@ -233,7 +234,7 @@
                     window.location.href = "studentAnswerQuestions.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&question_index=<%=index+1%>";
                 }
             };
-            xml.open("POST","/Student/studentAnswerQuestions?index=" + index + "&answer=" + answer + "&exam_id=" + exam_id ,true);
+            xml.open("POST","/Student/studentAnswerQuestions?index=" + index + "&answer=" + answer + "&exam_id=" + exam_id + "&student_id=" + student_id,true);
             xml.send();
         }
 
@@ -261,7 +262,7 @@
                     window.location.href = "studentAnswerQuestions.jsp?studentID=<%=student_id%>&exam_id=<%=exam_id%>&question_index=<%=index-1%>";
                 }
             };
-            xml.open("POST","/Student/studentAnswerQuestions?index=" + index + "&answer=" + answer + "&exam_id=" + exam_id ,true);
+            xml.open("POST","/Student/studentAnswerQuestions?index=" + index + "&answer=" + answer + "&exam_id=" + exam_id + "&student_id=" + student_id,true);
             xml.send();
         }
 

@@ -51,7 +51,7 @@
             Submission submission = SubmissionMapper.getSubmissionByIDs(exam_id, student_id);
             boolean isMarked = submission.isMarked();
             float marks = submission.getMarks();
-            //TODO display xx out of xx points
+            // display xx out of xx points
             List<Question> questionList = exam.getQuestions();
             // count the total marks of this exam
             float total = 0;
