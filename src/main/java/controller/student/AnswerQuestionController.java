@@ -44,11 +44,13 @@ public class AnswerQuestionController extends HttpServlet {
         System.out.println("index: " + index);
         String answer = request.getParameter("answer");
         String exam_id = request.getParameter("exam_id");
+        String student_id = request.getParameter("student_id");
         System.out.println("answer: " + answer);
-        System.out.println("exam_id: " + exam_id);
+
         HttpSession session = request.getSession();
-        String key = exam_id + "_" + index;
-        session.setAttribute(key,answer);
+        String key = student_id + "_" + exam_id + "_" + index;
+        System.out.println("key: " + key);
+        session.setAttribute(key, answer);
 
         PrintWriter writer = response.getWriter();
         writer.write("success");

@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -41,20 +40,20 @@ public class SubmitExamController extends HttpServlet {
         assert status != null;
         int question_index = Integer.parseInt(request.getParameter("index"));
         String question_answer = request.getParameter("answer");
-        String key = exam_id + "_" + question_index;
+        String key = student_id + "_" + exam_id + "_" + question_index;
         session.setAttribute(key,question_answer);
-        System.out.println(key + "_"+ question_answer);
+        System.out.println("key: " + key + ", answer:"+ question_answer);
         if (status.equals("PUBLISHED")) {
             // get all the answers using session
             // int examID, int userID, int questionNumber, String questionType, int choiceNumber, String shortAnswer, boolean isMarked, float marks
             SubmittedQuestion sq;
             //choice_number
             for (int index = 0; index < length; index++) {
-                keys[index] = exam_id + "_" + index;
+                keys[index] = student_id + "_" + exam_id + "_" + index;
                 answers[index] = (String) session.getAttribute(keys[index]);
                 int question_number = questions.get(index).getQuestionNumber();
                 String answer = answers[index];
-                System.out.println(Arrays.toString(keys) +"_"+ Arrays.toString(answers));
+                System.out.println("key: " + keys[index] + ", answer:" + answers[index]);
                 try {
                     if (questions.get(index).getClass().equals(ShortAnswerQuestion.class)) {
                         sq = new SubmittedQuestion(exam_id, student_id, question_number, "SHORT_ANSWER", 0, answer, false, -1);
