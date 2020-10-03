@@ -67,7 +67,7 @@ public class UserSubjectMapper {
             stmt.setString(2, subjectCode);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getFloat(4);
+                return rs.getFloat(3);
             }
         } catch (Exception e) {
             e.printStackTrace();
