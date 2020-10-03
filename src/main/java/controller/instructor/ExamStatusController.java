@@ -24,21 +24,25 @@ public class ExamStatusController extends HttpServlet {
             int examID = Integer.valueOf(request.getParameter("exam_id"));
             if (action.equals("publish")) {
                 if (!ExamMapper.publishExam(examID)) {
+                    System.err.println("Error in ExamStatusController: Cannot publish the exam");
                     showErrorPage(request, response);
                 }
             } else if (action.equals("close")) {
                 if (!ExamMapper.closeExam(examID)) {
+                    System.err.println("Error in ExamStatusController: Cannot close the exam");
                     showErrorPage(request, response);
                 }
             } else if (action.equals("delete")) {
                 if (!ExamMapper.deleteExam(examID)) {
                     // TODO: error handling
+                    System.err.println("Error in ExamStatusController: Cannot delete the exam");
                     showErrorPage(request, response);
                 }
             }
             String subjectCode = request.getParameter("subject_code");
             response.sendRedirect("/Instructor/instructorExams.jsp?subject_code=" + subjectCode);
         } catch (Exception e) {
+            e.printStackTrace();
             showErrorPage(request, response);
         }
     }

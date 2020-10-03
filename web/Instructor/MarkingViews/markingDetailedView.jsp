@@ -34,14 +34,13 @@
     <!-- Show subject code and exam title -->
     <h1><%=exam.getSubjectCode()%> <%=exam.getTitle()%></h1>
 
-    <!-- Show message if there's no submission from this student to this exam -->
+    <!-- Get the submission -->
     <%
-        // Get the submission
         Submission submission = SubmissionMapper.getSubmissionByIDs(examID, userID);
         if (submission == null) {
     %>
-    <!-- Case 1: Student has not submission for this exam -->
-    <p>This student has no submission for this exam.</p>
+    <!-- Case 1: Student has not submission for this exam (should not happen) -->
+    <div class="notification"><p>This student has no submission for this exam.</p></div>
 
     <!-- Case 2: Show submission information -->
     <%
@@ -51,10 +50,14 @@
     <p>Submission time: <%=submissionTime%></p>
     <!-- Display questions and marks -->
     <%
-
         // Display questions and marks
         List<Question> questions = exam.getQuestions();
-
+        if (questions.size() == 0) {
+    %>
+    <!-- Show message if there's no question in this exam (should not happen) -->
+    <div class="notification"><p>This exam has no question.</p></div>
+    <%
+        }
         for (int i=0; i<questions.size(); i++) {
             Question question = questions.get(i);
             SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionNumber());

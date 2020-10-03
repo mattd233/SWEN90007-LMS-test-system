@@ -63,7 +63,7 @@ public class ExamMapper extends Mapper {
                     status = "UNPUBLISHED";
                     return status;
                 } else {
-                    System.out.println("error when getting the exam status");
+                    System.err.println("error when getting the exam status");
                     return null;
                 }
             }
@@ -200,6 +200,7 @@ public class ExamMapper extends Mapper {
             stmt.setInt(1, examID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
+                System.out.println("Cannot delete exam because there are already submissions.");
                 return false;
             }
         } catch (Exception e) {
