@@ -15,20 +15,7 @@ Created by IntelliJ IDEA.
 <html>
 <head>
     <title>Edit Exam</title>
-    <style>
-        .choice {
-            margin-top: 10px;
-            margin-left: 20px;
-            white-space: nowrap;
-        }
-
-        .choice_input {
-            margin-top: 10px;
-            margin-left: 20px;
-        }
-
-
-    </style>
+    <link rel="stylesheet" href="../styles/EditExam.css">
 </head>
 <body>
 <%

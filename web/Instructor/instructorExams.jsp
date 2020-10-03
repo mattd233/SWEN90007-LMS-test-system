@@ -11,18 +11,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <style>
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 5px;
-        }
-        th {
-            text-align: left;
-        }
-    </style>
+    <link rel="stylesheet" href="/styles/instructorTables.css" type="text/css">
     <title>View all exams</title>
 </head>
 <body>
@@ -89,8 +78,9 @@
     </table>
     <input type="button" value="Go back" onclick=window.location.replace("/Instructor/instructorSubjects.jsp?");>
     <form name="add_new_exam" action="createNewExam.jsp?subject_code=<%=request.getParameter("subject_code")%>" method="post">
-        <input type="submit" value="Add new exam"/>
+        <input class="submitButton" type="submit" value="Add new exam"/>
     </form>
+    <a href="/Instructor/instructorSubjects.jsp">back to subject page</a>
 </div>
 
 </body>

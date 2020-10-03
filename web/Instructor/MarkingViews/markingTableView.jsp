@@ -15,7 +15,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <link rel="stylesheet" href="/Instructor/MarkingViews/markingStyles.css" type="text/css">
+    <link rel="stylesheet" href="/styles/markingStyles.css" type="text/css">
     <title><%=request.getParameter("subject_code")%> Submissions Table View</title>
 </head>
 <body>
@@ -96,7 +96,7 @@
 
                 <!-- Fudge point -->
                 <td>
-                    <input type="number" name="fp<%=uId%>" value="<%=fudgePoints%>" onsubmit="return notNullValidation(<%=uId%>)">
+                    <input type="number" name="fp<%=uId%>" value="<%=fudgePoints%>">
                 </td>
                 <%
                     String displayFinalMarks = "N/A";
@@ -113,16 +113,23 @@
                 }
             %>
         </table>
-        <input type="submit" value="Update marks">
+        <input class="submitButton" type="submit" value="Update marks">
     </form>
+    <a href="/Instructor/instructorSubjects.jsp">
+        back to subject page
+    </a><br>
+    <a href="/Instructor/instructorExams.jsp?subject_code=<%=subjectCode%>">
+        back to the exam page of subject <%=subjectCode%>
+    </a>
 </div>
 <script>
-    function notNullValidation(uID) {
-        var s = document.forms["markingTableForm"]["fp"+uID.toString()].value();
-        if (s == "") {
+    function notNullValidation(uId) {
+        var s = document.forms["markingTableForm"]["fp"+uId.toString()].value;
+        if (s == "" || s == null) {
             alert("Fudge points cannot be empty.");
             return false;
         }
+        return true;
     }
 </script>
 </body>

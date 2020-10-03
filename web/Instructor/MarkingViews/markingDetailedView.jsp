@@ -8,13 +8,12 @@
 <%@ page import="java.util.List" %>
 <%@ page import="main.java.db.mapper.ExamMapper" %>
 <%@ page import="main.java.db.mapper.SubmissionMapper" %>
-<%@ page import="main.java.db.mapper.QuestionMapper" %>
 <%@ page import="main.java.db.mapper.SubmittedQuestionMapper" %>
 <%@ page import="main.java.domain.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <link rel="stylesheet" href="/Instructor/MarkingViews/markingStyles.css" type="text/css">
+    <link rel="stylesheet" href="/styles/markingStyles.css" type="text/css">
     <title>Student's Submission</title>
 </head>
 <body>
@@ -34,27 +33,34 @@
     <!-- Show subject code and exam title -->
     <h1><%=exam.getSubjectCode()%> <%=exam.getTitle()%></h1>
 
-    <!-- Show message if there's no submission from this student to this exam -->
+    <a href="/submissions_table?subject_code=<%=exam.getSubjectCode()%>">
+        back to table view
+    </a>
+    <!-- Get the submission -->
     <%
-        // Get the submission
         Submission submission = SubmissionMapper.getSubmissionByIDs(examID, userID);
         if (submission == null) {
     %>
-    <!-- Case 1: Student has not submission for this exam -->
-    <p>This student has no submission for this exam.</p>
+    <!-- Case 1: Student has not submission for this exam (should not happen) -->
+    <div class="notification"><p>This student has no submission for this exam.</p></div>
 
     <!-- Case 2: Show submission information -->
     <%
         } else {
             String submissionTime = submission.getSubmissionTime().toString();
     %>
+    <p>Submitted by student: <%=userID%></p>
     <p>Submission time: <%=submissionTime%></p>
     <!-- Display questions and marks -->
     <%
-
         // Display questions and marks
         List<Question> questions = exam.getQuestions();
-
+        if (questions.size() == 0) {
+    %>
+    <!-- Show message if there's no question in this exam (should not happen) -->
+    <div class="notification"><p>This exam has no question.</p></div>
+    <%
+        }
         for (int i=0; i<questions.size(); i++) {
             Question question = questions.get(i);
             SubmittedQuestion answer = SubmittedQuestionMapper.getSubmittedQuestion(examID, userID, question.getQuestionNumber());
@@ -77,7 +83,7 @@
             <%=question.getMarks()%>
         </h3>
         <!-- Question content -->
-        <p>Question: <%=question.getDescription()%></p>
+        <p style="font-weight: bold">Question: </p><p><%=question.getDescription()%></p>
         <%
                     if (answer.getChoiceNumber() == 0 && answer.getShortAnswer() == null) {
         %>
@@ -87,7 +93,7 @@
                     } else {
         %>
         <!-- Case 2.2: Show student's answer -->
-        <p>Student's Answer: </p>
+        <p style="font-weight: bold">Student's Answer: </p>
         <!-- Case 2.2.1: Multiple choice question -->
         <%
                         // Display student's answer

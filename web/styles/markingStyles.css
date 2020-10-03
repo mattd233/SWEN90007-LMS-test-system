@@ -29,3 +29,10 @@ th {
 .fudgePoints {
     font-size: 18px;
 }
+.submitButton {
+    display: block;
+    margin: 8px auto auto auto;
+    padding: 5px;
+    width: 120px;
+    text-align: center;
+}

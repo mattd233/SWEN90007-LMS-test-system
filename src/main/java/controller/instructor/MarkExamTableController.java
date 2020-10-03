@@ -46,16 +46,15 @@ public class MarkExamTableController extends HttpServlet {
             String fudgePointsStr = request.getParameter("fp"+sID);
             try {
                 float fudgePoints = Float.valueOf(fudgePointsStr);
-                System.out.println(fudgePoints);
                 boolean updateSuccess = UserSubjectMapper.updateFudgePoints(sID, subjectCode, fudgePoints);
                 if (!updateSuccess) {
-                    System.out.println("Error in MarkExamTableController doPost: Update not successful");
-                    showErrorPage(request, response);
+                    System.err.println("Error in MarkExamTableController doPost: Update not successful");
+                    showErrorPage(request, response, "Update not successful. Please try again.");
                     return;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                showErrorPage(request, response);
+                showErrorPage(request, response, e.getMessage());
                 return;
             }
         }
@@ -68,6 +67,15 @@ public class MarkExamTableController extends HttpServlet {
     private void showErrorPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String view = "/errorPage.jsp";
         ServletContext servletContext = getServletContext();
+        request.setAttribute("errMsg", "Something wrong has happened. Please try again later.");
+        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
+        requestDispatcher.forward(request, response);
+    }
+
+    private void showErrorPage(HttpServletRequest request, HttpServletResponse response, String errMsg) throws ServletException, IOException {
+        String view = "/errorPage.jsp";
+        ServletContext servletContext = getServletContext();
+        request.setAttribute("errMsg", errMsg);
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
         requestDispatcher.forward(request, response);
     }
