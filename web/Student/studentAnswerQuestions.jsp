@@ -132,7 +132,7 @@
                             String choice_description = choice.getChoiceDescription();
                 %>
                 <%--            display all the answers--%>
-                <input type="radio" name="radioChoice" value="<%=choice.getChoiceID()%>">
+                <input type="radio" name="radioChoice" value="<%=choice.getChoiceNumber()%>">
                 <%=choice_description%><br/>
                 <%
                     } // end for

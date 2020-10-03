@@ -11,6 +11,13 @@
     <title>Error</title>
 </head>
 <body>
-    <p>Error: <%=request.getAttribute("errMsg")%></p>
+    <%
+        Object errMsgAttr = request.getAttribute("errMsg");
+        String errMsg = "Something wrong has happened. Please try again later.";
+        if (errMsgAttr != null && !errMsgAttr.toString().equals("")) {
+            errMsg = errMsgAttr.toString();
+        }
+    %>
+    <p>Error: <%=errMsg%></p>
 </body>
 </html>
