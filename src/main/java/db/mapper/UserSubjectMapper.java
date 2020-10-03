@@ -122,6 +122,7 @@ public class UserSubjectMapper {
             stmt.setInt(2, userID);
             stmt.setString(3, subjectCode);
             int result = stmt.executeUpdate();
+            updateMarks(userID, subjectCode);
             return (result > 0) ? true : false;
         } catch (Exception e) {
             e.printStackTrace();
