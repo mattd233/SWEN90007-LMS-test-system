@@ -15,7 +15,7 @@ Created by IntelliJ IDEA.
 <html>
 <head>
     <title>Edit Exam</title>
-    <link rel="stylesheet" href="EditExam.css">
+    <link rel="stylesheet" href="../styles/EditExam.css">
 </head>
 <body>
 <%

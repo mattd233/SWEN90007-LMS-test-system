@@ -15,7 +15,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <link rel="stylesheet" href="/Instructor/MarkingViews/markingStyles.css" type="text/css">
+    <link rel="stylesheet" href="/styles/markingStyles.css" type="text/css">
     <title><%=request.getParameter("subject_code")%> Submissions Table View</title>
 </head>
 <body>
@@ -113,7 +113,7 @@
                 }
             %>
         </table>
-        <input type="submit" value="Update marks">
+        <input class="submitButton" type="submit" value="Update marks">
     </form>
     <a href="/Instructor/instructorSubjects.jsp">
         back to subject page

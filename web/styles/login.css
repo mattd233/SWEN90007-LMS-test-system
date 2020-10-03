@@ -1,0 +1,16 @@
+.center {
+    margin: 10px auto auto auto;
+    width: 300px;
+    padding: 30px;
+}
+.inputLine {
+    padding: 10px;
+    text-align: center;
+}
+.submitButton {
+    display: block;
+    margin: 20px auto auto auto;
+    padding: 5px;
+    width: 80px;
+    text-align: center;
+}
