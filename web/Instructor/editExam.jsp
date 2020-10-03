@@ -1,11 +1,8 @@
 <%@ page import="main.java.db.mapper.ExamMapper" %>
-<%@ page import="main.java.domain.Exam" %>
-<%@ page import="main.java.domain.Question" %>
 <%@ page import="main.java.db.mapper.QuestionMapper" %>
-<%@ page import="main.java.domain.MultipleChoiceQuestion" %>
-<%@ page import="main.java.domain.Choice" %>
 <%@ page import="main.java.db.mapper.ChoiceMapper" %>
 <%@ page import="main.java.db.QuestionUOW" %>
+<%@ page import="main.java.domain.*" %>
 <%--
 Created by IntelliJ IDEA.
   User: Matt
@@ -24,10 +21,10 @@ Created by IntelliJ IDEA.
 <%
     int examID = Integer.parseInt(request.getParameter("exam_id"));
     Exam exam = ExamMapper.getExamByID(examID);
-    assert exam != null : "exam does not exist";
+
 %>
 <form action="/Instructor/editExam" method="post">
-    <input type="hidden" value=<%=examID%> name="exam_id">
+    <input type="hidden" value=<%=examID%> name="exam_id", id="exam_id">
     Exam Title: <input type="text" placeholder=<%=exam.getTitle()%>>
     <br>
     Exam Description: <input type="text" placeholder=<%=exam.getDescription()%>>
@@ -35,9 +32,6 @@ Created by IntelliJ IDEA.
     Status: <%=exam.getStatus()%>
     <br>
     <%
-        if (QuestionUOW.getCurrent() == null) {
-            QuestionUOW.newCurrent();
-        }
         for (Question question : QuestionMapper.getAllQuestionsWithExamID(examID)) {
     %>
     <div id=<%="Q" + question.getQuestionNumber()%>>
@@ -49,6 +43,7 @@ Created by IntelliJ IDEA.
         <p>marks: <%=question.getMarks()%></p>
         <input type="number" placeholder="Change marks" name=<%="marks" + question.getQuestionNumber()%>>
         <input type="button" value="remove" onclick=deleteQuestion(<%=question.getQuestionNumber()%>)>
+<%--        deleteQuestion(<%=question.getQuestionNumber()%>)--%>
         <br>
             <% if (question instanceof MultipleChoiceQuestion) {
                 for (Choice choice : ChoiceMapper.getChoices(examID, question.getQuestionNumber())) {
@@ -68,12 +63,14 @@ Created by IntelliJ IDEA.
 </form>
 </body>
 <script>
+    var exam_id = <%=examID%>;
     function deleteQuestion(qNumber) {
         var qID = "Q".concat(qNumber);
-        var rem = confirm("Do you want to delete the question?")
+        var rem = confirm("Do you want to delete the question?");
         if(rem) {
-<%--            <%db.QuestionUOW.getCurrent().registerDeleted(new Question(examID, qNumber, ));%>--%>
             document.getElementById(qID).remove();
+            var target = "editExam?exam_id=".concat(exam_id, "&deleteQuestion=", qNumber);
+            window.location.replace(target);
         }
     }
 </script>

@@ -27,7 +27,7 @@ public class AddSubjectController extends HttpServlet {
         String subjectCode = request.getParameter("code");
         String name = request.getParameter("name");
         String coordinator = request.getParameter("coordinator_name");
-        System.out.println(subjectCode + " " + name + " " + coordinator);
+//        System.out.println(subjectCode + " " + name + " " + coordinator);
 //        Subject subject = new Subject(subjectCode, name, coordinator);
 //        subject.insert();
         String view = "/subjects.jsp";

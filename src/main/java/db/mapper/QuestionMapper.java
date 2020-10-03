@@ -105,7 +105,7 @@ public class QuestionMapper {
 
 
     public static void update(Question question) {
-        final String updateQuestionStmt = "UPDATE questions SET question_type = ?::question_type, " +
+        final String updateQuestionStmt = "UPDATE questions SET question_number= ?, question_type = ?::question_type, " +
                 "title = ?, description = ?, marks = ?" +
                 "WHERE exam_id = ? AND question_number = ?";
         try {
@@ -143,9 +143,38 @@ public class QuestionMapper {
                 stmt.setInt(2, question.getQuestionNumber());
                 stmt.execute();
             }
+            // reset the question numbers
+            resetQuestionNumber(question.getExamID());
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Reset the question numbers in an exam after deletion
+     */
+    public static void resetQuestionNumber(int examID) {
+        final String deleteAllStmt = "DELETE FROM questions WHERE exam_id = ?";
+
+        List<Question> questions = getAllQuestionsWithExamID(examID);
+        for (int i=0; i<questions.size(); i++){
+            Question question = questions.get(i);
+            question.setQuestionNumber(i+1);
+        }
+
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(deleteAllStmt);
+            stmt.setInt(1, examID);
+            stmt.execute();
+            // take care of choices table if it's a multiple choice question
+            for (Question question : questions) {
+                insert(question);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
