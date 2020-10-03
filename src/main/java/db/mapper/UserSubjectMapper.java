@@ -38,11 +38,19 @@ public class UserSubjectMapper {
 
     /**/
     public static void insert(int userID, String subjectCode) {
-        final String insertStmt =
-                "INSERT INTO users_has_subjects (user_id, subject_code) VALUES (?, ?)";
+        final String checkStmt = "SELECT * FROM users_has_subjects WHERE user_id = ? AND subject_code = ?";
+        final String insertStmt = "INSERT INTO users_has_subjects (user_id, subject_code) VALUES (?, ?)";
         try {
             Connection dbConnection = new DBConnection().connect();
-            PreparedStatement stmt = dbConnection.prepareStatement(insertStmt);
+            // check if instructor with the subjects already exists.
+            PreparedStatement stmt = dbConnection.prepareStatement(checkStmt);
+            stmt.setInt(1, userID);
+            stmt.setString(2, subjectCode);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                throw new Exception("Instructor already exists in the subject.");
+            }
+            stmt = dbConnection.prepareStatement(insertStmt);
             stmt.setInt(1, userID);
             stmt.setString(2, subjectCode);
             stmt.execute();
