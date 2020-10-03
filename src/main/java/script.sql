@@ -41,19 +41,18 @@ DROP TABLE users_has_subjects CASCADE;
 CREATE TABLE users_has_subjects (
     user_id INT NOT NULL REFERENCES users(user_id),
     subject_code VARCHAR(20) NOT NULL REFERENCES subjects(subject_code),
-    marks INT DEFAULT null,
     fudge_points FLOAT DEFAULT 0
 );
 
-INSERT INTO users_has_subjects VALUES(000001, 'SWEN90007', DEFAULT, DEFAULT);
-INSERT INTO users_has_subjects VALUES(000001, 'SWEN90009', DEFAULT, DEFAULT);
-INSERT INTO users_has_subjects VALUES(000002, 'SWEN90007', DEFAULT, DEFAULT);
-INSERT INTO users_has_subjects VALUES(904601, 'SWEN90007', DEFAULT, DEFAULT);
-INSERT INTO users_has_subjects VALUES(904601, 'SWEN90009', DEFAULT, DEFAULT);
-INSERT INTO users_has_subjects VALUES(713551, 'SWEN90007', DEFAULT, DEFAULT);
-INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90007', DEFAULT, DEFAULT);
-INSERT INTO users_has_subjects VALUES(713551, 'SWEN90009', DEFAULT, DEFAULT);
-INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90009', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(000001, 'SWEN90007', DEFAULT);
+INSERT INTO users_has_subjects VALUES(000001, 'SWEN90009', DEFAULT);
+INSERT INTO users_has_subjects VALUES(000002, 'SWEN90007', DEFAULT);
+INSERT INTO users_has_subjects VALUES(904601, 'SWEN90007', DEFAULT);
+INSERT INTO users_has_subjects VALUES(904601, 'SWEN90009', DEFAULT);
+INSERT INTO users_has_subjects VALUES(713551, 'SWEN90007', DEFAULT);
+INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90007', DEFAULT);
+INSERT INTO users_has_subjects VALUES(713551, 'SWEN90009', DEFAULT);
+INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90009', DEFAULT);
 
 --------------------------------------------------------------------------------
 --                                  exams                                     --
@@ -73,7 +72,6 @@ CREATE TABLE exams (
 
 INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Week 3 Quiz', 'A quiz about data source layer', 'CLOSED');
 INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Week 5 Quiz', 'A quiz about object to relational structural patterns', 'PUBLISHED');
-INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Mid-Sem exam', '2020S2 Mid semester exam (0% of total)', DEFAULT);
 INSERT INTO exams VALUES (DEFAULT, 'SWEN90007', 'Final exam', '2020S2 Final exam of Software Design and Architecture (60% of total)', DEFAULT);
 INSERT INTO exams VALUES (DEFAULT, 'SWEN90009', 'Mid-Sem exam', '2020S1 Mid semester exam', 'PUBLISHED');
 INSERT INTO exams VALUES (DEFAULT, 'SWEN90009', 'Final exam', '2020S1 Final exam of Software Requirement Analysis', DEFAULT);
@@ -98,9 +96,15 @@ CREATE TABLE questions (
 INSERT INTO questions VALUES (1, 1, 'SHORT_ANSWER', 'Question 1', 'What is the object that wraps a row in a DB table or view, encapsulates the DB access, and adds domain logic on that data?', 50);
 INSERT INTO questions VALUES (1, 2, 'MULTIPLE_CHOICE', 'Question 2', 'What is the layer of software that separates the in-memory objects from the database?', 50);
 
-INSERT INTO questions VALUES (5, 1, 'SHORT_ANSWER', 'Question 1', 'What is software engineering?', 20);
-INSERT INTO questions VALUES (5, 2, 'SHORT_ANSWER', 'Question 2', 'What is software requirements analysis?', 50);
-INSERT INTO questions VALUES (5, 3, 'MULTIPLE_CHOICE', 'Multiple Choice 1', 'Choose the WRONG statement.', 30);
+INSERT INTO questions VALUES (2, 1, 'SHORT_ANSWER', 'Question 1', 'How to structurally map our domain objects to a relational database?', 100);
+
+INSERT INTO questions VALUES (3, 1, 'SHORT_ANSWER', 'Question 1', 'What does unit of work do?', 100);
+
+INSERT INTO questions VALUES (4, 1, 'SHORT_ANSWER', 'Question 1', 'What is software engineering?', 20);
+INSERT INTO questions VALUES (4, 2, 'SHORT_ANSWER', 'Question 2', 'What is software requirements analysis?', 50);
+INSERT INTO questions VALUES (4, 3, 'MULTIPLE_CHOICE', 'Multiple Choice 1', 'Choose the WRONG statement.', 30);
+
+INSERT
 
 --------------------------------------------------------------------------------
 --                                  choices                                   --
@@ -119,8 +123,8 @@ INSERT INTO choices VALUES (1, 2, 2, 'Row data gateway');
 INSERT INTO choices VALUES (1, 2, 3, 'Active record');
 INSERT INTO choices VALUES (1, 2, 4, 'Data mapper');
 
-INSERT INTO choices VALUES (5, 3, 1, 'Software engineering is meaningless.');
-INSERT INTO choices VALUES (5, 3, 2, 'Software engineering is the systematic application of engineering approaches to the development of software.');
+INSERT INTO choices VALUES (4, 3, 1, 'Software engineering is meaningless.');
+INSERT INTO choices VALUES (4, 3, 2, 'Software engineering is the systematic application of engineering approaches to the development of software.');
 
 --------------------------------------------------------------------------------
 --                                submissions                                 --

@@ -24,7 +24,7 @@ public class AddSubjectController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // handles adding coordinator
-        String target = "subjects.jsp";
+        String target = "/Admin/subjects.jsp";
         String instructorID = request.getParameter("instructor_id");
         String subjectCode = request.getParameter("subject_code");
         if (instructorID != null && subjectCode !=null) {
@@ -51,7 +51,7 @@ public class AddSubjectController extends HttpServlet {
         assert instructor != null;
         subject.addInstructor(instructor.getStaffID(), instructor.getName());
         SubjectMapper.insert(subject);
-        String view = "/subjects.jsp";
+        String view = "/Admin/subjects.jsp";
         ServletContext servletContext = getServletContext();
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
         requestDispatcher.forward(request, response);

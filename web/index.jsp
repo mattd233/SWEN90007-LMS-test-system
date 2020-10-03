@@ -13,9 +13,7 @@
   <body>
     <h1> Hello </h1>
     <%
-      if (session.getAttribute("user_id") == null) {
-        response.sendRedirect("/login.jsp");
-      }
+      response.sendRedirect("/login.jsp");
     %>
   </body>
 </html>
