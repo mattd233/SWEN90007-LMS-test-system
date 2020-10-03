@@ -18,10 +18,23 @@
     String examID = request.getParameter("exam_id");
     int exam_id = Integer.parseInt(examID);
     String title = Objects.requireNonNull(ExamMapper.getExamByID(exam_id)).getTitle();
-
+    String status = ExamMapper.getExamStatus(exam_id);
 %>
 <div style="margin-top: 100px" align="center">
+    <%
+        assert status != null;
+        if (status.equals("PUBLISHED")){
+    %>
     <h3><%=studentID%> submitted <%=title%> successfully.<br/></h3>
+    <%
+        } // end if
+        else if (status.equals("CLOSED")){
+    %>
+    <h3>Failed. The exam has been closed.<br/></h3>
+    <%
+        } // end else if
+    %>
+
 
     <br><br>
 
