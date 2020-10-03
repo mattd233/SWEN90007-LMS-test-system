@@ -38,7 +38,7 @@ public class LoginController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("user_id", user.getUserID());
             if (user instanceof Admin) {
-                response.sendRedirect("/subjects");
+                response.sendRedirect("Admin/subjects.jsp");
             } else if (user instanceof Instructor) {
                 response.sendRedirect("Instructor/instructorSubjects.jsp");
             } else if (user instanceof Student){

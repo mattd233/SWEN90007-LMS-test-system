@@ -13,7 +13,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <link rel="stylesheet" href="/styles/markingStyles.css" type="text/css">
+    <link rel="stylesheet" href="/styles/instructorMarkingStyles.css" type="text/css">
     <title>Student's Submission</title>
 </head>
 <body>

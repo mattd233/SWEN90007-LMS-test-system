@@ -10,30 +10,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <link rel="stylesheet" href="/styles/adminStyles.css" type="text/css">
     <title>Subjects</title>
-    <style>
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 5px;
-        }
-        th {
-            text-align: left;
-        }
-        form {
-            margin: 5px;
-        }
-    </style>
 </head>
 <body>
 <div align="center">
-    <table style="width:70%">
+    <h1>All Subjects</h1>
+    <table>
         <tr>
             <th>Subject Code</th>
             <th>Subject Name</th>
-            <th>Coordinator</th>
+            <th>Instructors</th>
             <th></th>
         </tr>
         <tr>
@@ -50,15 +37,14 @@
         %>
     </table>
 </div>
+
 <div align="center">
+    <h2>Add New Subject</h2>
     <form name="AddSubjectForm" action="/subjects" method="post">
-        Subject Code: <input type = "text" name = "code">
-        <br />
-        Subject Name: <input type = "text" name = "name">
-        <br />
-        Instructor ID: <input type = "text" name = "instructor_id" />
-        <br />
-        <input type = "submit" value = "Add New Subject" />
+        <div class="inputLine">Subject Code: <input type = "text" name = "code"></div>
+        <div class="inputLine">Subject Name: <input type = "text" name = "name"></div>
+        <div class="inputLine">Instructor ID: <input type = "text" name = "instructor_id" /></div>
+        <input class="submitButton" type = "submit" value = "Add Subject" />
     </form>
 </div>
 </body>

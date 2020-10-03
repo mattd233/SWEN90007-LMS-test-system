@@ -11,12 +11,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <link rel="stylesheet" href="/styles/instructorTables.css" type="text/css">
+    <link rel="stylesheet" href="/styles/instructorStyles.css" type="text/css">
     <title>View all exams</title>
 </head>
 <body>
 <div align="center">
-    <table style="width:70%">
+    <h1>All Exams of Subject <%=request.getParameter("subject_code")%></h1>
+    <table>
         <tr>
             <th>Title</th>
             <th>Description</th>
@@ -76,11 +77,11 @@
             } // for loop
         %>
     </table>
-    <input type="button" value="Go back" onclick=window.location.replace("/Instructor/instructorSubjects.jsp?");>
     <form name="add_new_exam" action="createNewExam.jsp?subject_code=<%=request.getParameter("subject_code")%>" method="post">
         <input class="submitButton" type="submit" value="Add new exam"/>
     </form>
-    <a href="/Instructor/instructorSubjects.jsp">back to subject page</a>
+    <input class="returnButton" type="button" value="Go back to subject page" onclick=window.location.replace("/Instructor/instructorSubjects.jsp?");>
+<%--    <a href="/Instructor/instructorSubjects.jsp">back to subject page</a>--%>
 </div>
 
 </body>

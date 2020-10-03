@@ -11,12 +11,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <link rel="stylesheet" href="/styles/instructorTables.css" type="text/css">
+    <link rel="stylesheet" href="/styles/instructorStyles.css" type="text/css">
     <title>View all subjects</title>
 </head>
 <body>
 <div align="center">
-    <table style="width:70%">
+    <table>
         <tr>
             <th>Subject Code</th>
             <th>Subject Name</th>

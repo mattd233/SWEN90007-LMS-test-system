@@ -2,16 +2,29 @@ table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
 }
+table {
+    width: 70%
+}
 th, td {
     padding: 5px;
 }
 th {
     text-align: left;
 }
+form {
+    margin: 5px;
+}
+h2 {
+    padding-top: 10px;
+}
+.inputLine {
+    padding-top: 4px;
+    text-align: center;
+}
 .submitButton {
     display: block;
-    margin: 8px auto auto auto;
-    padding: 5px;
+    margin: 10px auto auto auto;
+    padding: 6px;
     width: 120px;
     text-align: center;
 }
