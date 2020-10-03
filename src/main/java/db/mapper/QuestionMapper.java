@@ -81,7 +81,10 @@ public class QuestionMapper {
         return null;
     }
 
-
+    /**
+     * Insert a question in to the database.
+     * @param question question to be inserted.
+     */
     public static void insert(Question question) {
         final String insertQuestionStmt = "INSERT INTO questions VALUES (?, ?, ?::question_type, ?, ?, ?)";
         try {
@@ -103,7 +106,10 @@ public class QuestionMapper {
         }
     }
 
-
+    /**
+     * Update a question in the database.
+     * @param question question to be updated.
+     */
     public static void update(Question question) {
         final String updateQuestionStmt = "UPDATE questions SET question_number= ?, question_type = ?::question_type, " +
                 "title = ?, description = ?, marks = ?" +
@@ -127,6 +133,10 @@ public class QuestionMapper {
         }
     }
 
+    /**
+     * Delete a question in the database.
+     * @param question question to be deleted.
+     */
     public static void delete(Question question) {
         final String deleteQuestionStmt = "DELETE FROM questions WHERE exam_id = ? AND question_number = ? ";
         final String deleteChoicesStmt = "DELETE FROM choices WHERE exam_id = ? AND question_number = ? ";
@@ -144,39 +154,35 @@ public class QuestionMapper {
                 stmt.execute();
             }
             // reset the question numbers
-            resetQuestionNumber(question.getExamID());
+//            resetQuestionNumber(question.getExamID());
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Reset the question numbers in an exam after deletion
+     * Get the biggest question number of given exam id.
+     * @param examID id of the exam
      */
-    public static void resetQuestionNumber(int examID) {
-        final String deleteAllStmt = "DELETE FROM questions WHERE exam_id = ?";
-
-        List<Question> questions = getAllQuestionsWithExamID(examID);
-        for (int i=0; i<questions.size(); i++){
-            Question question = questions.get(i);
-            question.setQuestionNumber(i+1);
-        }
+    public static int getCurQuestionNumber(int examID) {
+        final String getQNumberStmt = "SELECT max(question_number) FROM questions WHERE exam_id = ?";
 
         try {
             Connection dbConnection = new DBConnection().connect();
-            PreparedStatement stmt = dbConnection.prepareStatement(deleteAllStmt);
+            PreparedStatement stmt = null;
+            stmt = dbConnection.prepareStatement(getQNumberStmt);
             stmt.setInt(1, examID);
-            stmt.execute();
-            // take care of choices table if it's a multiple choice question
-            for (Question question : questions) {
-                insert(question);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        // no question in this exam, return 0
+        return 0;
 
     }
-
 
     /**
      *

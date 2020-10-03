@@ -1,5 +1,11 @@
 package main.java.controller.admin;
 
+import main.java.db.mapper.SubjectMapper;
+import main.java.db.mapper.UserMapper;
+import main.java.db.mapper.UserSubjectMapper;
+import main.java.domain.Instructor;
+import main.java.domain.Subject;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -17,19 +23,34 @@ public class AddSubjectController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String view = "/subjects.jsp";
-        ServletContext servletContext = getServletContext();
-        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
-        requestDispatcher.forward(request, response);
+        // handles adding coordinator
+        String target = "subjects.jsp";
+        String instructorID = request.getParameter("instructor_id");
+        String subjectCode = request.getParameter("subject_code");
+        if (instructorID != null && subjectCode !=null) {
+            try {
+                int id = Integer.parseInt(instructorID);
+                Instructor instructor = UserMapper.findInstructorWithID(id);
+                assert instructor != null;
+                UserSubjectMapper.insert(id, subjectCode);
+            } catch (Exception e) {
+                target = "errorPage.jsp";
+                e.printStackTrace();
+            }
+        }
+
+        response.sendRedirect(target);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String subjectCode = request.getParameter("code");
         String name = request.getParameter("name");
-        String coordinator = request.getParameter("coordinator_name");
-//        System.out.println(subjectCode + " " + name + " " + coordinator);
-//        Subject subject = new Subject(subjectCode, name, coordinator);
-//        subject.insert();
+        String instructorID = request.getParameter("instructor_id");
+        Subject subject = new Subject(subjectCode, name);
+        Instructor instructor = UserMapper.findInstructorWithID(Integer.parseInt(instructorID));
+        assert instructor != null;
+        subject.addInstructor(instructor.getStaffID(), instructor.getName());
+        SubjectMapper.insert(subject);
         String view = "/subjects.jsp";
         ServletContext servletContext = getServletContext();
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);

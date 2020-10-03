@@ -36,6 +36,21 @@ public class UserSubjectMapper {
         return students;
     }
 
+    /**/
+    public static void insert(int userID, String subjectCode) {
+        final String insertStmt =
+                "INSERT INTO users_has_subjects (user_id, subject_code) VALUES (?, ?)";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(insertStmt);
+            stmt.setInt(1, userID);
+            stmt.setString(2, subjectCode);
+            stmt.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Get the fudge points of a subject of a student.
      * @param userID The user_id of the student.

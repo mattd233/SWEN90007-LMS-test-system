@@ -1,6 +1,7 @@
 package main.java.db.mapper;
 
 import main.java.db.DBConnection;
+import main.java.domain.Instructor;
 import main.java.domain.Subject;
 
 import java.sql.Connection;
@@ -14,17 +15,16 @@ import java.util.List;
 
 public class SubjectMapper extends Mapper {
 
-
     /**
-     *
-     * @return
+     * Get all the subjects with the names of their respective instructors
+     * @return a list of subjects
      */
     public static List<Subject> getAllSubjects() {
         final String findAllSubjectsStatement =
                 "SELECT s.subject_code, s.name, u.user_id, u.name FROM subjects s\n" +
                 "INNER JOIN users_has_subjects uhs on s.subject_code = uhs.subject_code\n" +
                 "INNER JOIN users u on uhs.user_id = u.user_id\n" +
-                "WHERE u.type = 'instructor'";
+                "WHERE u.type = 'INSTRUCTOR'";
 
         // A hashmap that uses subject code as key and the object itself as value
         // It is used to determine whether a subject has already been instantiated
@@ -42,11 +42,11 @@ public class SubjectMapper extends Mapper {
                 // new subject
                 if (!subjects.containsKey(code)) {
                     Subject newSubject = new Subject(code, subjectName);
-                    newSubject.addCoordinator(staffID, coordinatorName);
+                    newSubject.addInstructor(staffID, coordinatorName);
                     subjects.put(code, newSubject);
                 } else {
                     Subject existingSubject = subjects.get(code);
-                    existingSubject.addCoordinator(staffID, coordinatorName);
+                    existingSubject.addInstructor(staffID, coordinatorName);
                 }
             }
         } catch (SQLException e) {
@@ -56,46 +56,49 @@ public class SubjectMapper extends Mapper {
         return new ArrayList<>(subjects.values());
     }
 
+    /**
+     * Insert a subject into the database.
+     * @param subject subject to be inserted.
+     */
     public static void insert(Subject subject) {
         final String insertSubjectStmt = "INSERT INTO subjects VALUES (?, ?)";
-        final String insertCHSStmt = "INSERT INTO coordinators_has_subjects VALUES (?, ?)";
+        final String insertCHSStmt = "INSERT INTO users_has_subjects(user_id, subject_code) VALUES (?, ?)";
 
-//        try {
-//            // first check if we can find the coordinator with given id
-//            for (Integer staffID : subject.getCoordinatorIDs()) {
-//                Coordinator coordinator = CoordinatorMapper.findCoordinatorWithID(staffID);
-//                if (coordinator == null) {
-//                    throw new Exception("Coordinator does not exist");
-//                }
-//                if (!coordinator.getName().equals(subject.getCoordinatorNameByID(staffID))) {
-//                    throw new Exception("Unmatched  coordinator_id and name.");
-//                }
-//            }
-//
-//            Connection dbConnection = new DBConnection().connect();
-//            PreparedStatement insertStatement = dbConnection.prepareStatement(insertSubjectStmt);
-//            insertStatement.setString(1,subject.getSubjectCode());
-//            insertStatement.setString(2, subject.getSubjectName());
-//            insertStatement.execute();
-//
-//
-//
-//            insertStatement = dbConnection.prepareStatement(insertCHSStmt);
-//            insertStatement.setInt(1, coordinator.getStaffID());
-//            insertStatement.setString(2, subject.getSubjectCode());
-//            insertStatement.execute();
-//
-//
-//            System.out.println("Insertion successful.");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        Instructor instructor = null;
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt;
+            // first check if we can find the coordinator with given id
+            for (Integer staffID : subject.getInsturctorIDs()) {
+                instructor = UserMapper.findInstructorWithID(staffID);
+                if (instructor == null) {
+                    throw new Exception("Coordinator does not exist");
+                }
+                if (!instructor.getName().equals(subject.getInstructorNameByID(staffID))) {
+                    throw new Exception("Unmatched  coordinator_id and name.");
+                }
+            }
+
+            stmt = dbConnection.prepareStatement(insertSubjectStmt);
+            stmt.setString(1,subject.getSubjectCode());
+            stmt.setString(2, subject.getSubjectName());
+            stmt.execute();
+
+            stmt = dbConnection.prepareStatement(insertCHSStmt);
+            stmt.setInt(1, instructor.getStaffID());
+            stmt.setString(2, subject.getSubjectCode());
+            stmt.execute();
+
+            System.out.println("Insertion successful.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Get all subjects being taught by a single instructor
-     * @param userID
-     * @return
+     * @param userID ID of the instructor
+     * @return a list of subjects.
      */
     public static List<Subject> getAllSubjectsWithInstructor(int userID) {
 

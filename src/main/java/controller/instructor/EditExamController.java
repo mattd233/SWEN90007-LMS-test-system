@@ -3,10 +3,9 @@ package main.java.controller.instructor;
 import main.java.db.ChoiceUOW;
 import main.java.db.QuestionUOW;
 import main.java.db.mapper.ChoiceMapper;
+import main.java.db.mapper.ExamMapper;
 import main.java.db.mapper.QuestionMapper;
-import main.java.domain.Choice;
-import main.java.domain.Question;
-import main.java.domain.ShortAnswerQuestion;
+import main.java.domain.*;
 
 
 import javax.servlet.RequestDispatcher;
@@ -29,31 +28,41 @@ public class EditExamController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        // handles deleting questions
         int exam_id = Integer.parseInt(request.getParameter("exam_id"));
-        String view = "/Instructor/editExam.jsp?exam_id=" + exam_id;
         if (request.getParameter("deleteQuestion")!=null) {
             int questionNumber = Integer.parseInt(request.getParameter("deleteQuestion"));
             QuestionMapper.delete(new ShortAnswerQuestion(exam_id, questionNumber, "", "", 0));
         }
-        ServletContext servletContext = getServletContext();
-        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
-        requestDispatcher.forward(request, response);
-
+        response.sendRedirect("/Instructor/editExam.jsp?exam_id=" + exam_id);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String exam_id = request.getParameter("exam_id");
+        int examID = Integer.parseInt(exam_id);
+        Exam exam = ExamMapper.getExamByID(examID);
+        assert exam != null;
+
+        String examTitle = request.getParameter("exam_title");
+        String examDescription = request.getParameter("exam_description");
+        if (!examTitle.equals("")) {
+            exam.setTitle(examTitle);
+        }
+        if (!examDescription.equals("")) {
+            exam.setDescription(examDescription);
+        }
+        ExamMapper.update(exam);
+
+
         QuestionUOW.newCurrent();
         ChoiceUOW.newCurrent();
 
-        String exam_id = request.getParameter("exam_id");
-        int examID = Integer.parseInt(exam_id);
+
         int questionIdx = 1;
         List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
         while(request.getParameter("title" + questionIdx) != null) {
             Question question = questions.get(questionIdx-1);
-            boolean modified = false;
 
             String type = request.getParameter("type" + questionIdx);
             String title = request.getParameter("title" + questionIdx);
@@ -91,8 +100,30 @@ public class EditExamController extends HttpServlet {
             questionIdx++;
 
         }
+
+        // save the newly added questions questions
+        questionIdx = 1;
+        int curIdx = QuestionMapper.getCurQuestionNumber(examID);
+        while(request.getParameter("new_title" + questionIdx) != null) {
+            String type = request.getParameter("new_type" + questionIdx);
+            String title = request.getParameter("new_title" + questionIdx);
+            String description = request.getParameter("new_description" + questionIdx);
+            int marks = Integer.parseInt(request.getParameter("new_marks" + questionIdx));
+            if (type.equals("multiple_choice")) {
+                int choiceIdx = 1;
+                while (request.getParameter("Q" + questionIdx + "choice" + choiceIdx) != null) {
+                    ChoiceUOW.getCurrent().registerNew(new Choice(examID, questionIdx, choiceIdx, request.getParameter("new_Q" + questionIdx + curIdx + "choice" + choiceIdx)));
+                    choiceIdx++;
+                }
+                QuestionUOW.getCurrent().registerNew(new MultipleChoiceQuestion(examID, questionIdx + curIdx, title, description, marks));
+            } else {
+                QuestionUOW.getCurrent().registerNew(new ShortAnswerQuestion(examID, questionIdx + curIdx, title, description, marks));
+            }
+            questionIdx++;
+        }
         QuestionUOW.getCurrent().commit();
         ChoiceUOW.getCurrent().commit();
+
         response.sendRedirect("/Instructor/editExam.jsp?exam_id=" + examID);
     }
 

@@ -11,11 +11,12 @@
     <title>Create an exam</title>
 </head>
 <body>
-<form name="CreateExam" action="/Instructor/createNewExam" method="post" id="form">
-    Exam Title: <input type="text" name="exam_title" id="title">
+<form name="CreateExam" action="/Instructor/instructorExams.jsp" method="post" id="form">
+    Title: <input type="text"  placeholder="Enter title here." name="exam_title" id="title">
     <br>
-    Exam Description:
-    <input type="text" size=50 name="exam_description" id="description">
+    Description:
+    <br>
+    <textarea placeholder="Enter description here." name="exam_description" rows="5" cols="100"></textarea>
     <br>
     <input type="hidden" name="code" value="<%=request.getParameter("subject_code")%>">
     <fieldset id="add_exam_questions">
@@ -23,6 +24,7 @@
     </fieldset>
     <input type="button" value="Add a short-answer question" class="add" id="short-answer" />
     <input type="button" value="Add a multiple-choice question" class="add" id="multiple-choice" />
+    <input type="button" value="Goback" onclick=window.location.replace("/Instructor/instructorExams.jsp?subject_code=<%=request.getParameter("subject_code")%>");>
     <input type="button" value="Create exam" onclick=saveExam()>
 </form>
 </body>
@@ -43,6 +45,9 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 <script>
+<%--  This script is based on the following answer by FarligOpptreden on stack overflow:
+https://stackoverflow.com/questions/9173182/add-remove-input-field-dynamically-with-jquery
+modified by Simai Deng 10/2020  --%>
     $(document).ready(function() {
         // add a short-answer question
         $("#short-answer").click(function() {
@@ -52,7 +57,7 @@
             fieldWrapper.data("idx", intId);
             var fType = $("<input type=\"hidden\" name=\"type" + intId + "\" value=\"short_answer\"/>");
             var fName = $("<input type=\"text\" placeholder =\"title\" class=\"fieldname\" name=\"title" + intId + "\" />");
-            var fDescription = $("<input type=\"text\" placeholder =\"description\" class=\"fieldname\" name=\"description" + intId + "\" />");
+            var fDescription = $("<input type=\"text\" placeholder =\"description\" size = \"80\" class=\"fieldname\" name=\"description" + intId + "\" />");
             var fMarks = $("<input type=\"number\" placeholder =\"marks\" class=\"fieldmarks\" name=\"marks" + intId + "\" />");
             var removeButton = $("<input type=\"button\" class=\"remove\" value=\"-\" />");
             removeButton.click(function() {
@@ -75,12 +80,12 @@
             fieldWrapper.data("idx", intId);
             var fType = $("<input type=\"hidden\" name=\"type" + intId + "\" value=\"multiple_choice\"/>");
             var fName = $("<input type=\"text\" placeholder =\"title\" class=\"fieldname\" name=\"title" + intId + "\" />");
-            var fDescription = $("<input type=\"text\" placeholder =\"description\" class=\"fielddecription\" name=\"description" + intId + "\" />");
+            var fDescription = $("<input type=\"text\" placeholder =\"description\" size=\"80\" class=\"fielddecription\" name=\"description" + intId + "\" />");
             var fMarks = $("<input type=\"number\" placeholder =\"marks\" class=\"fieldmarks\" name=\"marks" + intId + "\" />");
             var addChoiceButton = $("<input type=\"button\" class=\"fieldchoice\" value=\"Add a choice\" />");
             addChoiceButton.click(function() {
                 var id = (fieldWrapper.data("choice_idx") + 1) || 1;
-                $(this).parent().append("<input type=\"text\" placeholder=\"Q" + intId + "choice"  + id + "\" name=\"Q" + intId + "choice"  + id + "\" />");
+                $(this).parent().append("<br>    <input type=\"text\" size=\"50\" placeholder=\"Q" + intId + "choice"  + id + "\" name=\"Q" + intId + "choice"  + id + "\" /><br>");
                 fieldWrapper.data("choice_idx", id);
             });
             var removeButton = $("<input type=\"button\" class=\"remove\" value=\"-\" />");

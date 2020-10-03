@@ -43,6 +43,11 @@ public class ExamMapper extends Mapper {
         return exams;
     }
 
+    /**
+     * Get the status of the exam.
+     * @param examID id of the exam.
+     * @return A string out of (PUBLISHED, CLOSED, UNPUBLISHED)
+     */
     public static String getExamStatus(int examID){
         final String findExamStmt = "SELECT * FROM exams WHERE exam_id = ?";
         try{
@@ -124,6 +129,26 @@ public class ExamMapper extends Mapper {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    /**
+     * Update an exam object's title and description in the db
+     * @param exam exam object to be update
+     */
+    public static void update(Exam exam) {
+
+        final String updateExamStmt = "UPDATE exams SET title = ?, description = ? WHERE exam_id = ?";
+
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(updateExamStmt);
+            stmt.setString(1,exam.getTitle());
+            stmt.setString(2, exam.getDescription());
+            stmt.setInt(3, exam.getExamID());
+            stmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

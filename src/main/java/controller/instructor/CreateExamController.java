@@ -26,13 +26,6 @@ public class CreateExamController extends HttpServlet {
         super();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String view = "/Instructor/createNewExam.jsp";
-        ServletContext servletContext = getServletContext();
-        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
-        requestDispatcher.forward(request, response);
-    }
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         // add the exam
@@ -43,12 +36,8 @@ public class CreateExamController extends HttpServlet {
         int examID = ExamMapper.insert(exam);
         assert examID != -1;
 
-        if (QuestionUOW.getCurrent()==null) {
-            QuestionUOW.newCurrent();
-        }
-        if (ChoiceUOW.getCurrent()==null) {
-            ChoiceUOW.newCurrent();
-        }
+        QuestionUOW.newCurrent();
+        ChoiceUOW.newCurrent();
 
         // add the exam questions
         int questionIdx = 1;

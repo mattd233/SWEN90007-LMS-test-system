@@ -11,6 +11,12 @@ import java.util.List;
 
 public class UserMapper {
 
+    /**
+     * Get the user with the given username and password, return null if the user cannot be found.
+     * @param username username
+     * @param password password
+     * @return a user object of either type (student, admin, instructor)
+     */
     public static User getUserWithUsernamePassword(String username, String password) {
         final String findUserStmt = "SELECT * FROM users WHERE username = ? AND password = ?";
         try {
@@ -40,7 +46,7 @@ public class UserMapper {
     /**
      * Find the corresponding row in instructors with the given staff_id.
      * @param userID
-     * @return A new instructor object.
+     * @return A new instructor object if instructor with given id exist and null otherwise.
      */
     public static Instructor findInstructorWithID(int userID) {
 
@@ -69,9 +75,41 @@ public class UserMapper {
     }
 
     /**
-     *
-     * @param studentID
-     * @return
+     * Find the corresponding row in instructors with the given name.
+     * @param name name of instructor.
+     * @return A new instructor object if instructor with given name exist and null otherwise.
+     */
+    public static Instructor findInstructorWithName(String name) {
+
+        final String findInstructorStmt = "SELECT * FROM users WHERE name = ?";
+
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(findInstructorStmt);
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt(1);
+                String type = rs.getString(2);
+                if (type.equals(User.UserType.INSTRUCTOR.toString())) {
+                    // skip name
+                    String userName = rs.getString(4);
+                    String passWord = rs.getString(5);
+                    return new Instructor(id, name, userName, passWord);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    /**
+     * Find the corresponding row in users with the given id.
+     * @param studentID id of the student.
+     * @return a student object if a student with the given id exists and null otherwise.
      */
     public static Student findStudentWithID(int studentID) {
         final String findStudentStmt = "SELECT * FROM users WHERE user_id = ?";

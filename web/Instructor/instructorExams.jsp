@@ -24,7 +24,6 @@
         }
     </style>
     <title>View all exams</title>
-    <link rel="stylesheet" href="Menu.css">
 </head>
 <body>
 <div align="center">
@@ -88,6 +87,7 @@
             } // for loop
         %>
     </table>
+    <input type="button" value="Go back" onclick=window.location.replace("/Instructor/instructorSubjects.jsp?");>
     <form name="add_new_exam" action="createNewExam.jsp?subject_code=<%=request.getParameter("subject_code")%>" method="post">
         <input type="submit" value="Add new exam"/>
     </form>

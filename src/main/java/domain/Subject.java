@@ -18,7 +18,7 @@ public class Subject {
         subjectCoordinators = new HashMap<>();
     };
 
-    public void addCoordinator(int staffID, String name){
+    public void addInstructor(int staffID, String name){
         subjectCoordinators.put(staffID, name);
     }
 
@@ -30,17 +30,19 @@ public class Subject {
         return name;
     }
 
-    public String getCoordinatorNameByID(int staffID) {
+    public String getInstructorNameByID(int staffID) {
         return subjectCoordinators.get(staffID);
     }
 
-    public List<Integer> getCoordinatorIDs() {
+    public List<Integer> getInsturctorIDs() {
         return new ArrayList<Integer>(subjectCoordinators.keySet());
     }
 
-    public String getCoordinatorNamesAsOneString() {
+    // Format the name of the instructor as one string
+    // For example if the instructor names are Maria and Eduardo, the formatted string would be "Maria, Eduardo"
+    public String getInstructorNamesAsOneString() {
         assert (subjectCoordinators != null);
-        List<Integer> coordinatorIDs = getCoordinatorIDs();
+        List<Integer> coordinatorIDs = getInsturctorIDs();
         String output = subjectCoordinators.get(coordinatorIDs.get(0));
         for (int i=1; i<subjectCoordinators.size(); i++) {
             output += ", " + subjectCoordinators.get(coordinatorIDs.get(i));
@@ -48,7 +50,8 @@ public class Subject {
         return output;
     }
 
-    public List<Instructor> getSubjectCoordinators() {
+    // get the instructors for a subject
+    public List<Instructor> getSubjectInstructors() {
         List<Instructor> instructors = new ArrayList<>();
         for (int staffID : subjectCoordinators.keySet()) {
             Instructor instructor = UserMapper.findInstructorWithID(staffID);
