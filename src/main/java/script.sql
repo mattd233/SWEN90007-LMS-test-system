@@ -104,7 +104,7 @@ INSERT INTO questions VALUES (4, 1, 'SHORT_ANSWER', 'Question 1', 'What is softw
 INSERT INTO questions VALUES (4, 2, 'SHORT_ANSWER', 'Question 2', 'What is software requirements analysis?', 50);
 INSERT INTO questions VALUES (4, 3, 'MULTIPLE_CHOICE', 'Multiple Choice 1', 'Choose the WRONG statement.', 30);
 
-INSERT
+INSERT INTO questions VALUES (5, 1, 'SHORT_ANSWER', 'Question 1', 'What is requirement elicitation?', 100);
 
 --------------------------------------------------------------------------------
 --                                  choices                                   --
