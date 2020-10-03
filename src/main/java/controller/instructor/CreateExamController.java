@@ -2,16 +2,12 @@ package main.java.controller.instructor;
 
 import main.java.db.ChoiceUOW;
 import main.java.db.QuestionUOW;
-import main.java.db.mapper.ChoiceMapper;
 import main.java.db.mapper.ExamMapper;
-import main.java.db.mapper.QuestionMapper;
 import main.java.domain.Choice;
 import main.java.domain.Exam;
 import main.java.domain.MultipleChoiceQuestion;
 import main.java.domain.ShortAnswerQuestion;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

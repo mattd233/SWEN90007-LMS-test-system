@@ -1,11 +1,6 @@
 package main.java.controller.instructor;
 
-
-import main.java.db.mapper.QuestionMapper;
-import main.java.db.mapper.SubmissionMapper;
-import main.java.db.mapper.SubmittedQuestionMapper;
 import main.java.db.mapper.UserSubjectMapper;
-import main.java.domain.Question;
 import main.java.domain.Student;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;

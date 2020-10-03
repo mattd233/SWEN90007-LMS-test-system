@@ -182,12 +182,16 @@ public class ExamMapper extends Mapper {
         final String updateStmt =
                 "UPDATE exams SET status = ?::exam_status WHERE exam_id = ?";
         try {
+            // Set exam status to closed in db
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(updateStmt);
             stmt.setString(1, Exam.ExamStatus.CLOSED.toString());
             stmt.setInt(2, examID);
             int result = stmt.executeUpdate();
-            String subjectCode = ExamMapper.getExamByID(examID).getSubjectCode();
+            // Create submissions for all students
+            Exam exam = ExamMapper.getExamByID(examID);
+            List<Question> questions = exam.getQuestions();
+            String subjectCode = exam.getSubjectCode();
             List<Student> students = UserSubjectMapper.getAllStudentsWithSubject(subjectCode);
             for (Student student : students) {
                 int userID = student.getUserID();
@@ -195,8 +199,6 @@ public class ExamMapper extends Mapper {
                 if (SubmissionMapper.getSubmissionByIDs(examID, userID) == null) {
                     Submission submission = new Submission(examID, userID);
                     SubmissionMapper.insertSubmission(submission);
-                    // TODO
-                    List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
                     for (Question question : questions) {
                         SubmittedQuestionMapper.insertUnansweredSubmittedQuestion(question, userID);
                     }

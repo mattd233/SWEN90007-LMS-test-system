@@ -1,15 +1,16 @@
-<%@ page import="main.java.db.mapper.ExamMapper" %>
-<%@ page import="main.java.db.mapper.SubmissionMapper" %>
-<%@ page import="main.java.domain.Exam" %>
-<%@ page import="main.java.domain.Question" %>
-<%@ page import="main.java.domain.Submission" %>
-<%@ page import="java.util.List" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: wyr04
   Date: 2020/10/1
   Time: 23:58
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page import="main.java.db.mapper.ExamMapper" %>
+<%@ page import="main.java.db.mapper.SubmissionMapper" %>
+<%@ page import="main.java.domain.Exam" %>
+<%@ page import="main.java.domain.Question" %>
+<%@ page import="main.java.domain.Submission" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>

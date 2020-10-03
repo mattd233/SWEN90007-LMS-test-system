@@ -8,7 +8,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="main.java.db.mapper.ExamMapper" %>
 <%@ page import="main.java.db.mapper.SubmissionMapper" %>
-<%@ page import="main.java.db.mapper.QuestionMapper" %>
 <%@ page import="main.java.db.mapper.SubmittedQuestionMapper" %>
 <%@ page import="main.java.domain.Exam" %>
 <%@ page import="main.java.domain.Submission" %>

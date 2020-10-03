@@ -7,16 +7,12 @@ import main.java.db.mapper.ExamMapper;
 import main.java.db.mapper.QuestionMapper;
 import main.java.domain.*;
 
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/Instructor/editExam")
@@ -54,13 +50,11 @@ public class EditExamController extends HttpServlet {
         }
         ExamMapper.update(exam);
 
-
         QuestionUOW.newCurrent();
         ChoiceUOW.newCurrent();
 
-
         int questionIdx = 1;
-        List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(examID);
+        List<Question> questions = exam.getQuestions();
         while(request.getParameter("title" + questionIdx) != null) {
             Question question = questions.get(questionIdx-1);
 

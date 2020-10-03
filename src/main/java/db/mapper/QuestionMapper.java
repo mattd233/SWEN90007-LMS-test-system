@@ -49,39 +49,6 @@ public class QuestionMapper {
     }
 
     /**
-     *
-     * @param exam_id
-     * @param questionNumber
-     * @return
-     */
-    public static Question getQuestionWithQuestionID(int exam_id, int questionNumber) {
-        final String findQuestionStmt = "SELECT * FROM questions WHERE exam_id = ? AND question_number=?";
-        try {
-            Connection dbConnection = new DBConnection().connect();
-            PreparedStatement stmt = dbConnection.prepareStatement(findQuestionStmt);
-            stmt.setInt(1, questionNumber);
-            stmt.setInt(2, questionNumber);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                Question.QuestionType question_type = Question.QuestionType.valueOf(Question.QuestionType.class, rs.getString(3));
-                String title = rs.getString(4);
-                String description = rs.getString(5);
-                int marks = rs.getInt(6);
-                // return a question by telling the question type
-                if (question_type == Question.QuestionType.MULTIPLE_CHOICE){
-                    return new MultipleChoiceQuestion(exam_id, questionNumber, title, description, marks);
-                }
-                else if (question_type == Question.QuestionType.SHORT_ANSWER){
-                    return new ShortAnswerQuestion(exam_id, questionNumber, title, description, marks);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
      * Insert a question in to the database.
      * @param question question to be inserted.
      */
@@ -183,35 +150,5 @@ public class QuestionMapper {
         return 0;
 
     }
-
-    /**
-     *
-     * @param exam_id
-     * @param question_number
-     * @return
-     */
-    public static Question getNextQuestion(int exam_id, int question_number){
-        try{
-            List<Question> questionList = getAllQuestionsWithExamID(exam_id);
-            Question thisQuestion = getQuestionWithQuestionID(exam_id, question_number);
-            int index;
-            Question nextQuestion;
-
-            // assert if the question is in the list
-            if (questionList.contains(thisQuestion)){
-                // the question is not the last question in the list
-                index = questionList.indexOf(thisQuestion);
-                nextQuestion = questionList.get(index + 1);
-                return nextQuestion;
-            }
-            else {
-                return null;
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 
 }

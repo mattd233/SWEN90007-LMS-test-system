@@ -11,7 +11,6 @@
 <%@ page import="main.java.domain.Student" %>
 <%@ page import="main.java.domain.Subject" %>
 <%@ page import="java.util.Objects" %>
-<%@ page import="main.java.domain.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>

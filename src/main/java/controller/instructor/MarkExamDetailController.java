@@ -1,7 +1,6 @@
 package main.java.controller.instructor;
 
 import main.java.db.mapper.ExamMapper;
-import main.java.db.mapper.QuestionMapper;
 import main.java.db.mapper.SubmissionMapper;
 import main.java.db.mapper.SubmittedQuestionMapper;
 import main.java.domain.Exam;

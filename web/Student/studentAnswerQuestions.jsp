@@ -1,10 +1,3 @@
-<%@ page import="main.java.db.mapper.ExamMapper" %>
-<%@ page import="main.java.db.mapper.QuestionMapper" %>
-<%@ page import="main.java.domain.*" %>
-<%@ page import="java.util.List" %>
-<%@ page import="static main.java.db.mapper.ChoiceMapper.getChoices" %>
-
-
 <%--
   Created by IntelliJ IDEA.
   User: wyr04
@@ -12,6 +5,10 @@
   Time: 19:21
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page import="main.java.db.mapper.ExamMapper" %>
+<%@ page import="main.java.domain.*" %>
+<%@ page import="java.util.List" %>
+<%@ page import="static main.java.db.mapper.ChoiceMapper.getChoices" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>

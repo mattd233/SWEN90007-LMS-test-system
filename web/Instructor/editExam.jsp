@@ -1,8 +1,3 @@
-<%@ page import="main.java.db.mapper.ExamMapper" %>
-<%@ page import="main.java.db.mapper.QuestionMapper" %>
-<%@ page import="main.java.db.mapper.ChoiceMapper" %>
-<%@ page import="main.java.db.QuestionUOW" %>
-<%@ page import="main.java.domain.*" %>
 <%--
 Created by IntelliJ IDEA.
   User: Matt
@@ -10,12 +5,16 @@ Created by IntelliJ IDEA.
   Time: 15:48
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page import="main.java.db.mapper.ExamMapper" %>
+<%@ page import="main.java.db.mapper.ChoiceMapper" %>
+<%@ page import="main.java.domain.*" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
 <head>
     <title>Edit Exam</title>
-    <link rel="stylesheet" href="../styles/EditExam.css">
+    <link rel="stylesheet" href="../styles/editExam.css">
 </head>
 <body>
 <%
@@ -32,7 +31,8 @@ Created by IntelliJ IDEA.
     <p>Status: <%=exam.getStatus()%></p>
     <br>
     <%
-        for (Question question : QuestionMapper.getAllQuestionsWithExamID(examID)) {
+        List<Question> questions = exam.getQuestions();
+        for (Question question : questions) {
     %>
         <div id=<%="Q" + question.getQuestionNumber()%>>
             <h3 class="title"><%=question.getTitle()%></h3>

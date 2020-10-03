@@ -1,7 +1,6 @@
 package main.java.controller.student;
 
 import main.java.db.mapper.ExamMapper;
-import main.java.db.mapper.QuestionMapper;
 import main.java.db.mapper.SubmissionMapper;
 import main.java.db.mapper.SubmittedQuestionMapper;
 import main.java.domain.*;
@@ -32,7 +31,8 @@ public class SubmitExamController extends HttpServlet {
         String examID = request.getParameter("exam_id");
         int exam_id = Integer.parseInt(examID);
         // TODO
-        List<Question> questions = QuestionMapper.getAllQuestionsWithExamID(exam_id);
+        Exam exam = ExamMapper.getExamByID(exam_id);
+        List<Question> questions = exam.getQuestions();
         int length = questions.size();
         String[] keys = new String[length];
         String[] answers = new String[length];

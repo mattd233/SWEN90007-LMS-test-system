@@ -38,7 +38,6 @@ public class AddSubjectController extends HttpServlet {
                 e.printStackTrace();
             }
         }
-
         response.sendRedirect(target);
     }
 
