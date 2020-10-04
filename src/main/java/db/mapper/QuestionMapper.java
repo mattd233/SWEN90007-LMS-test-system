@@ -78,7 +78,7 @@ public class QuestionMapper extends Mapper {
      * @param question question to be updated.
      */
     public static void update(Question question) {
-        final String updateQuestionStmt = "UPDATE questions SET question_number= ?, question_type = ?::question_type, " +
+        final String updateQuestionStmt = "UPDATE questions SET question_type = ?::question_type, " +
                 "title = ?, description = ?, marks = ?" +
                 "WHERE exam_id = ? AND question_number = ?";
         try {
