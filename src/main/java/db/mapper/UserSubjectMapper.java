@@ -38,6 +38,26 @@ public class UserSubjectMapper extends Mapper {
         return students;
     }
 
+    /**
+     *
+     * @param subjectCode
+     * @return
+     */
+    public static String getAllStudentsWithSubjectAsString(String subjectCode) {
+        List<Student> students = getAllStudentsWithSubject(subjectCode);
+        if (students.size() == 0) {
+            return "No students enrolled in this subject";
+        }
+        String str = "";
+        for (int i=0; i<students.size(); i++) {
+            str += students.get(i).getName();
+            if (i != students.size() - 1) {
+                str += ", ";
+            }
+        }
+        return str;
+    }
+
     /**/
     public static void insert(int userID, String subjectCode) {
         final String checkStmt = "SELECT * FROM users_has_subjects WHERE user_id = ? AND subject_code = ?";

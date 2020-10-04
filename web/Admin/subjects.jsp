@@ -7,6 +7,7 @@
 --%>
 <%@ page import="main.java.db.mapper.SubjectMapper" %>
 <%@ page import="main.java.domain.Subject" %>
+<%@ page import="main.java.db.mapper.UserSubjectMapper" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -21,7 +22,7 @@
             <th>Subject Code</th>
             <th>Subject Name</th>
             <th>Instructors</th>
-            <th></th>
+            <th>Students</th>
         </tr>
         <tr>
             <%
@@ -29,8 +30,13 @@
             %>
             <td><%= subject.getSubjectCode() %></td>
             <td><%= subject.getSubjectName() %></td>
-            <td><%= subject.getInstructorNamesAsOneString() %></td>
-            <td><button onclick=addCoordinator("<%=subject.getSubjectCode()%>")>Add coordinator</button></td>
+            <td>
+                <%= subject.getInstructorNamesAsOneString() %><br>
+                <button onclick=addCoordinator("<%=subject.getSubjectCode()%>")>Add coordinator</button>
+            </td>
+            <td>
+                <%= UserSubjectMapper.getAllStudentsWithSubjectAsString(subject.getSubjectCode())%>
+            </td>
         </tr>
         <%
             } // for loop
