@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChoiceMapper {
+public class ChoiceMapper extends Mapper {
 
     public static List<Choice> getChoices(int examID, int questionNumber) {
         final String findChoicesStmt = "SELECT * FROM choices WHERE exam_id = ? AND question_number = ?";

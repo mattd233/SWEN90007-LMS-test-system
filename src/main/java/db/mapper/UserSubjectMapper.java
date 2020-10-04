@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserSubjectMapper {
+public class UserSubjectMapper extends Mapper {
 
     /**
      * Get all students who are taking a subject.

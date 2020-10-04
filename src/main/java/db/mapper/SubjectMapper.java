@@ -131,12 +131,12 @@ public class SubjectMapper extends Mapper {
      * @return subjects
      */
     public static List<Subject> getStudentEnrolledSubject(int userID) {
-        final String findSubjectsWithStudentIDStmt= "SELECT s.subject_code, s.name FROM subjects s\n" +
+        final String findSubjectsStmt= "SELECT s.subject_code, s.name FROM subjects s\n" +
                 "INNER JOIN users_has_subjects uhs on s.subject_code = uhs.subject_code\n" +
                 "WHERE user_id = ?";
         try {
             Connection dbConnection = new DBConnection().connect();
-            PreparedStatement stmt = dbConnection.prepareStatement(findSubjectsWithStudentIDStmt);
+            PreparedStatement stmt = dbConnection.prepareStatement(findSubjectsStmt);
             stmt.setInt(1, userID);
             ResultSet rs = stmt.executeQuery();
             List<Subject> subjects = new ArrayList<>();
@@ -151,6 +151,4 @@ public class SubjectMapper extends Mapper {
         }
         return null;
     }
-
-
 }

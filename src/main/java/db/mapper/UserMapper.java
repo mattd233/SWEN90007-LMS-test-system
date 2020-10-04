@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserMapper {
+public class UserMapper extends Mapper {
 
     /**
      * Get the user with the given username and password, return null if the user cannot be found.
@@ -134,30 +134,4 @@ public class UserMapper {
         return null;
     }
 
-    /**
-     * get all the subjects a student enrolled with the input studentID
-     * @param userID
-     * @return subjects
-     */
-    public static List<Subject> getStudentEnrolledSubject(int userID) {
-        final String findSubjectsStmt= "SELECT s.subject_code, s.name FROM subjects s\n" +
-                "INNER JOIN users_has_subjects uhs on s.subject_code = uhs.subject_code\n" +
-                "WHERE user_id = ?";
-        try {
-            Connection dbConnection = new DBConnection().connect();
-            PreparedStatement stmt = dbConnection.prepareStatement(findSubjectsStmt);
-            stmt.setInt(1, userID);
-            ResultSet rs = stmt.executeQuery();
-            List<Subject> subjects = new ArrayList<>();
-            while (rs.next()) {
-                String subject_code = rs.getString(1);
-                String name = rs.getString(2);
-                subjects.add(new Subject(subject_code, name));
-            }
-            return subjects;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

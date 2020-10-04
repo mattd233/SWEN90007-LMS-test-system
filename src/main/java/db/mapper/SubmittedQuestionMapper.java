@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubmittedQuestionMapper {
+public class SubmittedQuestionMapper extends Mapper {
 
     /**
      * Get all submitted questions of an exam from a student

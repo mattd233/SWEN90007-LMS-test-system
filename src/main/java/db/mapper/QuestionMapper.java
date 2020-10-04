@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionMapper {
+public class QuestionMapper extends Mapper {
 
     /**
      * Get all questions of an exam.
