@@ -136,7 +136,7 @@ public class QuestionMapper extends Mapper {
 
         try {
             Connection dbConnection = new DBConnection().connect();
-            PreparedStatement stmt = null;
+            PreparedStatement stmt;
             stmt = dbConnection.prepareStatement(getQNumberStmt);
             stmt.setInt(1, examID);
             ResultSet rs = stmt.executeQuery();

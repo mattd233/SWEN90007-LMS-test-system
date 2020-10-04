@@ -100,7 +100,7 @@ public class EditExamController extends HttpServlet {
 
         // save the newly added questions questions
         questionIdx = 1;
-        int curIdx = QuestionMapper.getCurQuestionNumber(examID);
+        int dbIdx = QuestionMapper.getCurQuestionNumber(examID);
         while(request.getParameter("new_title" + questionIdx) != null) {
             String type = request.getParameter("new_type" + questionIdx);
             String title = request.getParameter("new_title" + questionIdx);
@@ -108,13 +108,13 @@ public class EditExamController extends HttpServlet {
             int marks = Integer.parseInt(request.getParameter("new_marks" + questionIdx));
             if (type.equals("multiple_choice")) {
                 int choiceIdx = 1;
-                while (request.getParameter("Q" + questionIdx + "choice" + choiceIdx) != null) {
-                    ChoiceUOW.getCurrent().registerNew(new Choice(examID, questionIdx, choiceIdx, request.getParameter("new_Q" + questionIdx + curIdx + "choice" + choiceIdx)));
+                while (request.getParameter("new_Q" + questionIdx + "choice" + choiceIdx) != null) {
+                    ChoiceUOW.getCurrent().registerNew(new Choice(examID, dbIdx + 1, choiceIdx, request.getParameter("new_Q" + questionIdx + "choice" + choiceIdx)));
                     choiceIdx++;
                 }
-                QuestionUOW.getCurrent().registerNew(new MultipleChoiceQuestion(examID, questionIdx + curIdx, title, description, marks));
+                QuestionUOW.getCurrent().registerNew(new MultipleChoiceQuestion(examID, dbIdx + 1, title, description, marks));
             } else {
-                QuestionUOW.getCurrent().registerNew(new ShortAnswerQuestion(examID, questionIdx + curIdx, title, description, marks));
+                QuestionUOW.getCurrent().registerNew(new ShortAnswerQuestion(examID, dbIdx + 1, title, description, marks));
             }
             questionIdx++;
         }

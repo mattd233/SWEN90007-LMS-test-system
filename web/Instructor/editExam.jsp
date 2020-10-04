@@ -51,15 +51,15 @@ Created by IntelliJ IDEA.
         <p>marks: <%=question.getMarks()%>
         </p>
         <input type="number" placeholder="Change marks" name=<%="marks" + question.getQuestionNumber()%>>
-
         <br>
         <% if (question instanceof MultipleChoiceQuestion) {
             for (Choice choice : ChoiceMapper.getChoices(examID, question.getQuestionNumber())) {
         %>
-        <p class="choice"><%="C" + choice.getChoiceNumber() + ": " + choice.getChoiceDescription()%>
-        </p>
+        <p class="choice"><%=choice.getChoiceDescription()%></p>
+        <br>
         <input class="choice_input" size="50" type="text" placeholder="Change choice"
                name=<%="Q"+question.getQuestionNumber()+"choice"+choice.getChoiceNumber()%>>
+        <br>
         <%
             }
         %>
@@ -168,12 +168,12 @@ Created by IntelliJ IDEA.
             var fTitle = $("<input type=\"text\" placeholder =\"title\" class=\"fieldtitle\" name=\"new_title" + intId + "\" />");
             var fDescription = $("<input type=\"text\" placeholder =\"description\" size=\"80\" class=\"fielddescription\" name=\"new_description" + intId + "\" />");
             var fMarks = $("<input type=\"number\" placeholder =\"marks\" class=\"fieldmarks\" name=\"new_marks" + intId + "\" />");
-            var choice1 = $("<br>    <input type=\"text\" size=\"50\" class=\"fieldchoices\" placeholder=\"Q" + intId + "choice" + 1 + "\" name=\"Q" + intId + "choice" + 1 + "\" /><br>");
-            var choice2 = $("<br>    <input type=\"text\" size=\"50\" class=\"fieldchoices\" placeholder=\"Q" + intId + "choice" + 2 + "\" name=\"Q" + intId + "choice" + 2 + "\" /><br>");
+            var choice1 = $("<br>    <input type=\"text\" size=\"50\" class=\"fieldchoices\" placeholder=\"Q" + intId + "choice" + 1 + "\" name=\"new_Q" + intId + "choice" + 1 + "\" /><br>");
+            var choice2 = $("<br>    <input type=\"text\" size=\"50\" class=\"fieldchoices\" placeholder=\"Q" + intId + "choice" + 2 + "\" name=\"new_Q" + intId + "choice" + 2 + "\" /><br>");
             var addChoiceButton = $("<input type=\"button\" class=\"fieldchoice\" value=\"Add a choice\" />");
             addChoiceButton.click(function () {
                 var id = (fieldWrapper.data("choice_idx") + 3 || 3);
-                $(this).parent().append("<br>    <input type=\"text\" size=\"50\" class=\"fieldchoices\" placeholder=\"new_Q" + intId + "choice" + id + "\" name=\"Q" + intId + "choice" + id + "\" /><br>");
+                $(this).parent().append("<br>    <input type=\"text\" size=\"50\" class=\"fieldchoices\" placeholder=\"Q" + intId + "choice" + id + "\" name=\"new_Q" + intId + "choice" + id + "\" /><br>");
                 fieldWrapper.data("choice_idx", id);
             });
             var removeButton = $("<input type=\"button\" class=\"remove\" value=\"-\" />");
