@@ -23,9 +23,8 @@ public class CreateExamController extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         // add the exam
-        String subjectCode = request.getParameter("code");
+        String subjectCode = request.getParameter("subject_code");
         String examTitle = request.getParameter("exam_title");
         String examDescription = request.getParameter("exam_description");
         Exam exam = new Exam(subjectCode, examTitle, examDescription);
@@ -56,6 +55,7 @@ public class CreateExamController extends HttpServlet {
         }
         QuestionUOW.getCurrent().commit();
         ChoiceUOW.getCurrent().commit();
+        response.sendRedirect("/Instructor/instructorExams.jsp?subject_code=" + subjectCode);
     }
 
 }

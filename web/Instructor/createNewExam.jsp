@@ -11,14 +11,14 @@
     <title>Create an exam</title>
 </head>
 <body>
-<form name="CreateExam" action="/Instructor/instructorExams.jsp" method="post" id="form">
+<form name="CreateExam" action="/Instructor/createNewExam" method="post" id="form">
     Title: <input type="text"  placeholder="Enter title here." name="exam_title" id="title">
     <br>
     Description:
     <br>
-    <textarea placeholder="Enter description here." name="exam_description" rows="5" cols="100"></textarea>
+    <textarea placeholder="Enter description here." name="exam_description" rows="5" cols="100" id="description"></textarea>
     <br>
-    <input type="hidden" name="code" value="<%=request.getParameter("subject_code")%>">
+    <input type="hidden" name="subject_code" value="<%=request.getParameter("subject_code")%>">
     <fieldset id="add_exam_questions">
         <legend>Add new questions!</legend>
     </fieldset>
@@ -30,12 +30,42 @@
 </body>
 <script>
     function saveExam(){
+        var emptyField = false;
+        var titles = document.getElementsByClassName("fieldtitle");
+        var descriptions = document.getElementsByClassName("fielddescription");
+        var marks = document.getElementsByClassName("fieldmarks");
+        var choices = document.getElementsByClassName("fieldchoices");
+        for (i = 0; i < titles.length; i++) {
+            if (titles[i].value.length===0) {
+                emptyField = true;
+
+            }
+            if (descriptions[i].value.length===0) {
+                emptyField = true;
+            }
+            if (marks[i].value.length===0) {
+                emptyField = true;
+            }
+        }
+        for (i=0; i<choices.length; i++) {
+            if (choices[i].value.length===0) {
+                emptyField = true;
+            }
+        }
+
         var title =  document.getElementById("title").value;
-        if (title==="") {
+        var description =  document.getElementById("description").value;
+        if (title.length===0) {
             window.alert("Please enter a title.")
+        }
+        else if (description.length===0) {
+            window.alert("Please enter a description.")
         }
         else if (document.getElementById("field1")==null) {
             window.alert("Please add at least one question.")
+        }
+        else if (emptyField) {
+            window.alert("Empty fields in the exam, please check before submit.")
         }
         else {
             document.getElementById("form").submit();
@@ -56,8 +86,8 @@ modified by Simai Deng 10/2020  --%>
             var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"field" + intId + "\" />");
             fieldWrapper.data("idx", intId);
             var fType = $("<input type=\"hidden\" name=\"type" + intId + "\" value=\"short_answer\"/>");
-            var fName = $("<input type=\"text\" placeholder =\"title\" class=\"fieldname\" name=\"title" + intId + "\" />");
-            var fDescription = $("<input type=\"text\" placeholder =\"description\" size = \"80\" class=\"fieldname\" name=\"description" + intId + "\" />");
+            var fTitle = $("<input type=\"text\" placeholder =\"title\" class=\"fieldtitle\" name=\"title" + intId + "\" />");
+            var fDescription = $("<input type=\"text\" placeholder =\"description\" size = \"80\" class=\"fielddescription\" name=\"description" + intId + "\" />");
             var fMarks = $("<input type=\"number\" placeholder =\"marks\" class=\"fieldmarks\" name=\"marks" + intId + "\" />");
             var removeButton = $("<input type=\"button\" class=\"remove\" value=\"-\" />");
             removeButton.click(function() {
@@ -66,7 +96,7 @@ modified by Simai Deng 10/2020  --%>
 
             fieldWrapper.append(intId + ". ");
             fieldWrapper.append(fType);
-            fieldWrapper.append(fName);
+            fieldWrapper.append(fTitle);
             fieldWrapper.append(fDescription);
             fieldWrapper.append(fMarks);
             fieldWrapper.append(removeButton);
@@ -79,13 +109,13 @@ modified by Simai Deng 10/2020  --%>
             var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"field" + intId + "\" />");
             fieldWrapper.data("idx", intId);
             var fType = $("<input type=\"hidden\" name=\"type" + intId + "\" value=\"multiple_choice\"/>");
-            var fName = $("<input type=\"text\" placeholder =\"title\" class=\"fieldname\" name=\"title" + intId + "\" />");
-            var fDescription = $("<input type=\"text\" placeholder =\"description\" size=\"80\" class=\"fielddecription\" name=\"description" + intId + "\" />");
+            var fTitle = $("<input type=\"text\" placeholder =\"title\" class=\"fieldtitle\" name=\"title" + intId + "\" />");
+            var fDescription = $("<input type=\"text\" placeholder =\"description\" size=\"80\" class=\"fielddescription\" name=\"description" + intId + "\" />");
             var fMarks = $("<input type=\"number\" placeholder =\"marks\" class=\"fieldmarks\" name=\"marks" + intId + "\" />");
             var addChoiceButton = $("<input type=\"button\" class=\"fieldchoice\" value=\"Add a choice\" />");
             addChoiceButton.click(function() {
                 var id = (fieldWrapper.data("choice_idx") + 1) || 1;
-                $(this).parent().append("<br>    <input type=\"text\" size=\"50\" placeholder=\"Q" + intId + "choice"  + id + "\" name=\"Q" + intId + "choice"  + id + "\" /><br>");
+                $(this).parent().append("<br>    <input type=\"text\" size=\"50\" class=\"fieldchoices\" placeholder=\"Q" + intId + "choice"  + id + "\" name=\"Q" + intId + "choice"  + id + "\" /><br>");
                 fieldWrapper.data("choice_idx", id);
             });
             var removeButton = $("<input type=\"button\" class=\"remove\" value=\"-\" />");
@@ -95,7 +125,7 @@ modified by Simai Deng 10/2020  --%>
 
             fieldWrapper.append(intId + ". ");
             fieldWrapper.append(fType);
-            fieldWrapper.append(fName);
+            fieldWrapper.append(fTitle);
             fieldWrapper.append(fDescription);
             fieldWrapper.append(fMarks);
             fieldWrapper.append(removeButton);

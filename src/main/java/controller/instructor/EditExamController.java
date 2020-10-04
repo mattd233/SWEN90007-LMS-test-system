@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -26,6 +27,9 @@ public class EditExamController extends HttpServlet {
         // handles deleting questions
         int exam_id = Integer.parseInt(request.getParameter("exam_id"));
         if (request.getParameter("deleteQuestion")!=null) {
+            if (QuestionMapper.getAllQuestionsWithExamID(exam_id).size()<=1) {
+                response.getWriter().println("Cannot delete last question.");
+            }
             int questionNumber = Integer.parseInt(request.getParameter("deleteQuestion"));
             QuestionMapper.delete(new ShortAnswerQuestion(exam_id, questionNumber, "", "", 0));
         }
@@ -116,7 +120,6 @@ public class EditExamController extends HttpServlet {
         }
         QuestionUOW.getCurrent().commit();
         ChoiceUOW.getCurrent().commit();
-
         response.sendRedirect("/Instructor/editExam.jsp?exam_id=" + examID);
     }
 
