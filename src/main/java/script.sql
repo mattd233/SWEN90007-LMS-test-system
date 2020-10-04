@@ -41,18 +41,19 @@ DROP TABLE users_has_subjects CASCADE;
 CREATE TABLE users_has_subjects (
     user_id INT NOT NULL REFERENCES users(user_id),
     subject_code VARCHAR(20) NOT NULL REFERENCES subjects(subject_code),
+    marks FLOAT DEFAULT -1,
     fudge_points FLOAT DEFAULT 0
 );
 
-INSERT INTO users_has_subjects VALUES(000001, 'SWEN90007', DEFAULT);
-INSERT INTO users_has_subjects VALUES(000001, 'SWEN90009', DEFAULT);
-INSERT INTO users_has_subjects VALUES(000002, 'SWEN90007', DEFAULT);
-INSERT INTO users_has_subjects VALUES(904601, 'SWEN90007', DEFAULT);
-INSERT INTO users_has_subjects VALUES(904601, 'SWEN90009', DEFAULT);
-INSERT INTO users_has_subjects VALUES(713551, 'SWEN90007', DEFAULT);
-INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90007', DEFAULT);
-INSERT INTO users_has_subjects VALUES(713551, 'SWEN90009', DEFAULT);
-INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90009', DEFAULT);
+INSERT INTO users_has_subjects VALUES(000001, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(000001, 'SWEN90009', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(000002, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(904601, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(904601, 'SWEN90009', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(713551, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90007', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(713551, 'SWEN90009', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90009', DEFAULT, DEFAULT);
 
 --------------------------------------------------------------------------------
 --                                  exams                                     --
@@ -135,7 +136,7 @@ CREATE TABLE submissions (
     user_id INT REFERENCES users(user_id),
     submission_time TIMESTAMP NOT NULL,
     is_marked BOOLEAN NOT NULL DEFAULT FALSE,
-    marks FLOAT DEFAULT null,
+    marks FLOAT DEFAULT -1,
     fudge_points FLOAT DEFAULT 0,
     PRIMARY KEY (exam_id, user_id)
 );
@@ -156,7 +157,7 @@ CREATE TABLE submitted_questions (
     choice_number SMALLINT DEFAULT null,
     short_answer VARCHAR(500) DEFAULT null,
     is_marked BOOLEAN NOT NULL DEFAULT FALSE,
-    marks FLOAT DEFAULT null,
+    marks FLOAT DEFAULT -1,
     PRIMARY KEY (exam_id, user_id, question_number)
 );
 

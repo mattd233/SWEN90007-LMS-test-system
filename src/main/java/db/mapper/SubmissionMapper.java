@@ -2,6 +2,7 @@ package main.java.db.mapper;
 
 
 import main.java.db.DBConnection;
+import main.java.domain.Exam;
 import main.java.domain.Submission;
 import main.java.domain.SubmittedQuestion;
 
@@ -44,6 +45,49 @@ public class SubmissionMapper extends Mapper {
      * Update fields of a submission when fudge points is changed.
      * @param examID The exam_id of the exam.
      * @param userID The user_id of the student.
+     * @return True if update is successful.
+     */
+    public static boolean updateSubmission(int examID, int userID) {
+        try {
+            Submission submission = getSubmissionByIDs(examID, userID);
+            float fudgePoints = submission.getFudgePoints();
+            List<SubmittedQuestion> answers = SubmittedQuestionMapper.getSubmittedQuestions(examID, userID);
+            boolean allQuestionsMarked = true;
+            float totalMarks = 0;
+            for (SubmittedQuestion answer : answers) {
+                if (answer.isMarked()) {
+                    totalMarks += answer.getMarks();
+                } else { // If not all answers are marked
+                    allQuestionsMarked = false;
+                }
+            }
+            if (!allQuestionsMarked) {
+                totalMarks = -1;
+            } else {
+                totalMarks += fudgePoints;
+            }
+            final String updateStmt =
+                    "UPDATE submissions SET is_marked = ?, marks = ?, fudge_points = ? WHERE exam_id = ? AND user_id = ?";
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(updateStmt);
+            stmt.setBoolean(1, allQuestionsMarked);
+            stmt.setFloat(2, totalMarks);
+            stmt.setFloat(3, fudgePoints);
+            stmt.setInt(4, examID);
+            stmt.setInt(5, userID);
+            int result = stmt.executeUpdate();
+            UserSubjectMapper.updateMarks(userID, ExamMapper.getExamByID(examID).getSubjectCode());
+            return (result > 0) ? true : false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Update fields of a submission when fudge points is changed.
+     * @param examID The exam_id of the exam.
+     * @param userID The user_id of the student.
      * @param fudgePoints The new fudge points.
      * @return True if update is successful.
      */
@@ -60,7 +104,7 @@ public class SubmissionMapper extends Mapper {
                 }
             }
             if (!allQuestionsMarked) {
-                totalMarks = 0;
+                totalMarks = -1;
             } else {
                 totalMarks += fudgePoints;
             }
@@ -74,6 +118,32 @@ public class SubmissionMapper extends Mapper {
             stmt.setInt(4, examID);
             stmt.setInt(5, userID);
             int result = stmt.executeUpdate();
+            UserSubjectMapper.updateMarks(userID, ExamMapper.getExamByID(examID).getSubjectCode());
+            return (result > 0) ? true : false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Update fields of a submission when fudge points is changed.
+     * @param examID The exam_id of the exam.
+     * @param userID The user_id of the student.
+     * @param marks The new marks.
+     * @return True if update is successful.
+     */
+    public static boolean updateSubmissionMarks(int examID, int userID, float marks) {
+        try {
+            final String updateStmt =
+                    "UPDATE submissions SET marks = ? WHERE exam_id = ? AND user_id = ?";
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(updateStmt);
+            stmt.setFloat(1, marks);
+            stmt.setInt(2, examID);
+            stmt.setInt(3, userID);
+            int result = stmt.executeUpdate();
+            UserSubjectMapper.updateMarks(userID, ExamMapper.getExamByID(examID).getSubjectCode());
             return (result > 0) ? true : false;
         } catch (Exception e) {
             e.printStackTrace();

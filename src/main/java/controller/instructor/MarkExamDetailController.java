@@ -50,35 +50,42 @@ public class MarkExamDetailController extends HttpServlet {
                 float numericMarks = Float.valueOf(marks);
                 SubmittedQuestionMapper.updateMarks(examID, userID, questionNumber, numericMarks);
             } catch (Exception e) {
-                e.printStackTrace();
-                showErrorPage(request, response);
-                return;
+                continue;
             }
         }
 
+        // update submission according to marks and fudge points
+        boolean updateSuccess;
         try {
-            // update submission
+            // If there's a valid fudge point, update it
             float fudgePoints = Float.valueOf(request.getParameter("fudgePoints"));
-            boolean updateSuccess = SubmissionMapper.updateSubmission(examID, userID, fudgePoints);
-            if (updateSuccess) {
-                String view = "/Instructor/MarkingViews/markingOverview.jsp";
-                ServletContext servletContext = getServletContext();
-                RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
-                requestDispatcher.forward(request, response);
-            } else {
-                System.out.println("Error in MarkExamDetailedController doPost: Update not successful");
-                showErrorPage(request, response);
-            }
+            updateSuccess = SubmissionMapper.updateSubmission(examID, userID, fudgePoints);
         } catch (Exception e) {
-            e.printStackTrace();
-            showErrorPage(request, response);
-            return;
+            // If there's no valid fudge point, update submission based on the submitted questions
+            updateSuccess = SubmissionMapper.updateSubmission(examID, userID);
+        }
+        if (updateSuccess) {
+            String view = "/Instructor/MarkingViews/markingOverview.jsp";
+            ServletContext servletContext = getServletContext();
+            RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
+            requestDispatcher.forward(request, response);
+        } else {
+            System.out.println("Error in MarkExamDetailedController doPost: Update not successful");
+            showErrorPage(request, response, "Update not successful");
         }
     }
 
     private void showErrorPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String view = "/errorPage.jsp";
         ServletContext servletContext = getServletContext();
+        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
+        requestDispatcher.forward(request, response);
+    }
+
+    private void showErrorPage(HttpServletRequest request, HttpServletResponse response, String errMsg) throws ServletException, IOException {
+        String view = "/errorPage.jsp";
+        ServletContext servletContext = getServletContext();
+        request.setAttribute("errMsg", errMsg);
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
         requestDispatcher.forward(request, response);
     }
