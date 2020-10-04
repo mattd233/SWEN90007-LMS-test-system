@@ -112,10 +112,12 @@ modified by Simai Deng 10/2020  --%>
             var fTitle = $("<input type=\"text\" placeholder =\"title\" class=\"fieldtitle\" name=\"title" + intId + "\" />");
             var fDescription = $("<input type=\"text\" placeholder =\"description\" size=\"80\" class=\"fielddescription\" name=\"description" + intId + "\" />");
             var fMarks = $("<input type=\"number\" placeholder =\"marks\" class=\"fieldmarks\" name=\"marks" + intId + "\" />");
+            var choice1 = $("<br>    <input type=\"text\" size=\"50\" class=\"fieldchoices\" placeholder=\"Q" + intId + "choice" + 1 + "\" name=\"Q" + intId + "choice" + 1 + "\" /><br>");
+            var choice2 = $("<br>    <input type=\"text\" size=\"50\" class=\"fieldchoices\" placeholder=\"Q" + intId + "choice" + 2 + "\" name=\"Q" + intId + "choice" + 2 + "\" /><br>");
             var addChoiceButton = $("<input type=\"button\" class=\"fieldchoice\" value=\"Add a choice\" />");
-            addChoiceButton.click(function() {
-                var id = (fieldWrapper.data("choice_idx") + 1) || 1;
-                $(this).parent().append("<br>    <input type=\"text\" size=\"50\" class=\"fieldchoices\" placeholder=\"Q" + intId + "choice"  + id + "\" name=\"Q" + intId + "choice"  + id + "\" /><br>");
+            addChoiceButton.click(function () {
+                var id = (fieldWrapper.data("choice_idx") + 3 || 3);
+                $(this).parent().append("<br>    <input type=\"text\" size=\"50\" class=\"fieldchoices\" placeholder=\"Q" + intId + "choice" + id + "\" name=\"Q" + intId + "choice" + id + "\" /><br>");
                 fieldWrapper.data("choice_idx", id);
             });
             var removeButton = $("<input type=\"button\" class=\"remove\" value=\"-\" />");
@@ -130,7 +132,8 @@ modified by Simai Deng 10/2020  --%>
             fieldWrapper.append(fMarks);
             fieldWrapper.append(removeButton);
             fieldWrapper.append(addChoiceButton);
-            fieldWrapper.append(addChoiceButton);
+            fieldWrapper.append(choice1);
+            fieldWrapper.append(choice2)
             $("#add_exam_questions").append(fieldWrapper);
         });
     });

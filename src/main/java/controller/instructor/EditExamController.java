@@ -6,6 +6,8 @@ import main.java.db.mapper.ExamMapper;
 import main.java.db.mapper.QuestionMapper;
 import main.java.domain.*;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,10 +30,12 @@ public class EditExamController extends HttpServlet {
         int exam_id = Integer.parseInt(request.getParameter("exam_id"));
         if (request.getParameter("deleteQuestion")!=null) {
             if (QuestionMapper.getAllQuestionsWithExamID(exam_id).size()<=1) {
-                response.getWriter().println("Cannot delete last question.");
+                // cannot delete the last question
+                showErrorPage(request, response, "Cannot delete the last question.");
+            } else {
+                int questionNumber = Integer.parseInt(request.getParameter("deleteQuestion"));
+                QuestionMapper.delete(new ShortAnswerQuestion(exam_id, questionNumber, "", "", 0));
             }
-            int questionNumber = Integer.parseInt(request.getParameter("deleteQuestion"));
-            QuestionMapper.delete(new ShortAnswerQuestion(exam_id, questionNumber, "", "", 0));
         }
         response.sendRedirect("/Instructor/editExam.jsp?exam_id=" + exam_id);
     }
@@ -121,6 +125,14 @@ public class EditExamController extends HttpServlet {
         QuestionUOW.getCurrent().commit();
         ChoiceUOW.getCurrent().commit();
         response.sendRedirect("/Instructor/editExam.jsp?exam_id=" + examID);
+    }
+
+    private void showErrorPage(HttpServletRequest request, HttpServletResponse response, String errMsg) throws ServletException, IOException {
+        String view = "/errorPage.jsp";
+        ServletContext servletContext = getServletContext();
+        request.setAttribute("errMsg", errMsg);
+        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
+        requestDispatcher.forward(request, response);
     }
 
 }
