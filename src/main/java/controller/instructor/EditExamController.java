@@ -2,7 +2,6 @@ package main.java.controller.instructor;
 
 import main.java.db.UOW.ChoiceUOW;
 import main.java.db.UOW.QuestionUOW;
-import main.java.db.mapper.ChoiceMapper;
 import main.java.db.mapper.ExamMapper;
 import main.java.db.mapper.QuestionMapper;
 import main.java.domain.*;
