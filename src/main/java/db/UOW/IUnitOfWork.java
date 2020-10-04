@@ -1,8 +1,4 @@
-package main.java.db;
-
-import javax.lang.model.util.Types;
-import java.util.ArrayList;
-import java.util.List;
+package main.java.db.UOW;
 
 interface IUnitOfWork {
 
