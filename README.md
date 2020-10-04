@@ -14,4 +14,5 @@ Branches will be named following the conventions listed below:
 * `feature/admin/feature-name`
 * `feature/instructor/feature-name`
 * `feature/student/feature-name`
+* `feature/general-feature-name`
 * `fix/feature-to-be-fixed`
