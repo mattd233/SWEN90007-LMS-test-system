@@ -1,8 +1,5 @@
 package main.java.domain;
 
-import main.java.db.mapper.SubjectMapper;
-
-import java.util.List;
 
 public class Instructor extends User {
 

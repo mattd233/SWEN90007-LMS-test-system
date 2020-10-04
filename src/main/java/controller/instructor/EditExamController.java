@@ -78,7 +78,7 @@ public class EditExamController extends HttpServlet {
             }
 
             if (type.equals("multiple_choice")) {
-                List<Choice> choices = ChoiceMapper.getChoices(examID, questionIdx);
+                List<Choice> choices = ((MultipleChoiceQuestion)question).getChoices();
                 int choiceIdx = 1;
                 while(request.getParameter("Q" + questionIdx + "choice" + choiceIdx)!=null) {
                     Choice choice = choices.get(choiceIdx-1);

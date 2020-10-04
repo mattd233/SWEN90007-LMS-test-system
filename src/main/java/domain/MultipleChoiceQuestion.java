@@ -1,7 +1,5 @@
 package main.java.domain;
 
-import main.java.db.QuestionUOW;
-
 import java.util.List;
 
 public class MultipleChoiceQuestion extends Question {
