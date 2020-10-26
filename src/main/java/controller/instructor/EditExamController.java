@@ -1,5 +1,6 @@
 package main.java.controller.instructor;
 
+import main.java.concurrency.ExclusiveReadLockManager;
 import main.java.db.UOW.ChoiceUOW;
 import main.java.db.UOW.QuestionUOW;
 import main.java.db.mapper.ExamMapper;
@@ -27,23 +28,35 @@ public class EditExamController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // handles deleting questions
-        int exam_id = Integer.parseInt(request.getParameter("exam_id"));
+        int examID = Integer.parseInt(request.getParameter("exam_id"));
+        ExclusiveReadLockManager lockManager = ExclusiveReadLockManager.getInstance();
+        // first try to acquire the lock
+        if (!lockManager.acquireLock(examID, request.getSession().getId())) {
+            // if failed, check if the lock is owned by the current thread
+            if (!lockManager.checkLock(examID, request.getSession().getId())) {
+                //if not, abort
+                showErrorPage(request, response, "Someone else is accessing the page.");
+                return;
+            }
+        }
+
+        // handle deletion of question
         if (request.getParameter("deleteQuestion")!=null) {
-            if (QuestionMapper.getAllQuestionsWithExamID(exam_id).size()<=1) {
+            if (QuestionMapper.getAllQuestionsWithExamID(examID).size()<=1) {
                 // cannot delete the last question
                 showErrorPage(request, response, "Cannot delete the last question.");
             } else {
                 int questionNumber = Integer.parseInt(request.getParameter("deleteQuestion"));
-                QuestionMapper.delete(new ShortAnswerQuestion(exam_id, questionNumber, "", "", 0));
+                QuestionMapper.delete(new ShortAnswerQuestion(examID, questionNumber, "", "", 0));
             }
         }
-        response.sendRedirect("/Instructor/editExam.jsp?exam_id=" + exam_id);
+
+        response.sendRedirect("/Instructor/editExam.jsp?exam_id=" + examID);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String exam_id = request.getParameter("exam_id");
-        int examID = Integer.parseInt(exam_id);
+        int examID = Integer.parseInt(request.getParameter("exam_id"));
         Exam exam = ExamMapper.getExamByID(examID);
         assert exam != null;
 
@@ -122,9 +135,18 @@ public class EditExamController extends HttpServlet {
             }
             questionIdx++;
         }
+        // commit the UOW
         QuestionUOW.getCurrent().commit();
         ChoiceUOW.getCurrent().commit();
-        response.sendRedirect("/Instructor/editExam.jsp?exam_id=" + examID);
+        // release the lock before exiting
+        try {
+            System.out.println(request.getSession().getId());
+            System.out.println(examID);
+            ExclusiveReadLockManager.getInstance().releaseLock(examID, request.getSession().getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        response.sendRedirect("instructorSubjects.jsp");
     }
 
     private void showErrorPage(HttpServletRequest request, HttpServletResponse response, String errMsg) throws ServletException, IOException {
