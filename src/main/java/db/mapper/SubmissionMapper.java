@@ -2,7 +2,6 @@ package main.java.db.mapper;
 
 
 import main.java.db.DBConnection;
-import main.java.domain.Exam;
 import main.java.domain.Submission;
 import main.java.domain.SubmittedQuestion;
 

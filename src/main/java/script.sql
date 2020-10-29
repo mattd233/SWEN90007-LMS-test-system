@@ -167,3 +167,14 @@ INSERT INTO submitted_questions VALUES (1, 713551, 1, 'SHORT_ANSWER', DEFAULT, '
 INSERT INTO submitted_questions VALUES (1, 713551, 2, 'MULTIPLE_CHOICE', 2, DEFAULT, DEFAULT, DEFAULT);
 INSERT INTO submitted_questions VALUES (1, 1049166, 1, 'SHORT_ANSWER', DEFAULT, 'Data mapper', DEFAULT, DEFAULT);
 INSERT INTO submitted_questions VALUES (1, 1049166, 2, 'MULTIPLE_CHOICE', 4, DEFAULT, DEFAULT, DEFAULT);
+
+--------------------------------------------------------------------------------
+--                                   locks                                    --
+--------------------------------------------------------------------------------
+DROP TABLE submission_locks CASCADE;
+CREATE TABLE submission_locks (
+    exam_id INT NOT NULL,
+    student_id INT NOT NULL,
+    owner VARCHAR(50) NOT NULL ,
+    PRIMARY KEY (exam_id, student_id)
+);

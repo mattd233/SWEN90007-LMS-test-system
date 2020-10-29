@@ -30,12 +30,14 @@ public class MarkExamTableController extends HttpServlet {
             RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
             requestDispatcher.forward(request, response);
         } else {
-            System.err.println("Error in MarkExamTableController doGet");
+            System.out.println("Error in MarkExamTableController doGet");
             showErrorPage(request, response);
         }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // TODO: Check lock
+        // TODO: If lock available:
         String subjectCode = request.getParameter("subject_code");
         List<Student> students = UserSubjectMapper.getAllStudentsWithSubject(subjectCode);
         List<Exam> exams = ExamMapper.getAllExamsWithSubjectCode(subjectCode);
@@ -43,15 +45,13 @@ public class MarkExamTableController extends HttpServlet {
             int sID = student.getStudentID();
             // Update marks
             for (Exam exam : exams) {
-                int eID = exam.getExamID();
-                String marksStr = request.getParameter("m_"+eID+"_"+sID);
-                if (marksStr != null) {
-                    try {
-                        float marks = Float.valueOf(marksStr);
-                        SubmissionMapper.updateSubmissionMarks(eID, sID, marks);
-                    } catch (Exception e) {
-                        continue;
-                    }
+                String marksStr = request.getParameter("m_"+exam.getExamID()+"_"+sID);
+                System.out.println(marksStr);
+                try {
+                    float marks = Float.valueOf(marksStr);
+                    SubmissionMapper.updateSubmissionMarks(exam.getExamID(), sID, marks);
+                } catch (Exception e) {
+                    continue;
                 }
             }
 
@@ -68,13 +68,13 @@ public class MarkExamTableController extends HttpServlet {
                 e.printStackTrace();
                 showErrorPage(request, response, e.getMessage());
             }
-
-
         }
         String view = "/Instructor/MarkingViews/markingTableView.jsp";
         ServletContext servletContext = getServletContext();
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
         requestDispatcher.forward(request, response);
+        // TODO: else:
+        // ...
     }
 
     private void showErrorPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
