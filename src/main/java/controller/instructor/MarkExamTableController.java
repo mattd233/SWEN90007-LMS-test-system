@@ -30,7 +30,7 @@ public class MarkExamTableController extends HttpServlet {
             RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
             requestDispatcher.forward(request, response);
         } else {
-            System.out.println("Error in MarkExamTableController doGet");
+            System.err.println("Error in MarkExamTableController doGet");
             showErrorPage(request, response);
         }
     }
@@ -43,13 +43,15 @@ public class MarkExamTableController extends HttpServlet {
             int sID = student.getStudentID();
             // Update marks
             for (Exam exam : exams) {
-                String marksStr = request.getParameter("m_"+exam.getExamID()+"_"+sID);
-                System.out.println(marksStr);
-                try {
-                    float marks = Float.valueOf(marksStr);
-                    SubmissionMapper.updateSubmissionMarks(exam.getExamID(), sID, marks);
-                } catch (Exception e) {
-                    continue;
+                int eID = exam.getExamID();
+                String marksStr = request.getParameter("m_"+eID+"_"+sID);
+                if (marksStr != null) {
+                    try {
+                        float marks = Float.valueOf(marksStr);
+                        SubmissionMapper.updateSubmissionMarks(eID, sID, marks);
+                    } catch (Exception e) {
+                        continue;
+                    }
                 }
             }
 
