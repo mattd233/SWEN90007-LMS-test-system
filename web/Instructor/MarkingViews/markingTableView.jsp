@@ -48,7 +48,7 @@
                 List<Student> students = UserSubjectMapper.getAllStudentsWithSubject(subjectCode);
                 if (students.size() == 0) {
             %>
-            <!-- Case 1: Show message if subject has not students -->
+            <!-- Case 1: Show message if subject has no students -->
             <p>No student enrolled in this subject.</p>
             <%
                 } else {
@@ -65,8 +65,6 @@
                 <!-- Exam marks -->
                 <%
                     // submission for loop starts
-//                    float totalMarks = 0;
-//                    boolean allSubmissionsMarked = true;
                     for (Exam exam : exams) {
                         int eId = exam.getExamID();
                         Submission submission = SubmissionMapper.getSubmissionByIDs(eId, uId);
@@ -74,17 +72,16 @@
                 %>
                 <!-- Case 2.1: Show message if student has no submission -->
                 <td>
-                    <input type="number" name="m_<%=exam.getExamID()%>_<%=uId%>"><br>
+<%--                    <input type="number" name="m_<%=exam.getExamID()%>_<%=uId%>"><br>--%>
                     No submission
                 </td>
                 <%
                         } else if (submission.isMarked()) {
                             float marks = submission.getMarks();
-//                            totalMarks += marks;
                 %>
                 <!-- Case 2.2: Show marks with link to detailed view if there is a submission and it's marked -->
                 <td>
-                    <input type="number" name="m_<%=exam.getExamID()%>_<%=uId%>" value="<%=marks%>"><br>
+                    <input type="number" name="m_<%=eId%>_<%=uId%>" value="<%=marks%>"><br>
                     <a href="/submissions_detail?examID=<%=eId%>&userID=<%=uId%>">Mark this exam</a><br>
                     (Finished marking)
                 </td>
@@ -95,18 +92,16 @@
                             if (marks == -1) {
                                 displayMarks = "";
                             }
-//                            allSubmissionsMarked = false;
                 %>
                 <!-- Case 2.3: Show link to detailed view if there is a submission but not marked -->
                 <td>
-                    <input type="number" name="m_<%=exam.getExamID()%>_<%=uId%>" value="<%=displayMarks%>"><br>
+                    <input type="number" name="m_<%=eId%>_<%=uId%>" value="<%=displayMarks%>"><br>
                     <a href="/submissions_detail?examID=<%=eId%>&userID=<%=uId%>">Mark this exam</a>
                 </td>
                 <%
                         }
                     } // submission for loop ends
                     float fudgePoints = UserSubjectMapper.getFudgePoints(uId, subjectCode);
-//                    float finalMarks = totalMarks + fudgePoints;
                 %>
 
                 <!-- Fudge point -->
@@ -115,9 +110,6 @@
                 </td>
                 <%
                     String displayFinalMarks = "N/A";
-//                    if (allSubmissionsMarked) {
-//                        displayFinalMarks = Float.valueOf(finalMarks).toString();
-//                    }
                     float finalMarks = UserSubjectMapper.getMarks(uId, subjectCode);
                     if (finalMarks != -1) {
                         displayFinalMarks = Float.valueOf(finalMarks).toString();
