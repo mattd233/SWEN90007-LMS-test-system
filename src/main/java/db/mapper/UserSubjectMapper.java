@@ -154,8 +154,6 @@ public class UserSubjectMapper extends Mapper {
         List<Exam> exams = ExamMapper.getAllExamsWithSubjectCode(subjectCode);
         float totalMarks = 0f;
         for (Exam exam : exams) {
-//            System.out.println(userID);
-//            System.out.println(subjectCode);
             Submission submission = SubmissionMapper.getSubmissionByIDs(exam.getExamID(), userID);
             if (submission == null || submission.getMarks() == -1) {
                 return false;
