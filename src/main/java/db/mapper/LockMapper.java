@@ -45,6 +45,18 @@ public class LockMapper {
         return owner;
     }
 
+    public static void releaseAllLocksByOwner(String owner) {
+        final String deleteStmt = "DELETE FROM locks WHERE owner = ?";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(deleteStmt);
+            stmt.setString(1, owner);
+            stmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void insert(int lockable, String owner) {
         final String insertStmt = "INSERT INTO locks VALUES (?, ?)";
         try {

@@ -39,6 +39,11 @@ public class ExclusiveReadLockManager implements LockManager {
         }
     }
 
+    public synchronized void releaseAllLocksByOwner(String owner) throws Exception {
+        System.out.println("Releasing all lock with owner " + owner);
+        LockMapper.releaseAllLocksByOwner(owner);
+    }
+
     // check if the lock is owned by the current owner (e.g. page is refreshed)
     public synchronized Boolean checkLock(int lockable, String curOwner) {
         if (LockMapper.hasKey(lockable)) {
