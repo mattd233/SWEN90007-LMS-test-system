@@ -26,7 +26,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.beanutils.ConvertUtilsBean;
+
 
 
 /**
@@ -58,8 +58,6 @@ public class Quickstart {
         // we'll just do the bare minimum so you can continue to get a feel
         // for things.
         SecurityUtils.setSecurityManager(securityManager);
-
-        // Now that a simple Shiro environment is set up, let's see what you can do:
 
         // get the currently executing user:
         Subject currentUser = SecurityUtils.getSubject();
@@ -97,8 +95,8 @@ public class Quickstart {
         log.info("User [" + currentUser.getPrincipal() + "] logged in successfully.");
 
 //        //test a role:
-//        if (currentUser.hasRole("schwartz")) {
-//            log.info("May the Schwartz be with you!");
+//        if (currentUser.hasRole("INSTRUCTOR")) {
+//            log.info("May the Students be with you!");
 //        } else {
 //            log.info("Hello, mere mortal.");
 //        }
