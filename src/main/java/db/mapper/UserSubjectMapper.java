@@ -33,6 +33,9 @@ public class UserSubjectMapper extends Mapper {
                 Student student = UserMapper.findStudentWithID(sID);
                 if (student != null) students.add(student);
             }
+            stmt.close();
+            rs.close();
+            dbConnection.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,6 +62,12 @@ public class UserSubjectMapper extends Mapper {
         return str;
     }
 
+    /**
+     * Get the object
+     * @param userID
+     * @param subjectCode
+     * @return
+     */
     public static StudentSubjectMark getStudentSubjectMark(int userID, String subjectCode) {
         final String getStmt =
                 "SELECT * FROM users_has_subjects WHERE user_id = ? AND subject_code = ?";
@@ -68,11 +77,19 @@ public class UserSubjectMapper extends Mapper {
             stmt.setInt(1, userID);
             stmt.setString(2, subjectCode);
             ResultSet rs = stmt.executeQuery();
+            dbConnection.close();
             if (rs.next()) {
                 float fudgePoints = rs.getFloat(3);
                 float marks = rs.getFloat(4);
                 int version = rs.getInt(5);
+                stmt.close();
+                rs.close();
+                dbConnection.close();
                 return new StudentSubjectMark(userID, subjectCode, fudgePoints, marks, version);
+            } else {
+                stmt.close();
+                rs.close();
+                dbConnection.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,6 +98,12 @@ public class UserSubjectMapper extends Mapper {
         return null;
     }
 
+    /**
+     * Get the current version of a row
+     * @param userID
+     * @param subjectCode
+     * @return
+     */
     public static int getVersion(int userID, String subjectCode) {
         final String getStmt =
                 "SELECT * FROM users_has_subjects WHERE user_id = ? AND subject_code = ?";
@@ -91,8 +114,15 @@ public class UserSubjectMapper extends Mapper {
             stmt.setString(2, subjectCode);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt(5);
+                int version = rs.getInt(5);
+                stmt.close();
+                rs.close();
+                dbConnection.close();
+                return version;
             }
+            stmt.close();
+            rs.close();
+            dbConnection.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,6 +166,28 @@ public class UserSubjectMapper extends Mapper {
      * @return True if update is successful.
      */
     public static boolean updateFudgePoints(int userID, String subjectCode, float fudgePoints) {
+        // Update version number
+        final String updateVersionStmt =
+                "UPDATE users_has_subjects SET version = ? WHERE user_id = ? AND subject_code = ?";
+        int version = getVersion(userID, subjectCode);
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(updateVersionStmt);
+            stmt.setInt(1, version + 1);
+            stmt.setInt(2, userID);
+            stmt.setString(3, subjectCode);
+            int result = stmt.executeUpdate();
+            stmt.close();
+            dbConnection.close();
+            if (result <= 0) {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        // Update marks
         // Calculate total marks
         boolean updateTotalMarks = true;
         List<Exam> exams = ExamMapper.getAllExamsWithSubjectCode(subjectCode);
@@ -149,20 +201,20 @@ public class UserSubjectMapper extends Mapper {
             totalMarks += submission.getMarks();
         }
         totalMarks += fudgePoints;
-        int version = getVersion(userID, subjectCode);
         // Update fudge points (and marks)
         if (updateTotalMarks) {
             final String updateStmt =
-                    "UPDATE users_has_subjects SET fudge_points = ?, marks = ?, version = ? WHERE user_id = ? AND subject_code = ?";
+                    "UPDATE users_has_subjects SET fudge_points = ?, marks = ? WHERE user_id = ? AND subject_code = ?";
             try {
                 Connection dbConnection = new DBConnection().connect();
                 PreparedStatement stmt = dbConnection.prepareStatement(updateStmt);
                 stmt.setFloat(1, fudgePoints);
                 stmt.setFloat(2, totalMarks);
-                stmt.setInt(3, version + 1);
-                stmt.setInt(4, userID);
-                stmt.setString(5, subjectCode);
+                stmt.setInt(3, userID);
+                stmt.setString(4, subjectCode);
                 int result = stmt.executeUpdate();
+                stmt.close();
+                dbConnection.close();
                 return (result > 0) ? true : false;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -170,15 +222,16 @@ public class UserSubjectMapper extends Mapper {
             }
         } else {
             final String updateStmt =
-                    "UPDATE users_has_subjects SET fudge_points = ?, version = ? WHERE user_id = ? AND subject_code = ?";
+                    "UPDATE users_has_subjects SET fudge_points = ? WHERE user_id = ? AND subject_code = ?";
             try {
                 Connection dbConnection = new DBConnection().connect();
                 PreparedStatement stmt = dbConnection.prepareStatement(updateStmt);
                 stmt.setFloat(1, fudgePoints);
-                stmt.setInt(2, version + 1);
-                stmt.setInt(3, userID);
-                stmt.setString(4, subjectCode);
+                stmt.setInt(2, userID);
+                stmt.setString(3, subjectCode);
                 int result = stmt.executeUpdate();
+                stmt.close();
+                dbConnection.close();
                 return (result > 0) ? true : false;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -194,6 +247,28 @@ public class UserSubjectMapper extends Mapper {
      * @return
      */
     public static boolean updateMarks(int userID, String subjectCode) {
+        // Update version number
+        final String updateVersionStmt =
+                "UPDATE users_has_subjects SET version = ? WHERE user_id = ? AND subject_code = ?";
+        int version = getVersion(userID, subjectCode);
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(updateVersionStmt);
+            stmt.setInt(1, version + 1);
+            stmt.setInt(2, userID);
+            stmt.setString(3, subjectCode);
+            int result = stmt.executeUpdate();
+            stmt.close();
+            dbConnection.close();
+            if (result <= 0) {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        // Update marks
         List<Exam> exams = ExamMapper.getAllExamsWithSubjectCode(subjectCode);
         float totalMarks = 0f;
         for (Exam exam : exams) {
@@ -205,17 +280,18 @@ public class UserSubjectMapper extends Mapper {
         }
         float fudgePoints = getStudentSubjectMark(userID, subjectCode).getFudgePoints();
         totalMarks += fudgePoints;
-        int version = getVersion(userID, subjectCode);
+        System.out.println("UserSubjectMapper: updateMarks: version "+version);
         final String updateStmt =
-                "UPDATE users_has_subjects SET marks = ?, version = ? WHERE user_id = ? AND subject_code = ?";
+                "UPDATE users_has_subjects SET marks = ? WHERE user_id = ? AND subject_code = ?";
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(updateStmt);
             stmt.setFloat(1, totalMarks);
-            stmt.setInt(2, version + 1);
-            stmt.setInt(3, userID);
-            stmt.setString(4, subjectCode);
+            stmt.setInt(2, userID);
+            stmt.setString(3, subjectCode);
             int result = stmt.executeUpdate();
+            stmt.close();
+            dbConnection.close();
             return (result > 0) ? true : false;
         } catch (Exception e) {
             e.printStackTrace();

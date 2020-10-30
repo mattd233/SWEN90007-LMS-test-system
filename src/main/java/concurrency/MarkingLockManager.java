@@ -1,7 +1,14 @@
 package main.java.concurrency;
 
+import main.java.db.mapper.ExamMapper;
 import main.java.db.mapper.SubmissionLockMapper;
+import main.java.domain.Exam;
 
+import java.util.List;
+
+/**
+ * Exclusive read lock that handles marking (i.e. updating the submissions table)
+ */
 public class MarkingLockManager implements LockManager {
 
     public static MarkingLockManager instance;
@@ -21,6 +28,30 @@ public class MarkingLockManager implements LockManager {
         }
         System.out.println("The submission is locked by someone else.");
         return false;
+    }
+
+    public boolean acquireAllLocksOfStudentSubject(int studentID, String subjectCode, String owner) throws Exception {
+        List<Exam> exams = ExamMapper.getAllExamsWithSubjectCode(subjectCode);
+        boolean canLock = true;
+        for (Exam exam : exams) {
+            if (SubmissionLockMapper.hasKey(exam.getExamID(), studentID)) {
+                if (!checkSubmissionLock(exam.getExamID(), studentID, owner)) {
+                    // If the lock is being held by someone else
+                    canLock = false;
+                    break;
+                }
+            }
+        }
+        if (canLock) {
+            for (Exam exam : exams) {
+                SubmissionLockMapper.insert(exam.getExamID(), studentID, owner);
+                System.out.println("Student " + studentID + " and exam " + exam.getExamID() + " is locked by " + owner);
+            }
+            return true;
+        } else {
+            System.out.println("One of the submissions is locked by someone else.");
+            return false;
+        }
     }
 
     public synchronized void releaseSubmissionLock(int examID, int studentID, String owner) throws Exception {
@@ -51,5 +82,9 @@ public class MarkingLockManager implements LockManager {
         }
         return false;
     }
+
+//    public synchronized Boolean isLocked(int examID, int studentID) {
+//        return SubmissionLockMapper.hasKey(examID, studentID);
+//    }
 
 }

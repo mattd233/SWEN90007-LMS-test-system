@@ -74,7 +74,6 @@
                 %>
                 <!-- Case 2.1: Show message if student has no submission -->
                 <td>
-                    <%--                    <input type="number" name="m_<%=exam.getExamID()%>_<%=uId%>"><br>--%>
                     No submission
                 </td>
                 <%
@@ -110,6 +109,7 @@
                 <!-- Fudge point -->
                 <td>
                     <input type="number" name="fp<%=uId%>" value="<%=fudgePoints%>">
+                    <input type="hidden" name="v<%=uId%>" value="<%=ssm.getVersion()%>">
                 </td>
                 <%
                     String displayFinalMarks = "N/A";

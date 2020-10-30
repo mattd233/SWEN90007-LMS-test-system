@@ -2,13 +2,13 @@ package main.java.controller.instructor;
 
 import main.java.concurrency.AppSession;
 import main.java.concurrency.AppSessionManager;
+import main.java.concurrency.MarkingLockRemover;
 import main.java.concurrency.MarkingLockManager;
 import main.java.db.mapper.ExamMapper;
 import main.java.db.mapper.SubmissionMapper;
 import main.java.db.mapper.SubmittedQuestionMapper;
 import main.java.domain.Exam;
 import main.java.domain.Question;
-import main.java.domain.Submission;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -52,7 +52,7 @@ public class MarkExamDetailController extends HttpServlet {
             return;
         }
 
-        // sessions and locks
+        // Check app session
         MarkingLockManager lockManager = MarkingLockManager.getInstance();
         HttpSession httpSession = request.getSession(true);
         AppSession appSession = (AppSession) httpSession.getAttribute(APP_SESSION);
@@ -66,15 +66,18 @@ public class MarkExamDetailController extends HttpServlet {
         appSession = new AppSession(request.getRemoteUser(), httpSession.getId());
         AppSessionManager.setSession(appSession);
         httpSession.setAttribute(APP_SESSION, appSession);
-        //httpSession.setAttribute(LOCK_REMOVER, new LockRemover(appSession.getId()));
+        httpSession.setAttribute(LOCK_REMOVER, new MarkingLockRemover(appSession.getId()));
+
+        // Acquire lock
         if (!lockManager.acquireSubmissionLock(examID, userID, request.getSession().getId())) {
             if (!lockManager.checkSubmissionLock(examID, userID, request.getSession().getId())) {
+                // Show error page if we don't own the lock and cannot acquire the lock
                 showErrorPage(request, response, "Someone else is accessing the page. Please try again later");
                 return;
             }
         }
 
-        // If lock can be acquired
+        // If lock is acquired, forward the page
         String view = "/Instructor/MarkingViews/markingDetailedView.jsp";
         ServletContext servletContext = getServletContext();
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
@@ -85,6 +88,13 @@ public class MarkExamDetailController extends HttpServlet {
         int examID = Integer.valueOf(request.getParameter("examID"));
         int userID = Integer.valueOf(request.getParameter("userID"));
 
+        // Check if we still have the lock
+        MarkingLockManager lockManager = MarkingLockManager.getInstance();
+        if (!lockManager.checkSubmissionLock(examID, userID, request.getSession().getId())) {
+            showErrorPage(request, response, "This submission cannot be marked. Please refresh the page and try again later.");
+        }
+
+        // Update marks of submitted questions
         Exam exam = ExamMapper.getExamByID(examID);
         List<Question> questions = exam.getQuestions();
         for (Question question : questions) {
@@ -115,7 +125,7 @@ public class MarkExamDetailController extends HttpServlet {
             HttpSession httpSession = request.getSession();
             AppSession appSession = (AppSession) httpSession.getAttribute(APP_SESSION);
             AppSessionManager.setSession(appSession);
-            MarkingLockManager.getInstance().releaseSubmissionLock(examID, userID, request.getSession().getId());
+            lockManager.releaseSubmissionLock(examID, userID, request.getSession().getId());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -128,7 +138,7 @@ public class MarkExamDetailController extends HttpServlet {
             requestDispatcher.forward(request, response);
         } else {
             System.out.println("Error in MarkExamDetailedController doPost: Update not successful");
-            showErrorPage(request, response, "Update not successful");
+            showErrorPage(request, response, "Update not successful.");
         }
     }
 
