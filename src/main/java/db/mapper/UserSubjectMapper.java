@@ -39,7 +39,7 @@ public class UserSubjectMapper extends Mapper {
     }
 
     /**
-     *
+     * Get all students who are taking a subject as a string. Student names are separated with commas.
      * @param subjectCode
      * @return
      */
@@ -58,7 +58,11 @@ public class UserSubjectMapper extends Mapper {
         return str;
     }
 
-    /**/
+    /**
+     * Insert a pair of user ID and subject code
+     * @param userID
+     * @param subjectCode
+     */
     public static void insert(int userID, String subjectCode) {
         final String checkStmt = "SELECT * FROM users_has_subjects WHERE user_id = ? AND subject_code = ?";
         final String insertStmt = "INSERT INTO users_has_subjects (user_id, subject_code) VALUES (?, ?)";
@@ -106,6 +110,12 @@ public class UserSubjectMapper extends Mapper {
         return 0;
     }
 
+    /**
+     * Get the total marks of a subject of a student.
+     * @param userID The user_id of the student.
+     * @param subjectCode The subject_code of the subject.
+     * @return A float (the fudge points).
+     */
     public static float getMarks(int userID, String subjectCode) {
         final String getFudgePointsStmt =
                 "SELECT * FROM users_has_subjects WHERE user_id = ? AND subject_code = ?";

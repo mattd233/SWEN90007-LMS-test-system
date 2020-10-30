@@ -41,7 +41,9 @@ public class SubmissionMapper extends Mapper {
     }
 
     /**
-     * Update fields of a submission when fudge points is changed.
+     * Recalculate total marks from all submitted questions and the old submission-level fudge points,
+     * and update fields of a submission. This method should be called when updating submission mark
+     * from the marking detailed view.
      * @param examID The exam_id of the exam.
      * @param userID The user_id of the student.
      * @return True if update is successful.
@@ -84,7 +86,9 @@ public class SubmissionMapper extends Mapper {
     }
 
     /**
-     * Update fields of a submission when fudge points is changed.
+     * Recalculate total marks from all submitted questions and the new submission-level fudge points,
+     * and update fields of a submission. This method should be called when updating submission mark
+     * from the marking detailed view.
      * @param examID The exam_id of the exam.
      * @param userID The user_id of the student.
      * @param fudgePoints The new fudge points.
@@ -126,7 +130,8 @@ public class SubmissionMapper extends Mapper {
     }
 
     /**
-     * Update fields of a submission when fudge points is changed.
+     * Update fields of a submission when total marks is changed. This method should be called when
+     * updating submission mark from the marking table view.
      * @param examID The exam_id of the exam.
      * @param userID The user_id of the student.
      * @param marks The new marks.
@@ -151,16 +156,14 @@ public class SubmissionMapper extends Mapper {
     }
 
     /**
-     * //    exam_id SERIAL REFERENCES exams(exam_id),
-     * //    user_id INT REFERENCES users(user_id),
-     * //    submission_time TIMESTAMP NOT NULL,
-     * //    is_marked BOOLEAN NOT NULL DEFAULT FALSE,
-     * //    marks FLOAT DEFAULT null,
-     * //    fudge_points FLOAT DEFAULT 0,
-     * //    PRIMARY KEY (exam_id, user_id)
-    **/
+     * Check whether a submission exists.
+     * @param exam_id
+     * @param student_id
+     * @return
+     */
     public static boolean checkSubmission(int exam_id, int student_id){
-        final String findStudentSubmissionsStmt = "SELECT * from submissions WHERE exam_id = ? AND user_id = ? ";
+        final String findStudentSubmissionsStmt =
+                "SELECT * from submissions WHERE exam_id = ? AND user_id = ? ";
         boolean flag = false;
         try{
             Connection dbConnection = new DBConnection().connect();
@@ -178,16 +181,17 @@ public class SubmissionMapper extends Mapper {
     }
 
      /**
+      * Insert a submission
       * @param submission
       */
     public static void insertSubmission(Submission submission) {
 
-        final String insertSStmt = "INSERT INTO submissions VALUES (?, ?, ?, DEFAULT, DEFAULT, DEFAULT)";
+        final String insertSStmt =
+                "INSERT INTO submissions VALUES (?, ?, ?, DEFAULT, DEFAULT, DEFAULT)";
 
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement insertStmt = dbConnection.prepareStatement(insertSStmt);
-
             insertStmt.setInt(1, submission.getExamID());
             insertStmt.setInt(2, submission.getUserID());
             insertStmt.setTimestamp(3, submission.getSubmissionTime());
