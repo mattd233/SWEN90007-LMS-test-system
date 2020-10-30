@@ -75,7 +75,7 @@ public class MarkExamTableController extends HttpServlet {
             int version = Integer.valueOf(request.getParameter("v" + sID));
             int currVersion = UserSubjectMapper.getVersion(sID, subjectCode);
             if (version != currVersion) { // If version is expired, cannot update the student's marks
-                showErrorPage(request, response, "Marks cannot be updated because the data has expired. Please refresh the page and try again.");
+                showErrorPage(request, response, "Some of the marks cannot be updated because the data has expired. Please refresh the page and try again.");
             } else { // If version is up to date, update the submission
                 try {
                     // Try to acquire locks for all submissions of this student of this subject

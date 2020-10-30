@@ -32,12 +32,13 @@ public class MarkExamDetailController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //System.out.println(request.getSession().getId());
         String examIDStr = request.getParameter("examID");
         String userIDStr = request.getParameter("userID");
 
         // Show error page if exam ID or user ID is not valid.
         if (examIDStr == null || userIDStr == null) {
-            System.out.println("Error in MarkExamDetailedController doGet");
+            System.err.println("Error in MarkExamDetailedController doGet");
             showErrorPage(request, response);
             return;
         }
@@ -47,7 +48,7 @@ public class MarkExamDetailController extends HttpServlet {
             examID = Integer.valueOf(examIDStr);
             userID = Integer.valueOf(userIDStr);
         } catch (Exception e) {
-            System.out.println("Error in MarkExamDetailedController doGet");
+            System.err.println("Error in MarkExamDetailedController doGet");
             showErrorPage(request, response);
             return;
         }
