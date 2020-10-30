@@ -12,6 +12,7 @@
 <%@ page import="main.java.domain.Exam" %>
 <%@ page import="main.java.domain.Submission" %>
 <%@ page import="main.java.domain.Student" %>
+<%@ page import="main.java.domain.StudentSubjectMark" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -102,7 +103,8 @@
                 <%
                         }
                     } // submission for loop ends
-                    float fudgePoints = UserSubjectMapper.getFudgePoints(uId, subjectCode);
+                    StudentSubjectMark ssm = UserSubjectMapper.getStudentSubjectMark(uId, subjectCode);
+                    float fudgePoints = ssm.getFudgePoints();
                 %>
 
                 <!-- Fudge point -->
@@ -111,7 +113,7 @@
                 </td>
                 <%
                     String displayFinalMarks = "N/A";
-                    float finalMarks = UserSubjectMapper.getMarks(uId, subjectCode);
+                    float finalMarks = ssm.getTotalMarks();
                     if (finalMarks != -1) {
                         displayFinalMarks = Float.valueOf(finalMarks).toString();
                     }
