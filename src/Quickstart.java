@@ -65,16 +65,16 @@ public class Quickstart {
         Subject currentUser = SecurityUtils.getSubject();
 
         // Do some stuff with a Session (no need for a web or EJB container!!!)
-        Session session = currentUser.getSession();
-        session.setAttribute("someKey", "aValue");
-        String value = (String) session.getAttribute("someKey");
-        if (value.equals("aValue")) {
-            log.info("Retrieved the correct value! [" + value + "]");
-        }
+//        Session session = currentUser.getSession();
+//        session.setAttribute("someKey", "aValue");
+//        String value = (String) session.getAttribute("someKey");
+//        if (value.equals("aValue")) {
+//            log.info("Retrieved the correct value! [" + value + "]");
+//        }
 
         // let's login the current user so we can check against roles and permissions:
         if (!currentUser.isAuthenticated()) {
-            UsernamePasswordToken token = new UsernamePasswordToken("lonestarr", "vespa");
+            UsernamePasswordToken token = new UsernamePasswordToken("eduardo", "000000");
             token.setRememberMe(true);
             try {
                 currentUser.login(token);
@@ -96,27 +96,27 @@ public class Quickstart {
         //print their identifying principal (in this case, a username):
         log.info("User [" + currentUser.getPrincipal() + "] logged in successfully.");
 
-        //test a role:
-        if (currentUser.hasRole("schwartz")) {
-            log.info("May the Schwartz be with you!");
-        } else {
-            log.info("Hello, mere mortal.");
-        }
+//        //test a role:
+//        if (currentUser.hasRole("schwartz")) {
+//            log.info("May the Schwartz be with you!");
+//        } else {
+//            log.info("Hello, mere mortal.");
+//        }
 
-        //test a typed permission (not instance-level)
-        if (currentUser.isPermitted("lightsaber:wield")) {
-            log.info("You may use a lightsaber ring.  Use it wisely.");
-        } else {
-            log.info("Sorry, lightsaber rings are for schwartz masters only.");
-        }
+//        //test a typed permission (not instance-level)
+//        if (currentUser.isPermitted("lightsaber:wield")) {
+//            log.info("You may use a lightsaber ring.  Use it wisely.");
+//        } else {
+//            log.info("Sorry, lightsaber rings are for schwartz masters only.");
+//        }
 
-        //a (very powerful) Instance Level permission:
-        if (currentUser.isPermitted("winnebago:drive:eagle5")) {
-            log.info("You are permitted to 'drive' the winnebago with license plate (id) 'eagle5'.  " +
-                    "Here are the keys - have fun!");
-        } else {
-            log.info("Sorry, you aren't allowed to drive the 'eagle5' winnebago!");
-        }
+//        //a (very powerful) Instance Level permission:
+//        if (currentUser.isPermitted("winnebago:drive:eagle5")) {
+//            log.info("You are permitted to 'drive' the winnebago with license plate (id) 'eagle5'.  " +
+//                    "Here are the keys - have fun!");
+//        } else {
+//            log.info("Sorry, you aren't allowed to drive the 'eagle5' winnebago!");
+//        }
 
         //all done - log out!
         currentUser.logout();
