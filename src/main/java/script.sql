@@ -176,6 +176,14 @@ INSERT INTO submitted_questions VALUES (1, 1049166, 2, 'MULTIPLE_CHOICE', 4, DEF
 --------------------------------------------------------------------------------
 --                                   locks                                    --
 --------------------------------------------------------------------------------
+DROP TABLE locks CASCADE;
+DROP TABLE exam_locks CASCADE;
+CREATE TABLE exam_locks (
+    lockable INT NOT NULL UNIQUE ,
+    owner VARCHAR(50) NOT NULL ,
+    PRIMARY KEY (lockable)
+);
+
 DROP TABLE submission_locks CASCADE;
 CREATE TABLE submission_locks (
     exam_id INT NOT NULL,

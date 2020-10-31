@@ -23,6 +23,7 @@ Created by IntelliJ IDEA.
 
 %>
 <form action="/Instructor/editExam" method="post" id="form">
+    <%--Exam Details--%>
     <input type="hidden" value=<%=examID%> name="exam_id", id="exam_id">
     <h3>Title: <%=exam.getTitle()%>
     </h3>
@@ -33,6 +34,7 @@ Created by IntelliJ IDEA.
     <p>Status: <%=exam.getStatus()%>
     </p>
     <br>
+    <%--Form for current exam questions--%>
     <%
         List<Question> questions = exam.getQuestions();
         for (Question question : questions) {
@@ -77,10 +79,11 @@ Created by IntelliJ IDEA.
     <fieldset id="add_exam_questions">
         <legend>Add new questions!</legend>
     </fieldset>
+    <%-- Buttom buttons --%>
     <input type="button" value="Add a short-answer question" class="add" id="short-answer"/>
     <input type="button" value="Add a multiple-choice question" class="add" id="multiple-choice"/>
     <input type="button" value="Go back"
-           onclick=window.location.replace("/Instructor/instructorExams.jsp?subject_code=<%=exam.getSubjectCode()%>");>
+           onclick=window.location.replace("/Instructor/editExam?exam_id=<%=exam.getExamID()%>&release_lock=true");>
     <input type="button" value="Save Exam" onclick=saveExam()>
 </form>
 </body>
@@ -92,7 +95,7 @@ Created by IntelliJ IDEA.
         var rem = confirm("Do you want to delete the question?");
         if (rem) {
             document.getElementById(qID).remove();
-            var target = "editExam?exam_id=".concat(exam_id, "&deleteQuestion=", qNumber);
+            var target = "editExam?exam_id=".concat(exam_id, "&delete_question=", qNumber);
             window.location.replace(target);
         }
     }
