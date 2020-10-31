@@ -64,7 +64,7 @@
                 <button onclick="location.href='/Instructor/instructorExams.jsp?subject_code=<%=subject.getSubjectCode()%>'">
                     View exams
                 </button><br>
-                <button onclick="location.href='/submissions_table?subject_code=<%=subject.getSubjectCode()%>'">
+                <button onclick="location.href='/Instructor/submissions_table?subject_code=<%=subject.getSubjectCode()%>'">
                     Mark exam submissions in table view
                 </button>
             </td>

@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/submissions_detail")
+@WebServlet("/Instructor/submissions_detail")
 public class MarkExamDetailController extends HttpServlet {
 
     public static final String APP_SESSION = "app_session";

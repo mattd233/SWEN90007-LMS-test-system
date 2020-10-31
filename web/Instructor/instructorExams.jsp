@@ -65,7 +65,7 @@
                 <%
                     } else if (exam.getStatus() == Exam.ExamStatus.CLOSED) {
                 %>
-                <button onclick="location.href='/submissions_table?subject_code=<%=exam.getSubjectCode()%>'">
+                <button onclick="location.href='/Instructor/submissions_table?subject_code=<%=exam.getSubjectCode()%>'">
                     Mark exam
                 </button>
                 <%
