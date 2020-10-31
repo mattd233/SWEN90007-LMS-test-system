@@ -1,3 +1,4 @@
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: Matt
@@ -15,7 +16,18 @@
     <title>Subjects</title>
 </head>
 <body>
+<div align="right">
+    <button onclick="logout()">Logout</button>
+</div>
+
+<script>
+    function logout(){
+        alert("Logout successfully");
+        window.location.href='/logout.jsp';
+    }
+</script>
 <div align="center">
+    <h1>Welcome back, <shiro:principal/>!</h1>
     <h1>All Subjects</h1>
     <table>
         <tr>
