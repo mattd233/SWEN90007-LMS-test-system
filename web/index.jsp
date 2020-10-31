@@ -13,7 +13,7 @@
   <body>
     <h1> Hello </h1>
     <%
-      response.sendRedirect("/login.jsp");
+      response.sendRedirect("/login");
     %>
   </body>
 </html>

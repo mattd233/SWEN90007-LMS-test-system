@@ -15,7 +15,7 @@
     <div class="center">
         <form name="LoginForm" action="/login" method="post">
             <div class="inputLine">Username: <input type="text" name="userName"></div><br>
-            <div class="inputLine">Password: <input type="text" name="passWord"></div><br>
+            <div class="inputLine">Password: <input type="password" name="passWord"></div><br>
             <input class="submitButton" type="submit" value="Login"/>
         </form>
     </div>

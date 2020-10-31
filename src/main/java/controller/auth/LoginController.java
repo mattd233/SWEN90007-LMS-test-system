@@ -6,7 +6,10 @@ import main.java.domain.User;
 import main.java.security.AuthenticationEnforcer;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.Factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,10 +33,32 @@ public class LoginController extends HttpServlet {
     // Display welcome page if the user enters the correct password and username
     // otherwise, go back to the original page
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String view = "/login.jsp";
-        ServletContext servletContext = getServletContext();
-        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
-        requestDispatcher.forward(request, response);
+        // check is user is logged in
+        String path = getServletContext().getRealPath("/WEB-INF/shiro.ini");
+        Factory<SecurityManager> factory = new IniSecurityManagerFactory(path);
+        SecurityUtils.setSecurityManager(factory.getInstance());
+        Subject currentUser = SecurityUtils.getSubject();
+
+        if (currentUser.isAuthenticated()) {
+            // check the roles
+            if (currentUser.hasRole("ADMIN")) {
+                response.sendRedirect("Admin/subjects.jsp");
+                log.info("User " + currentUser.getPrincipal() + " logged in as ADMIN");
+            } else if (currentUser.hasRole("INSTRUCTOR")) {
+                response.sendRedirect("Instructor/instructorSubjects.jsp");
+                log.info("User " + currentUser.getPrincipal() + " logged in as INSTRUCTOR");
+            } else if (currentUser.hasRole("STUDENT")) {
+                response.sendRedirect("Student/studentHomePage.jsp");
+                log.info("User " + currentUser.getPrincipal() + " logged in as STUDENT");
+            }
+        }
+        else {
+            // else, send to log in page
+            String view = "/login.jsp";
+            ServletContext servletContext = getServletContext();
+            RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
+            requestDispatcher.forward(request, response);
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -50,7 +75,6 @@ public class LoginController extends HttpServlet {
         // let's login the current user so we can check against roles and permissions:
         if (!currentUser.isAuthenticated()) {
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-            token.setRememberMe(true);
             try {
                 currentUser.login(token);
             } catch (UnknownAccountException uae) {
@@ -69,7 +93,7 @@ public class LoginController extends HttpServlet {
             }
         }
 
-        User user = UserMapper.getUserWithUsername(username);
+        User user = UserMapper.getUserWithUsername(currentUser.getPrincipal().toString());
         HttpSession session = request.getSession();
         session.setAttribute("user_id", user.getUserID());
 
