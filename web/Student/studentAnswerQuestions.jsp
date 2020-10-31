@@ -125,7 +125,7 @@
                     List<Choice> choices = getChoices(exam_id, question_number);
                 %>
                 <%
-                    if (answer == null){
+                    if (answer == null || answer ==""){
                         for (Choice choice : choices) {
                             String choice_description = choice.getChoiceDescription();
                 %>

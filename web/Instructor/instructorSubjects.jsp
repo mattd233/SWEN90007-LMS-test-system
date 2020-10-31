@@ -1,3 +1,4 @@
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: Matt
@@ -5,9 +6,10 @@
   Time: 20:13
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="java.util.Objects" %>
+<%@ page import="main.java.concurrency.AppSession" %>
 <%@ page import="main.java.db.mapper.SubjectMapper" %>
 <%@ page import="main.java.domain.Subject" %>
+<%@ page import="java.util.Objects" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -15,7 +17,16 @@
     <title>View all subjects</title>
 </head>
 <body>
+<% if (AppSession.isAuthenticated() && AppSession.hasRole(AppSession.INSTRUCTOR))	{ %>
 <div align="center">
+
+
+    <h1>Welcome back, <shiro:principal/>!</h1>
+    <div align="right">
+        <form align="right" name="LogoutForm" action="/logout.jsp" method="post">
+            <input class="submitButton" type="submit" value="Logout"/>
+        </form>
+    </div>
     <table>
         <tr>
             <th>Subject Code</th>
@@ -53,5 +64,12 @@
         %>
     </table>
 </div>
+<%
+}else {
+        %>
+You are not authorized.
+<%
+    }
+%>
 </body>
 </html>

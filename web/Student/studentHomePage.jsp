@@ -1,3 +1,4 @@
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: wyr04
@@ -28,6 +29,12 @@
     <title>Student home</title>
 </head>
 <body>
+<div align="right">
+    <form name="LogoutForm" action="/logout.jsp" method="post">
+        <input class="submitButton" type="submit" value="Logout"/>
+    </form>
+</div>
+</div>
 <div align="center">
 
     <%
@@ -39,11 +46,10 @@
             studentID = (int) session.getAttribute("user_id");
         }
         Student student = UserMapper.findStudentWithID(studentID);
-        String student_name = student.getName();
     %>
 
     <%--header--%>
-    <h1>Welcome back, <%=student_name%>!</h1>
+    <h1>Welcome back, <shiro:principal/>!</h1>
 
     <table>
         <tr>
