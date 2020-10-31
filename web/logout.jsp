@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <link rel="stylesheet" href="/styles/login.css" type="text/css">
     <title>Logout</title>
 </head>
 <body>
@@ -16,7 +17,12 @@
 </script>
 <%
     session.invalidate();
-    response.sendRedirect("login.jsp");
+//    response.sendRedirect("login.jsp");
 %>
+<div align="center">
+    <form name="LogoutForm" action="/login.jsp" method="post">
+        <input class="submitButton" type="submit" value="Login"/>
+    </form>
+</div>
 </body>
 </html>

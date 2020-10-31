@@ -34,7 +34,7 @@
         <input class="submitButton" type="submit" value="Logout"/>
     </form>
 </div>
-</div>
+
 <div align="center">
 
     <%
