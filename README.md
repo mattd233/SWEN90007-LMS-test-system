@@ -1,4 +1,4 @@
-# SWEN90007 Software Design and Architecture (2020 S2)
+# SWEN90007 Software Design and Architecture
 ## Team 16 - Magic Pigeons
 &nbsp;
 **Team members:**

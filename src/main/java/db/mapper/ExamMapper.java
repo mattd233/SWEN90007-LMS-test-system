@@ -218,6 +218,23 @@ public class ExamMapper extends Mapper {
      * @return True if the exam is successfully deleted. Otherwise returns false.
      */
     public static boolean deleteExam(int examID) {
+        // Don't need to delete exam if exam doesn't exist
+        final String getExamStmt =
+                "SELECT * FROM exams WHERE exam_id = ?";
+        try {
+            Connection dbConnection = new DBConnection().connect();
+            PreparedStatement stmt = dbConnection.prepareStatement(getExamStmt);
+            stmt.setInt(1, examID);
+            ResultSet rs = stmt.executeQuery();
+            if (!rs.next()) {
+                System.out.println("Exam doesn't exist.");
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
         // Can't delete exam if there's submission
         final String getSubmissionStmt =
                 "SELECT * FROM submissions WHERE exam_id = ?";
@@ -234,7 +251,9 @@ public class ExamMapper extends Mapper {
             e.printStackTrace();
             return false;
         }
+
         // TODO: can't delete exam if there's student taking exam
+
         // Delete exam
         final String updateStmt =
                 "DELETE FROM exams WHERE exam_id = ?";
