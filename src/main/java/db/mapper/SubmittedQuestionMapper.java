@@ -40,6 +40,10 @@ public class SubmittedQuestionMapper extends Mapper {
                 float marks = rs.getFloat(8);
                 submittedQuestions.add(new SubmittedQuestion(examID, userID, qNumber, qType, cNumber, shortAnswer, isMarked, marks));
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,6 +60,7 @@ public class SubmittedQuestionMapper extends Mapper {
     public static SubmittedQuestion getSubmittedQuestion(int examID, int userID, int questionNumber) {
         final String findAnswerStmt =
                 "SELECT * FROM submitted_questions WHERE exam_id = ? AND user_id = ? AND question_number = ?";
+        SubmittedQuestion sq = null;
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(findAnswerStmt);
@@ -69,12 +74,16 @@ public class SubmittedQuestionMapper extends Mapper {
                 String shortAnswer = rs.getString(6);
                 boolean isMarked = rs.getBoolean(7);
                 float marks = rs.getFloat(8);
-                return new SubmittedQuestion(examID, userID, questionNumber, qType, cNumber, shortAnswer, isMarked, marks);
+                sq = new SubmittedQuestion(examID, userID, questionNumber, qType, cNumber, shortAnswer, isMarked, marks);
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return sq;
     }
 
     /**
@@ -103,6 +112,9 @@ public class SubmittedQuestionMapper extends Mapper {
             }
             insertStmt.execute();
             System.out.println("insert submitted question successfully");
+            // Close connection
+            dbConnection.close();
+            insertStmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -134,6 +146,9 @@ public class SubmittedQuestionMapper extends Mapper {
             }
             insertStmt.execute();
             // System.out.println("inserted submitted question as unanswered");
+            // Close connection
+            dbConnection.close();
+            insertStmt.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -158,6 +173,9 @@ public class SubmittedQuestionMapper extends Mapper {
             stmt.setInt(3, userID);
             stmt.setInt(4, questionNumber);
             int result = stmt.executeUpdate();
+            // Close connection
+            dbConnection.close();
+            stmt.close();
             return (result > 0) ? true : false;
         } catch (Exception e) {
             e.printStackTrace();

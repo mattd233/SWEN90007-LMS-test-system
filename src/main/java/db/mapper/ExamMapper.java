@@ -37,6 +37,10 @@ public class ExamMapper extends Mapper {
                 Exam.ExamStatus status = Exam.ExamStatus.valueOf(Exam.ExamStatus.class, rs.getString(5));
                 exams.add(new Exam(exam_id, subjectCode, title, description, status));
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -56,22 +60,23 @@ public class ExamMapper extends Mapper {
             stmt.setInt(1, examID);
             String status = "";
             ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
+            if (rs.next()) {
                 Exam.ExamStatus examStatus = Exam.ExamStatus.valueOf(Exam.ExamStatus.class, rs.getString(5));
                 if(examStatus.toString().equals("PUBLISHED")){
                     status = "PUBLISHED";
-                    return status;
                 } else if (examStatus.toString().equals("CLOSED")){
                     status = "CLOSED";
-                    return status;
                 } else if (examStatus.toString().equals("UNPUBLISHED")){
                     status = "UNPUBLISHED";
-                    return status;
                 } else {
                     System.err.println("error when getting the exam status");
-                    return null;
                 }
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
+            return status;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -85,22 +90,27 @@ public class ExamMapper extends Mapper {
      */
     public static Exam getExamByID(int examID) {
         final String findExamStmt = "SELECT * FROM exams WHERE exam_id = ?";
+        Exam exam = null;
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(findExamStmt);
             stmt.setInt(1, examID);
             ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
+            if (rs.next()) {
                 String subjectCode = rs.getString(2);
                 String title = rs.getString(3);
                 String description = rs.getString(4);
                 Exam.ExamStatus status = Exam.ExamStatus.valueOf(Exam.ExamStatus.class, rs.getString(5));
-                return new Exam(examID, subjectCode, title, description, status);
+                exam = new Exam(examID, subjectCode, title, description, status);
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return exam;
     }
 
     /**
@@ -112,7 +122,7 @@ public class ExamMapper extends Mapper {
 
         final String insertExamStmt = "INSERT INTO exams VALUES (DEFAULT, ?, ?, ?, DEFAULT)";
         final String getIDStmt = "SELECT currval(pg_get_serial_sequence('exams','exam_id'))";
-
+        int id = -1;
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement insertStmt = dbConnection.prepareStatement(insertExamStmt);
@@ -123,12 +133,17 @@ public class ExamMapper extends Mapper {
             insertStmt.execute();
             ResultSet rs = getIDStatement.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1);
+                id = rs.getInt(1);
             }
+            // Close connection
+            dbConnection.close();
+            insertStmt.close();
+            rs.close();
+            return id;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return -1;
+        return id;
     }
 
     /**
@@ -146,6 +161,9 @@ public class ExamMapper extends Mapper {
             stmt.setString(2, exam.getDescription());
             stmt.setInt(3, exam.getExamID());
             stmt.execute();
+            // Close connection
+            dbConnection.close();
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -165,6 +183,9 @@ public class ExamMapper extends Mapper {
             stmt.setString(1, Exam.ExamStatus.PUBLISHED.toString());
             stmt.setInt(2, examID);
             int result = stmt.executeUpdate();
+            // Close connection
+            dbConnection.close();
+            stmt.close();
             return (result > 0) ? true : false;
         } catch (Exception e) {
             e.printStackTrace();
@@ -188,6 +209,9 @@ public class ExamMapper extends Mapper {
             stmt.setString(1, Exam.ExamStatus.CLOSED.toString());
             stmt.setInt(2, examID);
             int result = stmt.executeUpdate();
+            // Close connection
+            dbConnection.close();
+            stmt.close();
             // Create submissions for all students
             Exam exam = ExamMapper.getExamByID(examID);
             List<Question> questions = exam.getQuestions();
@@ -228,6 +252,10 @@ public class ExamMapper extends Mapper {
             ResultSet rs = stmt.executeQuery();
             if (!rs.next()) {
                 System.out.println("Exam doesn't exist.");
+                // Close connection
+                dbConnection.close();
+                stmt.close();
+                rs.close();
                 return true;
             }
         } catch (Exception e) {
@@ -245,8 +273,16 @@ public class ExamMapper extends Mapper {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 System.out.println("Cannot delete exam because there are already submissions.");
+                // Close connection
+                dbConnection.close();
+                stmt.close();
+                rs.close();
                 return false;
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -262,6 +298,9 @@ public class ExamMapper extends Mapper {
             PreparedStatement stmt = dbConnection.prepareStatement(updateStmt);
             stmt.setInt(1, examID);
             int result = stmt.executeUpdate();
+            // Close connection
+            dbConnection.close();
+            stmt.close();
             return (result > 0) ? true : false;
         } catch (Exception e) {
             e.printStackTrace();

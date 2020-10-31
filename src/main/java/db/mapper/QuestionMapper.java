@@ -42,6 +42,10 @@ public class QuestionMapper extends Mapper {
                     questions.add(new ShortAnswerQuestion(examID, qNumber, title, description, marks));
                 }
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -68,6 +72,9 @@ public class QuestionMapper extends Mapper {
             stmt.setString(5, question.getDescription());
             stmt.setInt(6, question.getMarks());
             stmt.execute();
+            // Close connection
+            dbConnection.close();
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -95,6 +102,9 @@ public class QuestionMapper extends Mapper {
             stmt.setInt(5, question.getExamID());
             stmt.setInt(6, question.getQuestionNumber());
             stmt.execute();
+            // Close connection
+            dbConnection.close();
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -122,6 +132,9 @@ public class QuestionMapper extends Mapper {
             }
             // reset the question numbers
 //            resetQuestionNumber(question.getExamID());
+            // Close connection
+            dbConnection.close();
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -133,7 +146,7 @@ public class QuestionMapper extends Mapper {
      */
     public static int getCurQuestionNumber(int examID) {
         final String getQNumberStmt = "SELECT max(question_number) FROM questions WHERE exam_id = ?";
-
+        int qNum = 0; // default: no question in this exam, return 0
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt;
@@ -141,14 +154,16 @@ public class QuestionMapper extends Mapper {
             stmt.setInt(1, examID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1);
+                qNum = rs.getInt(1);
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        // no question in this exam, return 0
-        return 0;
-
+        return qNum;
     }
 
 }

@@ -33,9 +33,10 @@ public class UserSubjectMapper extends Mapper {
                 Student student = UserMapper.findStudentWithID(sID);
                 if (student != null) students.add(student);
             }
+            // Close connection
+            dbConnection.close();
             stmt.close();
             rs.close();
-            dbConnection.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -71,31 +72,28 @@ public class UserSubjectMapper extends Mapper {
     public static StudentSubjectMark getStudentSubjectMark(int userID, String subjectCode) {
         final String getStmt =
                 "SELECT * FROM users_has_subjects WHERE user_id = ? AND subject_code = ?";
+        StudentSubjectMark ssm = null;
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(getStmt);
             stmt.setInt(1, userID);
             stmt.setString(2, subjectCode);
             ResultSet rs = stmt.executeQuery();
-            dbConnection.close();
             if (rs.next()) {
                 float fudgePoints = rs.getFloat(3);
                 float marks = rs.getFloat(4);
                 int version = rs.getInt(5);
-                stmt.close();
-                rs.close();
-                dbConnection.close();
-                return new StudentSubjectMark(userID, subjectCode, fudgePoints, marks, version);
-            } else {
-                stmt.close();
-                rs.close();
-                dbConnection.close();
+                ssm = new StudentSubjectMark(userID, subjectCode, fudgePoints, marks, version);
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("UserSubjectMapper: couldn't get StudentSubjectMark of "+userID+", "+subjectCode);
         }
-        System.out.println("UserSubjectMapper: couldn't get StudentSubjectMark of "+userID+", "+subjectCode);
-        return null;
+        return ssm;
     }
 
     /**
@@ -107,6 +105,7 @@ public class UserSubjectMapper extends Mapper {
     public static int getVersion(int userID, String subjectCode) {
         final String getStmt =
                 "SELECT * FROM users_has_subjects WHERE user_id = ? AND subject_code = ?";
+        int version = -1;
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(getStmt);
@@ -114,20 +113,17 @@ public class UserSubjectMapper extends Mapper {
             stmt.setString(2, subjectCode);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                int version = rs.getInt(5);
-                stmt.close();
-                rs.close();
-                dbConnection.close();
-                return version;
+                version = rs.getInt(5);
             }
+            // Close connection
+            dbConnection.close();
             stmt.close();
             rs.close();
-            dbConnection.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("UserSubjectMapper: couldn't get version of "+userID+", "+subjectCode);
-        return -1;
+        return version;
     }
 
     /**
@@ -146,12 +142,21 @@ public class UserSubjectMapper extends Mapper {
             stmt.setString(2, subjectCode);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
+                // Close connection
+                dbConnection.close();
+                stmt.close();
+                rs.close();
                 throw new Exception("Entry with user id and subject code already exists in table.");
             }
+            stmt.close();
             stmt = dbConnection.prepareStatement(insertStmt);
             stmt.setInt(1, userID);
             stmt.setString(2, subjectCode);
             stmt.execute();
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -177,8 +182,9 @@ public class UserSubjectMapper extends Mapper {
             stmt.setInt(2, userID);
             stmt.setString(3, subjectCode);
             int result = stmt.executeUpdate();
-            stmt.close();
+            // Close connection
             dbConnection.close();
+            stmt.close();
             if (result <= 0) {
                 return false;
             }
@@ -188,7 +194,7 @@ public class UserSubjectMapper extends Mapper {
         }
 
         // Update marks
-        // Calculate total marks
+        // Step 1. Calculate total marks
         boolean updateTotalMarks = true;
         List<Exam> exams = ExamMapper.getAllExamsWithSubjectCode(subjectCode);
         float totalMarks = 0f;
@@ -201,7 +207,7 @@ public class UserSubjectMapper extends Mapper {
             totalMarks += submission.getMarks();
         }
         totalMarks += fudgePoints;
-        // Update fudge points (and marks)
+        // Step 2. Update fudge points (and marks)
         if (updateTotalMarks) {
             final String updateStmt =
                     "UPDATE users_has_subjects SET fudge_points = ?, marks = ? WHERE user_id = ? AND subject_code = ?";
@@ -213,8 +219,9 @@ public class UserSubjectMapper extends Mapper {
                 stmt.setInt(3, userID);
                 stmt.setString(4, subjectCode);
                 int result = stmt.executeUpdate();
-                stmt.close();
+                // Close connection
                 dbConnection.close();
+                stmt.close();
                 return (result > 0) ? true : false;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -230,8 +237,9 @@ public class UserSubjectMapper extends Mapper {
                 stmt.setInt(2, userID);
                 stmt.setString(3, subjectCode);
                 int result = stmt.executeUpdate();
-                stmt.close();
+                // Close connection
                 dbConnection.close();
+                stmt.close();
                 return (result > 0) ? true : false;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -258,8 +266,9 @@ public class UserSubjectMapper extends Mapper {
             stmt.setInt(2, userID);
             stmt.setString(3, subjectCode);
             int result = stmt.executeUpdate();
-            stmt.close();
+            // Close connection
             dbConnection.close();
+            stmt.close();
             if (result <= 0) {
                 return false;
             }
@@ -290,8 +299,9 @@ public class UserSubjectMapper extends Mapper {
             stmt.setInt(2, userID);
             stmt.setString(3, subjectCode);
             int result = stmt.executeUpdate();
-            stmt.close();
+            // Close connection
             dbConnection.close();
+            stmt.close();
             return (result > 0) ? true : false;
         } catch (Exception e) {
             e.printStackTrace();

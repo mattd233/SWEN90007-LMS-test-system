@@ -28,6 +28,10 @@ public class UserMapper extends Mapper {
                 String userType = rs.getString(2);
                 String name = rs.getString(3);
                 String password = rs.getString(5);
+                // Close connection
+                dbConnection.close();
+                stmt.close();
+                rs.close();
                 if (userType.equals(User.UserType.ADMIN.toString())) {
                     return new Admin(userID, name, username, password);
                 } else if (userType.equals(User.UserType.INSTRUCTOR.toString())) {
@@ -36,6 +40,10 @@ public class UserMapper extends Mapper {
                     return new Student(userID, name, username, password);
                 }
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,9 +56,8 @@ public class UserMapper extends Mapper {
      * @return A new instructor object if instructor with given id exist and null otherwise.
      */
     public static Instructor findInstructorWithID(int userID) {
-
         final String findInstructorStmt = "SELECT * FROM users WHERE user_id = ?";
-
+        Instructor instructor = null;
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(findInstructorStmt);
@@ -63,47 +70,18 @@ public class UserMapper extends Mapper {
                     String name = rs.getString(3);
                     String userName = rs.getString(4);
                     String passWord = rs.getString(5);
-                    return new Instructor(id, name, userName, passWord);
+                    instructor = new Instructor(id, name, userName, passWord);
                 }
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return null;
+        return instructor;
     }
-
-    /**
-     * Find the corresponding row in instructors with the given name.
-     * @param name name of instructor.
-     * @return A new instructor object if instructor with given name exist and null otherwise.
-     */
-    public static Instructor findInstructorWithName(String name) {
-
-        final String findInstructorStmt = "SELECT * FROM users WHERE name = ?";
-
-        try {
-            Connection dbConnection = new DBConnection().connect();
-            PreparedStatement stmt = dbConnection.prepareStatement(findInstructorStmt);
-            stmt.setString(1, name);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                int id = rs.getInt(1);
-                String type = rs.getString(2);
-                if (type.equals(User.UserType.INSTRUCTOR.toString())) {
-                    // skip name
-                    String userName = rs.getString(4);
-                    String passWord = rs.getString(5);
-                    return new Instructor(id, name, userName, passWord);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
 
     /**
      * Find the corresponding row in users with the given id.
@@ -112,6 +90,7 @@ public class UserMapper extends Mapper {
      */
     public static Student findStudentWithID(int studentID) {
         final String findStudentStmt = "SELECT * FROM users WHERE user_id = ?";
+        Student student = null;
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(findStudentStmt);
@@ -124,13 +103,17 @@ public class UserMapper extends Mapper {
                     String name = rs.getString(3);
                     String userName = rs.getString(4);
                     String passWord = rs.getString(5);
-                    return new Student(id, name, userName, passWord);
+                    student = new Student(id, name, userName, passWord);
                 }
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return student;
     }
 
 }
