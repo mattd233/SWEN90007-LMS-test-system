@@ -1,9 +1,6 @@
 package main.java.concurrency;
 
-
 import main.java.db.mapper.LockMapper;
-
-import java.sql.SQLException;
 
 public class ExclusiveReadLockManager implements LockManager {
     public static ExclusiveReadLockManager instance;
