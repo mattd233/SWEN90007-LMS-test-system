@@ -12,6 +12,7 @@
 <%@ page import="main.java.domain.Exam" %>
 <%@ page import="main.java.domain.Submission" %>
 <%@ page import="main.java.domain.Student" %>
+<%@ page import="main.java.domain.StudentSubjectMark" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -35,13 +36,14 @@
                         String title = exam.getTitle();
                         // exam for loop starts
                 %>
-                        <th><%=title%></th>
+                <th><%=title%></th>
                 <%
                     } // exam for look ends
                 %>
                 <th>Fudge Points</th>
                 <th>Total Marks</th>
             </tr>
+            <!-- Header row ends -->
 
             <!-- Show all students taking the subject and their marks as rows -->
             <%
@@ -72,7 +74,6 @@
                 %>
                 <!-- Case 2.1: Show message if student has no submission -->
                 <td>
-<%--                    <input type="number" name="m_<%=exam.getExamID()%>_<%=uId%>"><br>--%>
                     No submission
                 </td>
                 <%
@@ -101,16 +102,18 @@
                 <%
                         }
                     } // submission for loop ends
-                    float fudgePoints = UserSubjectMapper.getFudgePoints(uId, subjectCode);
+                    StudentSubjectMark ssm = UserSubjectMapper.getStudentSubjectMark(uId, subjectCode);
+                    float fudgePoints = ssm.getFudgePoints();
                 %>
 
                 <!-- Fudge point -->
                 <td>
                     <input type="number" name="fp<%=uId%>" value="<%=fudgePoints%>">
+                    <input type="hidden" name="v<%=uId%>" value="<%=ssm.getVersion()%>">
                 </td>
                 <%
                     String displayFinalMarks = "N/A";
-                    float finalMarks = UserSubjectMapper.getMarks(uId, subjectCode);
+                    float finalMarks = ssm.getTotalMarks();
                     if (finalMarks != -1) {
                         displayFinalMarks = Float.valueOf(finalMarks).toString();
                     }

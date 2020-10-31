@@ -1,5 +1,9 @@
 package main.java.controller.instructor;
 
+import main.java.concurrency.AppSession;
+import main.java.concurrency.AppSessionManager;
+import main.java.concurrency.MarkingLockManager;
+import main.java.concurrency.MarkingLockRemover;
 import main.java.db.mapper.ExamMapper;
 import main.java.db.mapper.SubmissionMapper;
 import main.java.db.mapper.UserSubjectMapper;
@@ -12,11 +16,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 @WebServlet("/submissions_table")
 public class MarkExamTableController extends HttpServlet {
+
+    public static final String APP_SESSION = "app_session";
+    public static final String LOCK_REMOVER = "lock_remover";
 
     public MarkExamTableController() {
         super();
@@ -36,40 +46,73 @@ public class MarkExamTableController extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String subjectCode = request.getParameter("subject_code");
-        List<Student> students = UserSubjectMapper.getAllStudentsWithSubject(subjectCode);
-        List<Exam> exams = ExamMapper.getAllExamsWithSubjectCode(subjectCode);
-        for (Student student : students) {
-            int sID = student.getStudentID();
-            // Update marks
-            for (Exam exam : exams) {
-                int eID = exam.getExamID();
-                String marksStr = request.getParameter("m_"+eID+"_"+sID);
-                if (marksStr != null) {
-                    try {
-                        float marks = Float.valueOf(marksStr);
-                        SubmissionMapper.updateSubmissionMarks(eID, sID, marks);
-                    } catch (Exception e) {
-                        continue;
-                    }
-                }
-            }
+        // lock manager
+        MarkingLockManager lockManager = MarkingLockManager.getInstance();
 
-            // Update fudge_points in users_has_subjects table
-            String fudgePointsStr = request.getParameter("fp"+sID);
+        // Session details
+        HttpSession httpSession = request.getSession(true);
+        AppSession appSession = (AppSession) httpSession.getAttribute(APP_SESSION);
+        if (appSession != null) {
             try {
-                float fudgePoints = Float.valueOf(fudgePointsStr);
-                boolean updateSuccess = UserSubjectMapper.updateFudgePoints(sID, subjectCode, fudgePoints);
-                if (!updateSuccess) {
-                    System.err.println("Error in MarkExamTableController doPost: Update not successful");
-                    showErrorPage(request, response, "Update not successful. Please try again.");
-                }
+                lockManager.releaseAllLocksByOwner(appSession.getId());
             } catch (Exception e) {
                 e.printStackTrace();
-                showErrorPage(request, response, e.getMessage());
             }
+        }
+        appSession = new AppSession(request.getRemoteUser(),
+                httpSession.getId());
+        AppSessionManager.setSession(appSession);
+        httpSession.setAttribute(APP_SESSION, appSession);
+        httpSession.setAttribute(LOCK_REMOVER, new MarkingLockRemover(appSession.getId()));
 
+        // Update marks
+        String subjectCode = request.getParameter("subject_code");
+        List<Exam> exams = ExamMapper.getAllExamsWithSubjectCode(subjectCode);
+        List<Student> students = UserSubjectMapper.getAllStudentsWithSubject(subjectCode);
+        for (Student student : students) {
+            int sID = student.getStudentID();
+            // Check if version number is still up-to-date
+            int version = Integer.valueOf(request.getParameter("v" + sID));
+            int currVersion = UserSubjectMapper.getVersion(sID, subjectCode);
+            if (version != currVersion) { // If version is expired, cannot update the student's marks
+                showErrorPage(request, response, "Some of the marks cannot be updated because the data has expired. Please refresh the page and try again.");
+            } else { // If version is up to date, update the submission
+                try {
+                    // Try to acquire locks for all submissions of this student of this subject
+                    if (lockManager.acquireAllLocksOfStudentSubject(sID, subjectCode, request.getSession().getId())) {
+                        // If lock can be acquired, update submissions
+                        for (Exam exam : exams) {
+                            int eID = exam.getExamID();
+                            String marksStr = request.getParameter("m_"+eID+"_"+sID);
+                            if (marksStr != null && !marksStr.equals("")) {
+                                float marks = Float.valueOf(marksStr);
+                                SubmissionMapper.updateSubmissionMarks(eID, sID, marks);
+                            }
+                        }
+                        // Release all locks
+                        lockManager.releaseAllLocksByOwner(request.getSession().getId());
+                    } else {
+                        // If lock cannot be acquired, mark cannot be updated
+                        showErrorPage(request, response, "Marks cannot be updated because some of the submissions are being updated by other users. Please try again later.");
+                    }
+                } catch (Exception e) {
+                    // In case of any exceptions, mark cannot be updated
+                    e.printStackTrace();
+                    showErrorPage(request, response, "Update cannot be done.");
+                }
 
+                // Update users_has_subjects table
+                String fudgePointsStr = request.getParameter("fp"+sID);
+                try {
+                    float fudgePoints = Float.valueOf(fudgePointsStr);
+                    boolean updateSuccess = UserSubjectMapper.updateFudgePoints(sID, subjectCode, fudgePoints);
+                    if (!updateSuccess) {
+                        showErrorPage(request, response, "Update unsuccessful.");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
         String view = "/Instructor/MarkingViews/markingTableView.jsp";
         ServletContext servletContext = getServletContext();

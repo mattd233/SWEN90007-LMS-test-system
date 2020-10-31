@@ -41,19 +41,20 @@ DROP TABLE users_has_subjects CASCADE;
 CREATE TABLE users_has_subjects (
     user_id INT NOT NULL REFERENCES users(user_id),
     subject_code VARCHAR(20) NOT NULL REFERENCES subjects(subject_code),
+    fudge_points FLOAT DEFAULT 0,
     marks FLOAT DEFAULT -1,
-    fudge_points FLOAT DEFAULT 0
+    version INT NOT NULL DEFAULT 1
 );
 
-INSERT INTO users_has_subjects VALUES(000001, 'SWEN90007', DEFAULT, DEFAULT);
-INSERT INTO users_has_subjects VALUES(000001, 'SWEN90009', DEFAULT, DEFAULT);
-INSERT INTO users_has_subjects VALUES(000002, 'SWEN90007', DEFAULT, DEFAULT);
-INSERT INTO users_has_subjects VALUES(904601, 'SWEN90007', DEFAULT, DEFAULT);
-INSERT INTO users_has_subjects VALUES(904601, 'SWEN90009', DEFAULT, DEFAULT);
-INSERT INTO users_has_subjects VALUES(713551, 'SWEN90007', DEFAULT, DEFAULT);
-INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90007', DEFAULT, DEFAULT);
-INSERT INTO users_has_subjects VALUES(713551, 'SWEN90009', DEFAULT, DEFAULT);
-INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90009', DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(000001, 'SWEN90007', DEFAULT, DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(000001, 'SWEN90009', DEFAULT, DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(000002, 'SWEN90007', DEFAULT, DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(904601, 'SWEN90007', DEFAULT, DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(904601, 'SWEN90009', DEFAULT, DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(713551, 'SWEN90007', DEFAULT, DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90007', DEFAULT, DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(713551, 'SWEN90009', DEFAULT, DEFAULT, DEFAULT);
+INSERT INTO users_has_subjects VALUES(1049166, 'SWEN90009', DEFAULT, DEFAULT, DEFAULT);
 
 --------------------------------------------------------------------------------
 --                                  exams                                     --
@@ -138,12 +139,16 @@ CREATE TABLE submissions (
     is_marked BOOLEAN NOT NULL DEFAULT FALSE,
     marks FLOAT DEFAULT -1,
     fudge_points FLOAT DEFAULT 0,
+    -- version SERIAL NOT NULL DEFAULT 1,
     PRIMARY KEY (exam_id, user_id)
 );
 
 INSERT INTO submissions VALUES (1, 904601, '2020-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT);
 INSERT INTO submissions VALUES (1, 713551, '2020-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT);
 INSERT INTO submissions VALUES (1, 1049166, '2020-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT);
+-- INSERT INTO submissions VALUES (1, 904601, '2020-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+-- INSERT INTO submissions VALUES (1, 713551, '2020-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+-- INSERT INTO submissions VALUES (1, 1049166, '2020-09-28 01:00:00', DEFAULT, DEFAULT, DEFAULT, DEFAULT);
 
 --------------------------------------------------------------------------------
 --                            submitted questions                             --
@@ -168,10 +173,21 @@ INSERT INTO submitted_questions VALUES (1, 713551, 2, 'MULTIPLE_CHOICE', 2, DEFA
 INSERT INTO submitted_questions VALUES (1, 1049166, 1, 'SHORT_ANSWER', DEFAULT, 'Data mapper', DEFAULT, DEFAULT);
 INSERT INTO submitted_questions VALUES (1, 1049166, 2, 'MULTIPLE_CHOICE', 4, DEFAULT, DEFAULT, DEFAULT);
 
+--------------------------------------------------------------------------------
+--                                   locks                                    --
+--------------------------------------------------------------------------------
 DROP TABLE locks CASCADE;
 DROP TABLE exam_locks CASCADE;
 CREATE TABLE exam_locks (
     lockable INT NOT NULL UNIQUE ,
     owner VARCHAR(50) NOT NULL ,
     PRIMARY KEY (lockable)
-)
+);
+
+DROP TABLE submission_locks CASCADE;
+CREATE TABLE submission_locks (
+    exam_id INT NOT NULL,
+    student_id INT NOT NULL,
+    owner VARCHAR(50) NOT NULL ,
+    PRIMARY KEY (exam_id, student_id)
+);
