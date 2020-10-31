@@ -29,12 +29,21 @@
     <title>Student home</title>
 </head>
 <body>
+<%--<div align="right">--%>
+<%--    <form name="LogoutForm" action="/logout.jsp" method="post">--%>
+<%--        <input type="submit" value="Logout"/>--%>
+<%--    </form>--%>
+<%--</div>--%>
 <div align="right">
-    <form name="LogoutForm" action="/logout.jsp" method="post">
-        <input class="submitButton" type="submit" value="Logout"/>
-    </form>
+    <button onclick="logout()">Logout</button>
 </div>
 
+<script>
+    function logout(){
+        alert("Logout successfully");
+        window.location.href='/logout.jsp';
+    }
+</script>
 <div align="center">
 
     <%
@@ -45,7 +54,6 @@
         else{
             studentID = (int) session.getAttribute("user_id");
         }
-        Student student = UserMapper.findStudentWithID(studentID);
     %>
 
     <%--header--%>

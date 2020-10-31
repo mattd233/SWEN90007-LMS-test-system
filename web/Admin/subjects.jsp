@@ -17,10 +17,15 @@
 </head>
 <body>
 <div align="right">
-    <form name="LogoutForm" action="/logout.jsp" method="post">
-        <input class="submitButton" type="submit" value="Logout"/>
-    </form>
+    <button onclick="logout()">Logout</button>
 </div>
+
+<script>
+    function logout(){
+        alert("Logout successfully");
+        window.location.href='/logout.jsp';
+    }
+</script>
 <div align="center">
     <h1>Welcome back, <shiro:principal/>!</h1>
     <h1>All Subjects</h1>

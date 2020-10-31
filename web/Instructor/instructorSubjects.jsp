@@ -20,13 +20,23 @@
 <% if (AppSession.isAuthenticated() && AppSession.hasRole(AppSession.INSTRUCTOR))	{ %>
 <div align="center">
 
+<%--    <div align="right">--%>
+<%--        <form align="right" name="LogoutForm" action="/logout.jsp" method="post">--%>
+<%--            <input type="submit" value="Logout"/>--%>
+<%--        </form>--%>
+<%--    </div>--%>
+    <div align="right">
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        function logout(){
+            alert("Logout successfully");
+            window.location.href='/logout.jsp';
+        }
+    </script>
 
     <h1>Welcome back, <shiro:principal/>!</h1>
-    <div align="right">
-        <form align="right" name="LogoutForm" action="/logout.jsp" method="post">
-            <input class="submitButton" type="submit" value="Logout"/>
-        </form>
-    </div>
     <table>
         <tr>
             <th>Subject Code</th>

@@ -12,17 +12,14 @@
     <title>Logout</title>
 </head>
 <body>
-<script type="text/javascript" language="javascript">
-    alert("Logout successfully");
-</script>
 <%
     session.invalidate();
-//    response.sendRedirect("login.jsp");
+    response.sendRedirect("login.jsp");
 %>
-<div align="center">
-    <form name="LogoutForm" action="/login.jsp" method="post">
-        <input class="submitButton" type="submit" value="Login"/>
-    </form>
-</div>
+<%--<div align="center">--%>
+<%--    <form name="LogoutForm" action="/login.jsp" method="post">--%>
+<%--        <input class="submitButton" type="submit" value="Login"/>--%>
+<%--    </form>--%>
+<%--</div>--%>
 </body>
 </html>
