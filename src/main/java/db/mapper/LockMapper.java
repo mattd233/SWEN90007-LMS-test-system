@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class LockMapper {
 
     public static boolean hasKey(int lockable) {
-        final String selectStmt = "SELECT FROM locks WHERE lockable = ?";
+        final String selectStmt = "SELECT FROM exam_locks WHERE lockable = ?";
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(selectStmt);
@@ -26,7 +26,7 @@ public class LockMapper {
     }
 
     public static String getOwner(int lockable) {
-        final String selectStmt = "SELECT * FROM locks WHERE lockable = ?";
+        final String selectStmt = "SELECT * FROM exam_locks WHERE lockable = ?";
 
         String owner = null;
         try {
@@ -46,7 +46,7 @@ public class LockMapper {
     }
 
     public static void releaseAllLocksByOwner(String owner) {
-        final String deleteStmt = "DELETE FROM locks WHERE owner = ?";
+        final String deleteStmt = "DELETE FROM exam_locks WHERE owner = ?";
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(deleteStmt);
@@ -58,7 +58,7 @@ public class LockMapper {
     }
 
     public static void insert(int lockable, String owner) {
-        final String insertStmt = "INSERT INTO locks VALUES (?, ?)";
+        final String insertStmt = "INSERT INTO exam_locks VALUES (?, ?)";
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(insertStmt);
@@ -71,7 +71,7 @@ public class LockMapper {
     }
 
     public static void delete(int lockable) {
-        final String deleteStmt = "DELETE FROM locks WHERE lockable = ?";
+        final String deleteStmt = "DELETE FROM exam_locks WHERE lockable = ?";
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(deleteStmt);
