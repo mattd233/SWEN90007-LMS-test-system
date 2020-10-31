@@ -1,11 +1,14 @@
 package main.java.controller.auth;
 
+import main.java.controller.instructor.EditExamController;
 import main.java.db.mapper.UserMapper;
 import main.java.domain.User;
 import main.java.security.AuthenticationEnforcer;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -21,6 +24,8 @@ import java.io.PrintWriter;
 
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
+
+    private static final transient Logger log = LoggerFactory.getLogger(LoginController.class);
 
     // Display welcome page if the user enters the correct password and username
     // otherwise, go back to the original page
@@ -49,11 +54,11 @@ public class LoginController extends HttpServlet {
             try {
                 currentUser.login(token);
             } catch (UnknownAccountException uae) {
-                System.out.println("There is no user with username of " + token.getPrincipal());
+                log.info("There is no user with username of " + token.getPrincipal());
                 PrintWriter writer = response.getWriter();
                 writer.println("Invalid username or password");
             } catch (IncorrectCredentialsException ice) {
-                System.out.println(("Password for account " + token.getPrincipal() + " was incorrect!"));
+                log.info(("Password for account " + token.getPrincipal() + " was incorrect!"));
                 PrintWriter writer = response.getWriter();
                 writer.println("Invalid username or password");
             }
@@ -71,10 +76,13 @@ public class LoginController extends HttpServlet {
         // check the roles
         if (currentUser.hasRole("ADMIN")) {
             response.sendRedirect("Admin/subjects.jsp");
+            log.info("User " + currentUser.getPrincipal() + " logged in as ADMIN");
         } else if (currentUser.hasRole("INSTRUCTOR")) {
             response.sendRedirect("Instructor/instructorSubjects.jsp");
+            log.info("User " + currentUser.getPrincipal() + " logged in as INSTRUCTOR");
         } else if (currentUser.hasRole("STUDENT")) {
             response.sendRedirect("Student/studentHomePage.jsp");
+            log.info("User " + currentUser.getPrincipal() + " logged in as STUDENT");
         }
 
     }

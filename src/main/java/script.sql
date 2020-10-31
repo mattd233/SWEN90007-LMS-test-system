@@ -23,16 +23,16 @@ CREATE TABLE users (
     type user_type NOT NULL,
     name VARCHAR(50) NOT NULL,
     username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(50) NOT NULL,
+    password VARCHAR(100) NOT NULL,
     PRIMARY KEY (user_id)
 );
-
-INSERT INTO users VALUES (000000, 'ADMIN', 'Administrator', 'admin', 'admin');
-INSERT INTO users VALUES (000001, 'INSTRUCTOR', 'Eduardo Oliveira', 'eduardo', '000000');
-INSERT INTO users VALUES (000002, 'INSTRUCTOR', 'Maria Rodriguez Read', 'maria', '000000');
-INSERT INTO users VALUES (904601, 'STUDENT', 'Simai Deng', 'simaid', '111111');
-INSERT INTO users VALUES (713551, 'STUDENT', 'Jiayu Li', 'jiayul3', '111111');
-INSERT INTO users VALUES (1049166, 'STUDENT', 'Yiran Wei', 'yirwei', '111111');
+-- sha256 hash for admin, 000000(instructor) and 111111(students)
+INSERT INTO users VALUES (000000, 'ADMIN', 'Administrator', 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918');
+INSERT INTO users VALUES (000001, 'INSTRUCTOR', 'Eduardo Oliveira', 'eduardo', '91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203');
+INSERT INTO users VALUES (000002, 'INSTRUCTOR', 'Maria Rodriguez Read', 'maria', '91b4d142823f7d20c5f08df69122de43f35f057a988d9619f6d3138485c9a203');
+INSERT INTO users VALUES (904601, 'STUDENT', 'Simai Deng', 'simaid', 'bcb15f821479b4d5772bd0ca866c00ad5f926e3580720659cc80d39c9d09802a');
+INSERT INTO users VALUES (713551, 'STUDENT', 'Jiayu Li', 'jiayul3', 'bcb15f821479b4d5772bd0ca866c00ad5f926e3580720659cc80d39c9d09802a');
+INSERT INTO users VALUES (1049166, 'STUDENT', 'Yiran Wei', 'yirwei', 'bcb15f821479b4d5772bd0ca866c00ad5f926e3580720659cc80d39c9d09802a');
 
 --------------------------------------------------------------------------------
 --                            users_has_subjects                              --
@@ -173,10 +173,10 @@ INSERT INTO submitted_questions VALUES (1, 713551, 2, 'MULTIPLE_CHOICE', 2, DEFA
 INSERT INTO submitted_questions VALUES (1, 1049166, 1, 'SHORT_ANSWER', DEFAULT, 'Data mapper', DEFAULT, DEFAULT);
 INSERT INTO submitted_questions VALUES (1, 1049166, 2, 'MULTIPLE_CHOICE', 4, DEFAULT, DEFAULT, DEFAULT);
 
+
 --------------------------------------------------------------------------------
 --                                   locks                                    --
 --------------------------------------------------------------------------------
-DROP TABLE locks CASCADE;
 DROP TABLE exam_locks CASCADE;
 CREATE TABLE exam_locks (
     lockable INT NOT NULL UNIQUE ,

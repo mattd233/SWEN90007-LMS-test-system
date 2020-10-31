@@ -6,6 +6,8 @@ import main.java.db.UOW.QuestionUOW;
 import main.java.db.mapper.ExamMapper;
 import main.java.db.mapper.QuestionMapper;
 import main.java.domain.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -24,6 +26,7 @@ public class EditExamController extends HttpServlet {
 
     public static final String APP_SESSION = "app_session";
     public static final String LOCK_REMOVER = "lock_remover";
+
 
     public EditExamController() {
         super();
