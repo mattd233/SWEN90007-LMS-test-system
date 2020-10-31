@@ -33,7 +33,7 @@
     <!-- Show subject code and exam title -->
     <h1><%=exam.getSubjectCode()%> <%=exam.getTitle()%></h1>
 
-    <a href="/submissions_table?subject_code=<%=exam.getSubjectCode()%>">
+    <a href="/Instructor/submissions_table?subject_code=<%=exam.getSubjectCode()%>">
         back to table view
     </a>
     <!-- Get the submission -->

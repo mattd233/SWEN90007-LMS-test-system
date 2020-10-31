@@ -83,7 +83,7 @@
                 <!-- Case 2.2: Show marks with link to detailed view if there is a submission and it's marked -->
                 <td>
                     <input type="number" name="m_<%=eId%>_<%=uId%>" value="<%=marks%>"><br>
-                    <a href="/submissions_detail?examID=<%=eId%>&userID=<%=uId%>">Mark this exam</a><br>
+                    <a href="/Instructor/submissions_detail?examID=<%=eId%>&userID=<%=uId%>">Mark this exam</a><br>
                     (Finished marking)
                 </td>
                 <%
@@ -97,7 +97,7 @@
                 <!-- Case 2.3: Show link to detailed view if there is a submission but not marked -->
                 <td>
                     <input type="number" name="m_<%=eId%>_<%=uId%>" value="<%=displayMarks%>"><br>
-                    <a href="/submissions_detail?examID=<%=eId%>&userID=<%=uId%>">Mark this exam</a>
+                    <a href="/Instructor/submissions_detail?examID=<%=eId%>&userID=<%=uId%>">Mark this exam</a>
                 </td>
                 <%
                         }

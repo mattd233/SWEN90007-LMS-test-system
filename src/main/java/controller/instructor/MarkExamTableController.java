@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-@WebServlet("/submissions_table")
+@WebServlet("/Instructor/submissions_table")
 public class MarkExamTableController extends HttpServlet {
 
     public static final String APP_SESSION = "app_session";

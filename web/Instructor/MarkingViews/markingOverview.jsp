@@ -63,7 +63,7 @@
         %>
     </table>
     <p>Fudge points: <%=submission.getFudgePoints()%></p>
-    <a href="/submissions_table?subject_code=<%=exam.getSubjectCode()%>">Back to table view</a>
+    <a href="/Instructor/submissions_table?subject_code=<%=exam.getSubjectCode()%>">Back to table view</a>
 </div>
 </body>
 </html>
