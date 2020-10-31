@@ -19,6 +19,7 @@ public class SubmissionMapper extends Mapper {
     public static Submission getSubmissionByIDs(int examID, int userID) {
         final String findSubmissionStmt =
                 "SELECT * FROM submissions WHERE exam_id = ? AND user_id = ?";
+        Submission submission = null;
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(findSubmissionStmt);
@@ -32,15 +33,16 @@ public class SubmissionMapper extends Mapper {
                 Boolean isMarked = rs.getBoolean(4);
                 float marks = rs.getFloat(5);
                 float fudgePoints = rs.getFloat(6);
-                stmt.close();
-                rs.close();
-                dbConnection.close();
-                return new Submission(eId, uId, submissionTime, isMarked, marks, fudgePoints);
+                submission = new Submission(eId, uId, submissionTime, isMarked, marks, fudgePoints);
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return submission;
     }
 
     /**
@@ -62,6 +64,10 @@ public class SubmissionMapper extends Mapper {
             if (rs.next()) {
                 flag = true;
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -85,6 +91,9 @@ public class SubmissionMapper extends Mapper {
             insertStmt.execute();
             UserSubjectMapper.updateMarks(submission.getUserID(), ExamMapper.getExamByID(submission.getExamID()).getSubjectCode());
             System.out.println("insert submission successfully.");
+            // Close connection
+            dbConnection.close();
+            insertStmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -131,8 +140,9 @@ public class SubmissionMapper extends Mapper {
             stmt.setInt(5, userID);
             int result = stmt.executeUpdate();
             UserSubjectMapper.updateMarks(userID, ExamMapper.getExamByID(examID).getSubjectCode());
-            stmt.close();
+            // Close connection
             dbConnection.close();
+            stmt.close();
             return (result > 0) ? true : false;
         } catch (Exception e) {
             e.printStackTrace();
@@ -178,8 +188,9 @@ public class SubmissionMapper extends Mapper {
             stmt.setInt(5, userID);
             int result = stmt.executeUpdate();
             UserSubjectMapper.updateMarks(userID, ExamMapper.getExamByID(examID).getSubjectCode());
-            stmt.close();
+            // Close connection
             dbConnection.close();
+            stmt.close();
             return (result > 0) ? true : false;
         } catch (Exception e) {
             e.printStackTrace();
@@ -207,8 +218,9 @@ public class SubmissionMapper extends Mapper {
             stmt.setInt(3, userID);
             int result = stmt.executeUpdate();
             UserSubjectMapper.updateMarks(userID, ExamMapper.getExamByID(examID).getSubjectCode());
-            stmt.close();
+            // Close connection
             dbConnection.close();
+            stmt.close();
             return (result > 0) ? true : false;
         } catch (Exception e) {
             e.printStackTrace();

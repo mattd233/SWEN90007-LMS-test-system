@@ -10,24 +10,28 @@ import java.sql.SQLException;
 public class LockMapper {
 
     public static boolean hasKey(int lockable) {
-        final String selectStmt = "SELECT FROM exam_locks WHERE lockable = ?";
+        final String selectStmt = "SELECT * FROM exam_locks WHERE lockable = ?";
+        boolean isLocked = false;
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(selectStmt);
             stmt.setInt(1, lockable);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return true;
+                isLocked = true;
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return isLocked;
     }
 
     public static String getOwner(int lockable) {
         final String selectStmt = "SELECT * FROM exam_locks WHERE lockable = ?";
-
         String owner = null;
         try {
             Connection dbConnection = new DBConnection().connect();
@@ -37,8 +41,11 @@ public class LockMapper {
             if (rs.next()) {
                 // skip lockable (index = 1)
                 owner = rs.getString(2);
-                return owner;
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -52,6 +59,9 @@ public class LockMapper {
             PreparedStatement stmt = dbConnection.prepareStatement(deleteStmt);
             stmt.setString(1, owner);
             stmt.execute();
+            // Close connection
+            dbConnection.close();
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -65,6 +75,9 @@ public class LockMapper {
             stmt.setInt(1, lockable);
             stmt.setString(2, owner);
             stmt.execute();
+            // Close connection
+            dbConnection.close();
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -77,6 +90,9 @@ public class LockMapper {
             PreparedStatement stmt = dbConnection.prepareStatement(deleteStmt);
             stmt.setInt(1, lockable);
             stmt.execute();
+            // Close connection
+            dbConnection.close();
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

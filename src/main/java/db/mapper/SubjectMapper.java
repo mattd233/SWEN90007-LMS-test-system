@@ -49,6 +49,10 @@ public class SubjectMapper extends Mapper {
                     existingSubject.addInstructor(staffID, coordinatorName);
                 }
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -90,6 +94,10 @@ public class SubjectMapper extends Mapper {
             stmt.execute();
 
             System.out.println("Insertion successful.");
+
+            // Close connection
+            dbConnection.close();
+            stmt.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -117,6 +125,10 @@ public class SubjectMapper extends Mapper {
                 String name = rs.getString(2);
                 subjects.add(new Subject(subject_code, name));
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
             return subjects;
         } catch (Exception e) {
             e.printStackTrace();
@@ -145,6 +157,10 @@ public class SubjectMapper extends Mapper {
                 String name = rs.getString(2);
                 subjects.add(new Subject(subject_code, name));
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
             return subjects;
         } catch (Exception e) {
             e.printStackTrace();

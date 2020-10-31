@@ -12,6 +12,7 @@ public class SubmissionLockMapper extends Mapper {
     public static boolean hasKey(int examID, int studentID) {
         final String selectStmt =
                 "SELECT * FROM submission_locks WHERE exam_id = ? AND student_id = ?";
+        boolean isLocked = false;
         try {
             Connection dbConnection = new DBConnection().connect();
             PreparedStatement stmt = dbConnection.prepareStatement(selectStmt);
@@ -19,18 +20,16 @@ public class SubmissionLockMapper extends Mapper {
             stmt.setInt(2, studentID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                stmt.close();
-                rs.close();
-                dbConnection.close();
-                return true;
+                isLocked = true;
             }
+            // Close connection
+            dbConnection.close();
             stmt.close();
             rs.close();
-            dbConnection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return isLocked;
     }
 
     public static String getOwner(int examID, int studentID) {
@@ -45,14 +44,11 @@ public class SubmissionLockMapper extends Mapper {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 owner = rs.getString(3);
-                stmt.close();
-                rs.close();
-                dbConnection.close();
-                return owner;
             }
+            // Close connection
+            dbConnection.close();
             stmt.close();
             rs.close();
-            dbConnection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -66,8 +62,9 @@ public class SubmissionLockMapper extends Mapper {
             PreparedStatement stmt = dbConnection.prepareStatement(deleteStmt);
             stmt.setString(1, owner);
             stmt.execute();
-            stmt.close();
+            // Close connection
             dbConnection.close();
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -83,8 +80,9 @@ public class SubmissionLockMapper extends Mapper {
             stmt.setInt(2, studentID);
             stmt.setString(3, owner);
             stmt.execute();
-            stmt.close();
+            // Close connection
             dbConnection.close();
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -99,6 +97,9 @@ public class SubmissionLockMapper extends Mapper {
             stmt.setInt(1, examID);
             stmt.setInt(2, studentID);
             stmt.execute();
+            // Close connection
+            dbConnection.close();
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

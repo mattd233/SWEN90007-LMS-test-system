@@ -25,6 +25,10 @@ public class ChoiceMapper extends Mapper {
                 String choiceDescription = rs.getString(4);
                 choices.add(new Choice(examID, questionNumber, choiceNumber, choiceDescription));
             }
+            // Close connection
+            dbConnection.close();
+            stmt.close();
+            rs.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -41,6 +45,9 @@ public class ChoiceMapper extends Mapper {
             stmt.setInt(3, choice.getChoiceNumber());
             stmt.setString(4, choice.getChoiceDescription());
             stmt.execute();
+            // Close connection
+            dbConnection.close();
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -57,6 +64,9 @@ public class ChoiceMapper extends Mapper {
             stmt.setInt(3, choice.getQuestionNumber());
             stmt.setInt(4, choice.getChoiceNumber());
             stmt.execute();
+            // Close connection
+            dbConnection.close();
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -72,6 +82,9 @@ public class ChoiceMapper extends Mapper {
             stmt.setInt(2, choice.getQuestionNumber());
             stmt.setInt(3, choice.getChoiceNumber());
             stmt.execute();
+            // Close connection
+            dbConnection.close();
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
