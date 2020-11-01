@@ -4,6 +4,7 @@ import main.java.concurrency.*;
 import main.java.db.UOW.ChoiceUOW;
 import main.java.db.UOW.QuestionUOW;
 import main.java.db.mapper.ExamMapper;
+import main.java.db.mapper.LockMapper;
 import main.java.db.mapper.QuestionMapper;
 import main.java.domain.*;
 
@@ -91,6 +92,15 @@ public class EditExamController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int examID = Integer.parseInt(request.getParameter("exam_id"));
+        HttpSession httpSession = request.getSession();
+        AppSession appSession = (AppSession) httpSession.getAttribute(APP_SESSION);
+        AppSessionManager.setSession(appSession);
+        // check if the lock is still hold by the right owner
+        if (!ExclusiveReadLockManager.getInstance().checkLock(examID, request.getSession().getId())){
+            response.getWriter().println("Some error has occurred, please try again later.");
+            return;
+        }
+
         Exam exam = ExamMapper.getExamByID(examID);
         assert exam != null;
 
@@ -174,9 +184,6 @@ public class EditExamController extends HttpServlet {
         ChoiceUOW.getCurrent().commit();
         // release the lock before exiting
         try {
-            HttpSession httpSession = request.getSession();
-            AppSession appSession = (AppSession) httpSession.getAttribute(APP_SESSION);
-            AppSessionManager.setSession(appSession);
             ExclusiveReadLockManager.getInstance().releaseLock(examID, request.getSession().getId());
         } catch (Exception e) {
             e.printStackTrace();

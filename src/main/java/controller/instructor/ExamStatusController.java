@@ -24,12 +24,14 @@ public class ExamStatusController extends HttpServlet {
         String action = request.getParameter("action");
         try {
             int examID = Integer.valueOf(request.getParameter("exam_id"));
-            if (action.equals("publish")) {
-                if (LockMapper.hasKey(examID)) {
-                    System.err.println("Error in ExamStatusController: Cannot publish the exam");
-                    showErrorPage(request, response, "Someone is editing the exam. Please try again later.");
-                }
-                else if (!ExamMapper.publishExam(examID)) {
+
+            // first check if someone is editing the exam
+            if (LockMapper.hasKey(examID)) {
+                showErrorPage(request, response, "Someone is editing the exam. Please try again later.");
+                return;
+            }
+            else if (action.equals("publish")) {
+                if (!ExamMapper.publishExam(examID)) {
                     System.err.println("Error in ExamStatusController: Cannot publish the exam");
                     showErrorPage(request, response, "Could not publish the exam. Please try again later.");
                 }
