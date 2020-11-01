@@ -39,7 +39,8 @@ public class MarkExamDetailController extends HttpServlet {
         // Show error page if exam ID or user ID is not valid.
         if (examIDStr == null || userIDStr == null) {
             System.err.println("Error in MarkExamDetailedController doGet");
-            showErrorPage(request, response);
+            String msg = "Something wrong has happened. Please try again later.";
+            response.getWriter().println(msg);
             return;
         }
         int examID = 0;
@@ -49,7 +50,8 @@ public class MarkExamDetailController extends HttpServlet {
             userID = Integer.valueOf(userIDStr);
         } catch (Exception e) {
             System.err.println("Error in MarkExamDetailedController doGet");
-            showErrorPage(request, response);
+            String msg = "Something wrong has happened. Please try again later.";
+            response.getWriter().println(msg);
             return;
         }
 
@@ -73,7 +75,8 @@ public class MarkExamDetailController extends HttpServlet {
         if (!lockManager.acquireSubmissionLock(examID, userID, request.getSession().getId())) {
             if (!lockManager.checkSubmissionLock(examID, userID, request.getSession().getId())) {
                 // Show error page if we don't own the lock and cannot acquire the lock
-                showErrorPage(request, response, "Someone else is accessing the page. Please try again later");
+                String msg = "Someone else is accessing the page. Please try again later";
+                response.getWriter().println(msg);
                 return;
             }
         }
@@ -92,7 +95,9 @@ public class MarkExamDetailController extends HttpServlet {
         // Check if we still have the lock
         MarkingLockManager lockManager = MarkingLockManager.getInstance();
         if (!lockManager.checkSubmissionLock(examID, userID, request.getSession().getId())) {
-            showErrorPage(request, response, "This submission cannot be marked. Please refresh the page and try again later.");
+            String msg = "This submission cannot be marked. Please refresh the page and try again later.";
+            response.getWriter().println(msg);
+            return;
         }
 
         // Update marks of submitted questions
@@ -138,23 +143,9 @@ public class MarkExamDetailController extends HttpServlet {
             RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
             requestDispatcher.forward(request, response);
         } else {
-            System.out.println("Error in MarkExamDetailedController doPost: Update not successful");
-            showErrorPage(request, response, "Update not successful.");
+            String msg = "Error in MarkExamDetailedController doPost: Update not successful";
+            response.getWriter().println(msg);
+            return;
         }
-    }
-
-    private void showErrorPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String view = "/errorPage.jsp";
-        ServletContext servletContext = getServletContext();
-        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
-        requestDispatcher.forward(request, response);
-    }
-
-    private void showErrorPage(HttpServletRequest request, HttpServletResponse response, String errMsg) throws ServletException, IOException {
-        String view = "/errorPage.jsp";
-        ServletContext servletContext = getServletContext();
-        request.setAttribute("errMsg", errMsg);
-        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
-        requestDispatcher.forward(request, response);
     }
 }
