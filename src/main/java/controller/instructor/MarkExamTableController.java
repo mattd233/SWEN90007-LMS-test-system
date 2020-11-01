@@ -39,7 +39,8 @@ public class MarkExamTableController extends HttpServlet {
             requestDispatcher.forward(request, response);
         } else {
             System.err.println("Error in MarkExamTableController doGet");
-            showErrorPage(request, response);
+            String msg = "Something wrong has happened. Please try again later.";
+            response.getWriter().println(msg);
         }
     }
 
@@ -73,7 +74,8 @@ public class MarkExamTableController extends HttpServlet {
             int version = Integer.valueOf(request.getParameter("v" + sID));
             int currVersion = UserSubjectMapper.getVersion(sID, subjectCode);
             if (version != currVersion) { // If version is expired, cannot update the student's marks
-                showErrorPage(request, response, "Some of the marks cannot be updated because the data has expired. Please refresh the page and try again.");
+                String msg = "Some of the marks cannot be updated because the data has expired. Please refresh the page and try again.";
+                response.getWriter().println(msg);
             } else { // If version is up to date, update the submission
                 try {
                     // Try to acquire locks for all submissions of this student of this subject
@@ -91,12 +93,14 @@ public class MarkExamTableController extends HttpServlet {
                         lockManager.releaseAllLocksByOwner(request.getSession().getId());
                     } else {
                         // If lock cannot be acquired, mark cannot be updated
-                        showErrorPage(request, response, "Marks cannot be updated because some of the submissions are being updated by other users. Please try again later.");
+                        String msg = "Some of the marks cannot be updated because the data has expired. Please refresh the page and try again.";
+                        response.getWriter().println(msg);
                     }
                 } catch (Exception e) {
                     // In case of any exceptions, mark cannot be updated
                     e.printStackTrace();
-                    showErrorPage(request, response, "Update cannot be done.");
+                    String msg = "Update cannot be done.";
+                    response.getWriter().println(msg);
                 }
 
                 // Update users_has_subjects table
@@ -105,7 +109,8 @@ public class MarkExamTableController extends HttpServlet {
                     float fudgePoints = Float.valueOf(fudgePointsStr);
                     boolean updateSuccess = UserSubjectMapper.updateFudgePoints(sID, subjectCode, fudgePoints);
                     if (!updateSuccess) {
-                        showErrorPage(request, response, "Update unsuccessful.");
+                        String msg = "Update unsuccessful.";
+                        response.getWriter().println(msg);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -114,22 +119,6 @@ public class MarkExamTableController extends HttpServlet {
         }
         String view = "/Instructor/MarkingViews/markingTableView.jsp";
         ServletContext servletContext = getServletContext();
-        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
-        requestDispatcher.forward(request, response);
-    }
-
-    private void showErrorPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String view = "/errorPage.jsp";
-        ServletContext servletContext = getServletContext();
-        request.setAttribute("errMsg", "Something wrong has happened. Please try again later.");
-        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
-        requestDispatcher.forward(request, response);
-    }
-
-    private void showErrorPage(HttpServletRequest request, HttpServletResponse response, String errMsg) throws ServletException, IOException {
-        String view = "/errorPage.jsp";
-        ServletContext servletContext = getServletContext();
-        request.setAttribute("errMsg", errMsg);
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
         requestDispatcher.forward(request, response);
     }
