@@ -55,7 +55,8 @@ public class EditExamController extends HttpServlet {
             // if failed, check if the lock is owned by the current thread
             if (!lockManager.checkLock(examID, request.getSession().getId())) {
                 //if not, abort
-                showErrorPage(request, response, "Someone else is accessing the page.");
+                String msg = "Someone else is accessing the page.";
+                response.getWriter().println(msg);
                 return;
             }
         }
@@ -64,7 +65,8 @@ public class EditExamController extends HttpServlet {
         if (request.getParameter("delete_question")!=null) {
             if (QuestionMapper.getAllQuestionsWithExamID(examID).size()<=1) {
                 // cannot delete the last question
-                showErrorPage(request, response, "Cannot delete the last question.");
+                String msg = "Cannot delete the last question.";
+                response.getWriter().println(msg);
             } else {
                 int questionNumber = Integer.parseInt(request.getParameter("delete_question"));
                 QuestionMapper.delete(new ShortAnswerQuestion(examID, questionNumber, "", "", 0));
@@ -190,13 +192,4 @@ public class EditExamController extends HttpServlet {
         }
         response.sendRedirect("instructorExams.jsp?subject_code=" + exam.getSubjectCode());
     }
-
-    private void showErrorPage(HttpServletRequest request, HttpServletResponse response, String errMsg) throws ServletException, IOException {
-        String view = "/errorPage.jsp";
-        ServletContext servletContext = getServletContext();
-        request.setAttribute("errMsg", errMsg);
-        RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(view);
-        requestDispatcher.forward(request, response);
-    }
-
 }
