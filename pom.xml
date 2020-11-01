@@ -45,17 +45,6 @@
                     <warSourceDirectory>web</warSourceDirectory>
                 </configuration>
             </plugin>
-<!--            May not be necessary -->
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.3.11.v20160721</version>
-                <configuration>
-                    <webApp>
-                        <contextPath>/</contextPath>
-                    </webApp>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -100,23 +89,5 @@
             <version>1.6.0</version>
         </dependency>
 
-        <!-- Stormpath support for quick Realm deployment: -->
-        <dependency>
-            <groupId>com.stormpath.shiro</groupId>
-            <artifactId>stormpath-shiro-core</artifactId>
-            <version>0.7.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.stormpath.sdk</groupId>
-            <artifactId>stormpath-sdk-httpclient</artifactId>
-            <version>1.0.4</version>
-            <scope>runtime</scope>
-        </dependency>
-<!--        <dependency>-->
-<!--            <groupId>javax.servlet</groupId>-->
-<!--            <artifactId>javax.servlet-api</artifactId>-->
-<!--            <version>3.1.0</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
     </dependencies>
 </project>

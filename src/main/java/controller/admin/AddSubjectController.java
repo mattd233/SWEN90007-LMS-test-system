@@ -34,8 +34,7 @@ public class AddSubjectController extends HttpServlet {
                 assert instructor != null;
                 UserSubjectMapper.insert(id, subjectCode);
             } catch (Exception e) {
-                target = "errorPage.jsp";
-                e.printStackTrace();
+                response.getWriter().println("Invalid instructor ID");
             }
         }
         response.sendRedirect(target);
@@ -44,9 +43,15 @@ public class AddSubjectController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String subjectCode = request.getParameter("code");
         String name = request.getParameter("name");
-        String instructorID = request.getParameter("instructor_id");
+        int instructorID = -1;
+        try {
+            instructorID = Integer.parseInt(request.getParameter("instructor_id"));
+        } catch (NumberFormatException e) {
+            response.getWriter().println("Invalid instructor ID");
+        }
+
         Subject subject = new Subject(subjectCode, name);
-        Instructor instructor = UserMapper.findInstructorWithID(Integer.parseInt(instructorID));
+        Instructor instructor = UserMapper.findInstructorWithID((instructorID));
         if (instructor==null) {
             response.getWriter().println("Invalid instructor ID");
         }
