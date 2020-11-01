@@ -27,7 +27,8 @@ public class ExamStatusController extends HttpServlet {
 
             // first check if someone is editing the exam
             if (LockMapper.hasKey(examID)) {
-                showErrorPage(request, response, "Someone is editing the exam. Please try again later.");
+                String msg = "Someone is editing the exam. Please try again later.";
+                response.getWriter().println(msg);
                 return;
             }
             else if (action.equals("publish")) {
