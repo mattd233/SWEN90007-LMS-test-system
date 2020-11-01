@@ -47,7 +47,7 @@ public class EditExamController extends HttpServlet {
                 httpSession.getId());
         AppSessionManager.setSession(appSession);
         httpSession.setAttribute(APP_SESSION, appSession);
-        httpSession.setAttribute(LOCK_REMOVER, new LockRemover(appSession.getId()));
+        httpSession.setAttribute(LOCK_REMOVER, new ExclusiveReadLockRemover(appSession.getId()));
 
         // first try to acquire the lock
         if (!lockManager.acquireLock(examID, request.getSession().getId())) {

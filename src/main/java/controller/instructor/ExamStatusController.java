@@ -1,6 +1,8 @@
 package main.java.controller.instructor;
 
+import main.java.concurrency.ExclusiveReadLockManager;
 import main.java.db.mapper.ExamMapper;
+import main.java.db.mapper.LockMapper;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -23,7 +25,11 @@ public class ExamStatusController extends HttpServlet {
         try {
             int examID = Integer.valueOf(request.getParameter("exam_id"));
             if (action.equals("publish")) {
-                if (!ExamMapper.publishExam(examID)) {
+                if (LockMapper.hasKey(examID)) {
+                    System.err.println("Error in ExamStatusController: Cannot publish the exam");
+                    showErrorPage(request, response, "Someone is editing the exam. Please try again later.");
+                }
+                else if (!ExamMapper.publishExam(examID)) {
                     System.err.println("Error in ExamStatusController: Cannot publish the exam");
                     showErrorPage(request, response, "Could not publish the exam. Please try again later.");
                 }

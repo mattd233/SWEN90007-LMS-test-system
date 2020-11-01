@@ -3,10 +3,10 @@ package main.java.concurrency;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
-public class LockRemover implements HttpSessionBindingListener {
+public class ExclusiveReadLockRemover implements HttpSessionBindingListener {
 
     private String sessionId;
-    public LockRemover(String sessionId) {
+    public ExclusiveReadLockRemover(String sessionId) {
         this.sessionId = sessionId;
     }
 
