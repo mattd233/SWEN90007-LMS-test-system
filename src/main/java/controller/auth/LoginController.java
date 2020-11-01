@@ -2,13 +2,15 @@ package main.java.controller.auth;
 
 import main.java.db.mapper.UserMapper;
 import main.java.domain.User;
-import main.java.security.AuthenticationEnforcer;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.Factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +45,9 @@ public class LoginController extends HttpServlet {
         String username = request.getParameter("userName");
         String password = request.getParameter("passWord");
         String path = getServletContext().getRealPath("/WEB-INF/shiro.ini");
-        AuthenticationEnforcer.setSecurityUtils(path);
+        Factory<SecurityManager> factory = new IniSecurityManagerFactory(path);
+        SecurityManager securityManager = factory.getInstance();
+        SecurityUtils.setSecurityManager(securityManager);
 
         // get the currently executing user:
         Subject currentUser = SecurityUtils.getSubject();
