@@ -67,6 +67,7 @@ public class EditExamController extends HttpServlet {
                 // cannot delete the last question
                 String msg = "Cannot delete the last question.";
                 response.getWriter().println(msg);
+                return;
             } else {
                 int questionNumber = Integer.parseInt(request.getParameter("delete_question"));
                 QuestionMapper.delete(new ShortAnswerQuestion(examID, questionNumber, "", "", 0));

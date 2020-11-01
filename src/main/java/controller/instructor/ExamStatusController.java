@@ -36,12 +36,14 @@ public class ExamStatusController extends HttpServlet {
                     System.err.println("Error in ExamStatusController: Cannot publish the exam");
                     String msg = "Could not publish the exam. Please try again later.";
                     response.getWriter().println(msg);
+                    return;
                 }
             } else if (action.equals("close")) {
                 if (!ExamMapper.closeExam(examID)) {
                     System.err.println("Error in ExamStatusController: Cannot close the exam");
                     String msg = "Could not close the exam. Please try again later.";
                     response.getWriter().println(msg);
+                    return;
                 }
             } else if (action.equals("delete")) {
                 if (!ExamMapper.deleteExam(examID)) {
@@ -49,6 +51,7 @@ public class ExamStatusController extends HttpServlet {
                     System.err.println("Error in ExamStatusController: Cannot delete the exam");
                     String msg = "Could not delete the exam. This may be because there are already submissions or there are students currently taking the exam.";
                     response.getWriter().println(msg);
+                    return;
                 }
             }
             String subjectCode = request.getParameter("subject_code");

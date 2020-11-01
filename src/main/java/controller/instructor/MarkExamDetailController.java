@@ -41,6 +41,7 @@ public class MarkExamDetailController extends HttpServlet {
             System.err.println("Error in MarkExamDetailedController doGet");
             String msg = "Something wrong has happened. Please try again later.";
             response.getWriter().println(msg);
+            return;
         }
         int examID = 0;
         int userID = 0;
@@ -51,6 +52,7 @@ public class MarkExamDetailController extends HttpServlet {
             System.err.println("Error in MarkExamDetailedController doGet");
             String msg = "Something wrong has happened. Please try again later.";
             response.getWriter().println(msg);
+            return;
         }
 
         // Check app session
@@ -95,6 +97,7 @@ public class MarkExamDetailController extends HttpServlet {
         if (!lockManager.checkSubmissionLock(examID, userID, request.getSession().getId())) {
             String msg = "This submission cannot be marked. Please refresh the page and try again later.";
             response.getWriter().println(msg);
+            return;
         }
 
         // Update marks of submitted questions
@@ -142,6 +145,7 @@ public class MarkExamDetailController extends HttpServlet {
         } else {
             String msg = "Error in MarkExamDetailedController doPost: Update not successful";
             response.getWriter().println(msg);
+            return;
         }
     }
 }

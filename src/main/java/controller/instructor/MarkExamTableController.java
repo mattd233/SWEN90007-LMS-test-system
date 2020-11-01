@@ -41,6 +41,7 @@ public class MarkExamTableController extends HttpServlet {
             System.err.println("Error in MarkExamTableController doGet");
             String msg = "Something wrong has happened. Please try again later.";
             response.getWriter().println(msg);
+            return;
         }
     }
 
@@ -76,6 +77,7 @@ public class MarkExamTableController extends HttpServlet {
             if (version != currVersion) { // If version is expired, cannot update the student's marks
                 String msg = "Some of the marks cannot be updated because the data has expired. Please refresh the page and try again.";
                 response.getWriter().println(msg);
+                return;
             } else { // If version is up to date, update the submission
                 try {
                     // Try to acquire locks for all submissions of this student of this subject
@@ -95,12 +97,14 @@ public class MarkExamTableController extends HttpServlet {
                         // If lock cannot be acquired, mark cannot be updated
                         String msg = "Some of the marks cannot be updated because the data has expired. Please refresh the page and try again.";
                         response.getWriter().println(msg);
+                        return;
                     }
                 } catch (Exception e) {
                     // In case of any exceptions, mark cannot be updated
                     e.printStackTrace();
                     String msg = "Update cannot be done.";
                     response.getWriter().println(msg);
+                    return;
                 }
 
                 // Update users_has_subjects table
@@ -111,6 +115,7 @@ public class MarkExamTableController extends HttpServlet {
                     if (!updateSuccess) {
                         String msg = "Update unsuccessful.";
                         response.getWriter().println(msg);
+                        return;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
